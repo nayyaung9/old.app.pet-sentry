@@ -9,13 +9,13 @@ const data = {
   information: "Kyr B pyout thr wr",
   _owner: {
     fullname: "Nay Yaung Lin Lakk",
-    profileUrl: "https://avatars.githubusercontent.com/u/45455924?v=4"
+    profileUrl: "https://avatars.githubusercontent.com/u/45455924?v=4",
   },
   photos: [
     {
-      url: "https://images.pexels.com/photos/15563929/pexels-photo-15563929.png?auto=compress&cs=tinysrgb&w=800"
-    }
-  ]
+      url: "https://images.pexels.com/photos/15563929/pexels-photo-15563929.png?auto=compress&cs=tinysrgb&w=800",
+    },
+  ],
 };
 const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
   return (

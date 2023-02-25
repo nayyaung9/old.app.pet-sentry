@@ -8,11 +8,12 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<BottomTabScreenParamList>();
 
 // Tab Screens
 import HomeTab from "./Home";
 import ComposeTab from "./Compose";
+import { BottomTabScreenParamList } from "~/@types/navigators";
 
 const ScreenTab = () => {
   return (
@@ -48,10 +49,10 @@ const ScreenTab = () => {
         })}
       />
       <Tab.Screen
-        name="Tab-Catelog"
+        name="Tab-Compose"
         component={ComposeTab}
         options={() => ({
-          title: "Category",
+          title: "Compose",
           tabBarIcon: ({ color }) => (
             <AntDesign name="appstore1" size={24} color={color} />
           ),

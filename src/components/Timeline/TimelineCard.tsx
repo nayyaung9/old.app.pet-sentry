@@ -1,8 +1,19 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  Pressable,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import type { BottomTabsScreenProps } from "~/@types/navigators";
 
 const TimelineCard = ({ item }: { item: any }) => {
+  const navigation =
+    useNavigation<BottomTabsScreenProps<"Tab-Home">["navigation"]>();
   return (
     <TouchableOpacity activeOpacity={1} style={styles.timelineCard}>
       <View
@@ -36,14 +47,18 @@ const TimelineCard = ({ item }: { item: any }) => {
       </View>
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
-        <Image
-          source={{
-            uri: item.photos[0].url,
-          }}
-          // imageStyle={styles.timelineImage}
-          // blurHash={item?.photos[0]?.blurHashValue}
-          style={styles.timelineImage}
-        />
+        <Pressable
+          onPress={() => navigation.navigate("Timeline-Detail", { data: item })}
+        >
+          <Image
+            source={{
+              uri: item.photos[0].url,
+            }}
+            // imageStyle={styles.timelineImage}
+            // blurHash={item?.photos[0]?.blurHashValue}
+            style={styles.timelineImage}
+          />
+        </Pressable>
       )}
 
       <View style={styles.timelineCardContent}>

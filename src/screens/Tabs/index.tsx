@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   AntDesign,
   Ionicons,
-  Feather,
   MaterialIcons,
 } from "@expo/vector-icons";
 
@@ -41,9 +40,9 @@ const ScreenTab = () => {
           headerRight: () => (
             <Pressable
               style={{ marginRight: 16 }}
-              onPress={() => navigation.navigate("Cart-Screen")}
+              onPress={() => navigation.navigate("Map-Screen")}
             >
-              <Feather name="shopping-cart" size={22} color="black" />
+              <Ionicons name="map" size={24} color="#555" />
             </Pressable>
           ),
         })}

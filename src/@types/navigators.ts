@@ -10,6 +10,7 @@ export type RootStackParamList = {
   "Timeline-Detail": {
     data: any;
   };
+  "Map-Screen": undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

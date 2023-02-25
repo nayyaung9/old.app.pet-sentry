@@ -11,6 +11,7 @@ import { RootStackParamList } from "~/@types/navigators";
 // Screens
 import ScreenTabs from "~/screens/Tabs";
 import TimelineDetail from "~/screens/TimelineDetail";
+import Map from "~/screens/Map";
 
 const ApplicationNavigator = () => {
   return (
@@ -41,6 +42,11 @@ const ApplicationNavigator = () => {
               </Pressable>
             ),
           })}
+        />
+        <Stack.Screen
+          name="Map-Screen"
+          component={Map}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

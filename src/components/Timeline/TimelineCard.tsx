@@ -3,10 +3,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  Text,
   Image,
   Pressable,
+  Text,
 } from "react-native";
+import ThemeText from "~/components/ThemeText";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
@@ -28,20 +29,20 @@ const TimelineCard = ({ item }: { item: any }) => {
           style={{ width: 42, height: 42, borderRadius: 100 }}
         />
         <View style={{ marginLeft: 8 }}>
-          <Text>{item?._owner?.fullname}</Text>
+          <ThemeText>{item?._owner?.fullname}</ThemeText>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Ionicons
               name="md-location"
               size={14}
               color={"rgba(0, 0, 0, 0.7)"}
             />
-            <Text
+            <ThemeText
               fontStyle={"XS"}
               fontWeight={"Medium"}
               color={"rgba(0, 0, 0, 0.4)"}
             >
               Tarmwe, Yangon
-            </Text>
+            </ThemeText>
           </View>
         </View>
       </View>
@@ -70,19 +71,19 @@ const TimelineCard = ({ item }: { item: any }) => {
             paddingBottom: 8,
           }}
         >
-          <Text fontStyle="M" fontWeight={"Medium"} color={"#ff4081"}>
+          <ThemeText fontStyle="M" fontWeight={"Medium"} color={"#ff4081"}>
             {item?.petName}
-          </Text>
-          <Text fontStyle={"XS"} color={"rgba(0, 0, 0, 0.6)"}>
+          </ThemeText>
+          <ThemeText fontStyle={"XS"} color={"rgba(0, 0, 0, 0.6)"}>
             {/* {moment(item?.createdAt).format("MMM, DDD, YYYY")} */}
             Feb 24, 2023
-          </Text>
+          </ThemeText>
         </View>
 
         {(item?.information || item?.specialTraits) && (
-          <Text numberOfLines={2} color={"rgba(0, 0, 0, 0.4)"}>
+          <ThemeText numberOfLines={2} color={"rgba(0, 0, 0, 0.4)"}>
             {item?.information || item?.specialTraits}
-          </Text>
+          </ThemeText>
         )}
       </View>
     </TouchableOpacity>

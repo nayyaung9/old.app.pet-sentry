@@ -31,6 +31,7 @@ const ApplicationNavigator = () => {
           component={TimelineDetail}
           options={({ navigation, route }) => ({
             title: route?.params?.data?.petName,
+            headerTitleAlign: "center",
             headerLeft: () => (
               <Pressable onPress={() => navigation.goBack()}>
                 <Ionicons name="chevron-back" size={24} color="black" />

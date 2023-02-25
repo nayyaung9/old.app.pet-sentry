@@ -23,8 +23,8 @@ const HomeTab = () => {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "first", title: "Lost" },
-    { key: "second", title: "Found" },
+    { key: "first", title: "Missing" },
+    { key: "second", title: "Report" },
   ]);
 
   const renderTabBar = (props: any) => (
@@ -52,6 +52,7 @@ const HomeTab = () => {
       renderLabel={({ route, focused }) => (
         <Text
           style={{
+         textTransform: "uppercase",
             color: focused ? "#ff4081" : "#555",
           }}
         >

@@ -1,18 +1,15 @@
 import React from "react";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
+import ThemeText from "~/components/ThemeText";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 
+import type { BottomTabScreenParamList } from "~/@types/navigators";
 const Tab = createBottomTabNavigator<BottomTabScreenParamList>();
 
 // Tab Screens
 import HomeTab from "./Home";
 import ComposeTab from "./Compose";
-import { BottomTabScreenParamList } from "~/@types/navigators";
 
 const ScreenTab = () => {
   return (
@@ -28,9 +25,24 @@ const ScreenTab = () => {
         name="Tab-Home"
         component={HomeTab}
         options={({ navigation }) => ({
-          title: "Pet Sentry",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="pets" size={24} color={color} />
+          // title: "Pet Sentry",
+          headerTitle: () => (
+            <View style={{ alignItems: "center" }}>
+              <ThemeText fontStyle={"L"} fontWeight={"Medium"}>
+                Pet Sentry
+              </ThemeText>
+              <ThemeText fontStyle="S" fontWeight="Light">
+                Tarmwe, Yangon
+              </ThemeText>
+            </View>
+          ),
+
+          tabBarIcon: ({ focused, color }) => (
+            <MaterialIcons
+              name="pets"
+              size={24}
+              color={focused ? "#ff4081" : color}
+            />
           ),
           headerLeft: () => (
             <Pressable style={{ marginLeft: 16 }}>
@@ -52,8 +64,12 @@ const ScreenTab = () => {
         component={ComposeTab}
         options={() => ({
           title: "Compose",
-          tabBarIcon: ({ color }) => (
-            <AntDesign name="appstore1" size={24} color={color} />
+          tabBarIcon: ({ focused, color }) => (
+            <AntDesign
+              name="appstore1"
+              size={24}
+              color={focused ? "#ff4081" : color}
+            />
           ),
         })}
       />

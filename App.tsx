@@ -1,30 +1,24 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import * as Location from "expo-location";
 
 import Navigation from "./src/navigation";
-import { useEffect, useState } from "react";
+
+// Loaders
+import useLocation from "~/hooks/useLocation";
+import useCachedResources from "~/hooks/useCachedResources";
 
 export default function App() {
-  const [location, setLocation] = useState<any>(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const { location } = useLocation();
+  const isLoadingComplete = useCachedResources();
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
-
-  return (
-    <SafeAreaProvider>
-      <Navigation />
-      <StatusBar />
-    </SafeAreaProvider>
-  );
+  if (!isLoadingComplete) {
+    return null;
+  } else {
+    return (
+      <SafeAreaProvider>
+        <Navigation />
+        <StatusBar />
+      </SafeAreaProvider>
+    );
+  }
 }

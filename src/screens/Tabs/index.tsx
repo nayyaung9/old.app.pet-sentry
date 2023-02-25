@@ -10,8 +10,13 @@ const Tab = createBottomTabNavigator<BottomTabScreenParamList>();
 // Tab Screens
 import HomeTab from "./Home";
 import ComposeTab from "./Compose";
+import ProfileTab from "./Profile";
+
+// Utils
+import { useTheme } from "~/utils/theme/ThemeManager";
 
 const ScreenTab = () => {
+  const { colors } = useTheme();
   return (
     <Tab.Navigator
       initialRouteName="Tab-Home"
@@ -41,7 +46,7 @@ const ScreenTab = () => {
             <MaterialIcons
               name="pets"
               size={24}
-              color={focused ? "#ff4081" : color}
+              color={focused ? colors.primary : color}
             />
           ),
           headerLeft: () => (
@@ -68,7 +73,21 @@ const ScreenTab = () => {
             <AntDesign
               name="appstore1"
               size={24}
-              color={focused ? "#ff4081" : color}
+              color={focused ? colors.primary : color}
+            />
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="Tab-Profile"
+        component={ProfileTab}
+        options={() => ({
+          title: "Profile",
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name="person"
+              size={24}
+              color={focused ? colors.primary : color}
             />
           ),
         })}

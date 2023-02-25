@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import ThemeManager from "~/utils/theme/ThemeManager";
 
 import Navigation from "./src/navigation";
 
@@ -16,8 +17,10 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation />
-        <StatusBar />
+        <ThemeManager>
+          <StatusBar />
+          <Navigation />
+        </ThemeManager>
       </SafeAreaProvider>
     );
   }

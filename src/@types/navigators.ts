@@ -19,6 +19,7 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
 export type BottomTabScreenParamList = {
   "Tab-Home": undefined;
   "Tab-Compose": undefined;
+  "Tab-Profile": undefined;
 };
 
 export type BottomTabsScreenProps<T extends keyof BottomTabScreenParamList> =

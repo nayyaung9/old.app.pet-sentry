@@ -1,16 +1,7 @@
 import React from "react";
-import {
-  Text,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  View,
-  ActivityIndicator,
-  StatusBar,
-  Pressable,
-  Image,
-} from "react-native";
-import { RootStackScreenProps } from "~/@types/navigators";
+import { Dimensions, ScrollView, StyleSheet, View, Image } from "react-native";
+import ThemeText from "~/components/ThemeText";
+import type { RootStackScreenProps } from "~/@types/navigators";
 
 const DEVICE = Dimensions.get("window");
 
@@ -18,7 +9,6 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   route: {
     params: { data },
   },
-  navigation,
 }) => {
   return (
     <View style={{ flex: 1 }}>
@@ -52,14 +42,14 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                 justifyContent: "space-between",
               }}
             >
-              <Text
+              <ThemeText
                 style={{ flex: 1 }}
                 fontWeight={"Medium"}
                 fontStyle={"L"}
                 numberOfLines={2}
               >
                 {data?.petName}
-              </Text>
+              </ThemeText>
               {/* 
                   <IconLabel
                     iconComponent={Feather}
@@ -82,32 +72,32 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                     iconName={"location-outline"}
                     label={extractShortLocation(data?.geolocation?.address)}
                   /> */}
-              <Text fontStyle={"S"}>{data?.activityType}</Text>
+              <ThemeText fontStyle={"S"}>{data?.activityType}</ThemeText>
             </View>
           </View>
 
           <View style={styles.cardContainer}>
             <View style={styles.basicInfoRow}>
               <View style={{ flex: 1 }}>
-                <Text color={"#ddd"} fontStyle={"XS"}>
+                <ThemeText color={"#555"} fontStyle={"XS"}>
                   Gender
-                </Text>
-                <Text>{data?.gender ? "Male" : "Female"}</Text>
+                </ThemeText>
+                <ThemeText>{data?.gender ? "Male" : "Female"}</ThemeText>
               </View>
               <View style={{ flex: 1 }}>
-                <Text color={"#ddd"} fontStyle={"XS"}>
+                <ThemeText color={"#555"} fontStyle={"XS"}>
                   Lost Date
-                </Text>
-                <Text>
+                </ThemeText>
+                <ThemeText>
                   {/* {moment(data?.createdAt).format("MMM DDD YYYY")} */}
                   Feb 30, 2023
-                </Text>
+                </ThemeText>
               </View>
               <View style={{ flex: 1 }}>
-                <Text color={"#ddd"} fontStyle={"XS"}>
+                <ThemeText color={"#ddd"} fontStyle={"XS"}>
                   Collar color
-                </Text>
-                <Text>{data?.collarColor}</Text>
+                </ThemeText>
+                <ThemeText>{data?.collarColor}</ThemeText>
               </View>
             </View>
           </View>
@@ -116,28 +106,28 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
             <View>
               {data?.geolocation?.address != "" && (
                 <View style={{ marginBottom: 8 }}>
-                  <Text color={"#ddd"} fontStyle={"XS"}>
+                  <ThemeText color={"#555"} fontStyle={"XS"}>
                     Missing here
-                  </Text>
-                  <Text>{data?.geolocation?.address}</Text>
+                  </ThemeText>
+                  <ThemeText>{data?.geolocation?.address}</ThemeText>
                 </View>
               )}
 
               {data?.information != "" && (
                 <View style={{ marginBottom: 8 }}>
-                  <Text color={"#ddd"} fontStyle={"XS"}>
+                  <ThemeText color={"#555"} fontStyle={"XS"}>
                     Information
-                  </Text>
-                  <Text>{data?.information}</Text>
+                  </ThemeText>
+                  <ThemeText>{data?.information}</ThemeText>
                 </View>
               )}
 
               {data?.specialTraits != "" && data?.specialTraits != null && (
                 <View>
-                  <Text color={"#ddd"} fontStyle={"XS"}>
+                  <ThemeText color={"#555"} fontStyle={"XS"}>
                     Special Traits
-                  </Text>
-                  <Text>{data?.specialTraits}</Text>
+                  </ThemeText>
+                  <ThemeText>{data?.specialTraits}</ThemeText>
                 </View>
               )}
             </View>

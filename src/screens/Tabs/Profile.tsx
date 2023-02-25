@@ -1,12 +1,18 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 const ProfileTab = () => {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={styles.root}>
       <Text>Compose</Text>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});
 export default ProfileTab;

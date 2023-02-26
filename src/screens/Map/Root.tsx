@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 import { RootStackScreenProps } from "~/@types/navigators";
 import mapStyles from "./mapStyles.json";
@@ -51,14 +51,6 @@ const Map: React.FC<RootStackScreenProps<"Map-Screen">> = ({
   }) => setPinPoint({ latitude, longitude });
 
   const onConfirmLocationPoints = (location: string) => {
-    // setMapState({
-    //   address: location,
-    //   coordinates: {
-    //     latitude: pinPoint?.latitude!,
-    //     longitude: pinPoint?.longitude!,
-    //   },
-    // });
-
     setMapAddress(location);
     setMapCoordinates({
       latitude: pinPoint?.latitude,
@@ -78,6 +70,7 @@ const Map: React.FC<RootStackScreenProps<"Map-Screen">> = ({
         />
       )}
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={initialRegion}
         region={region}

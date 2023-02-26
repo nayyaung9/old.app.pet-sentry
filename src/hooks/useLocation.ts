@@ -1,8 +1,15 @@
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 
+type CoordinatesProps = {
+  latitude: number;
+  longitude: number;
+};
 const useLocation = () => {
-  const [location, setLocation] = useState<any>(null);
+  const [location, setLocation] = useState<CoordinatesProps>({
+    latitude: 0,
+    longitude: 0,
+  });
 
   useEffect(() => {
     (async () => {
@@ -12,7 +19,12 @@ const useLocation = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+
+      if (location) {
+        const latitude = location?.coords?.latitude;
+        const longitude = location?.coords?.longitude;
+        setLocation({ latitude, longitude });
+      }
     })();
   }, []);
 

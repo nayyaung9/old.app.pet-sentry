@@ -8,7 +8,8 @@ export type ColorDefinitions =
   | "buttonDisable"
   | "textDisable"
   | "textWhite"
-  | "textSecondary";
+  | "textSecondary"
+  | "inputBackground";
 
 const themeColors: {
   [key in ColorDefinitions]: {
@@ -40,6 +41,10 @@ const themeColors: {
   textSecondary: {
     light: "#9e9e9e",
     dark: "#9e9e9e",
+  },
+  inputBackground: {
+    light: "#F2F7FC",
+    dark: "#F00",
   },
 };
 

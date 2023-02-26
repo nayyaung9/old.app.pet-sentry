@@ -10,7 +10,14 @@ export type RootStackParamList = {
   "Timeline-Detail": {
     data: any;
   };
-  "Map-Screen": undefined;
+  "Map-Screen": {
+    isPin: boolean;
+    point: {
+      latitude?: number;
+      longitude?: number;
+    };
+  };
+  "Pet-Lost-Screen": undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

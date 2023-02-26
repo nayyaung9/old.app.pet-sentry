@@ -14,11 +14,7 @@ const ComposeTab: React.FC<BottomTabsScreenProps<"Tab-Compose">> = ({
       <View style={styles.container}>
         {activities?.map((activity, index) => (
           <TouchableOpacity
-            // onPress={() =>
-            //   navigation.navigate("Timeline-Post-Form", {
-            //     actionType: activity?.type,
-            //   })
-            // }
+            onPress={() => navigation.navigate("Pet-Lost-Screen")}
             disabled={activity?.isDisabled}
             key={index}
             style={[

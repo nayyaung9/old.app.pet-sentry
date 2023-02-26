@@ -1,5 +1,5 @@
 const Base = 4;
-enum FONT_FAMILY {
+export enum FONT_FAMILY {
   REGULAR = "Font-Regular",
   LIGHT = "Font-Light",
   MEDIUM = "Font-Medium",

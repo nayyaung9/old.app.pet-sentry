@@ -13,10 +13,14 @@ import ComposeTab from "./Compose";
 import ProfileTab from "./Profile";
 
 // Utils
+import { useGeoAddress, useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { useTheme } from "~/utils/theme/ThemeManager";
 
 const ScreenTab = () => {
   const { colors } = useTheme();
+  const geoAddress = useGeoAddress();
+  const userCoordinates = useUserCoordinates();
+
   return (
     <Tab.Navigator
       initialRouteName="Tab-Home"
@@ -30,15 +34,16 @@ const ScreenTab = () => {
         name="Tab-Home"
         component={HomeTab}
         options={({ navigation }) => ({
-          // title: "Pet Sentry",
           headerTitle: () => (
             <View style={{ alignItems: "center" }}>
               <ThemeText fontStyle={"L"} fontWeight={"Medium"}>
                 Pet Sentry
               </ThemeText>
-              <ThemeText fontStyle="S" fontWeight="Light">
-                Tarmwe, Yangon
-              </ThemeText>
+              {geoAddress != "" && (
+                <ThemeText fontStyle="S" fontWeight="Light">
+                  {geoAddress}
+                </ThemeText>
+              )}
             </View>
           ),
 
@@ -57,7 +62,15 @@ const ScreenTab = () => {
           headerRight: () => (
             <Pressable
               style={{ marginRight: 16 }}
-              onPress={() => navigation.navigate("Map-Screen")}
+              onPress={() =>
+                navigation.navigate("Map-Screen", {
+                  isPin: false,
+                  point: {
+                    latitude: userCoordinates?.latitude,
+                    longitude: userCoordinates?.longitude,
+                  },
+                })
+              }
             >
               <Ionicons name="map" size={24} color="#555" />
             </Pressable>

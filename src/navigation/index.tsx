@@ -1,9 +1,10 @@
 import React from "react";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 import { RootStackParamList } from "~/@types/navigators";
@@ -13,8 +14,11 @@ import ScreenTabs from "~/screens/Tabs";
 import TimelineDetail from "~/screens/TimelineDetail";
 import Map from "~/screens/Map/Root";
 import PetLostForm from "~/screens/Compose/PetLostForm";
+import { StyleConstants } from "~/utils/theme/constants";
 
 const ApplicationNavigator = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -27,24 +31,7 @@ const ApplicationNavigator = () => {
           component={ScreenTabs}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Timeline-Detail"
-          component={TimelineDetail}
-          options={({ navigation, route }) => ({
-            title: route?.params?.data?.petName,
-            headerTitleAlign: "center",
-            headerLeft: () => (
-              <Pressable onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color="black" />
-              </Pressable>
-            ),
-            headerRight: () => (
-              <Pressable>
-                <Ionicons name="md-bookmark-outline" size={24} color="black" />
-              </Pressable>
-            ),
-          })}
-        />
+        <Stack.Screen name="Timeline-Detail" component={TimelineDetail} />
         <Stack.Screen
           name="Map-Screen"
           component={Map}

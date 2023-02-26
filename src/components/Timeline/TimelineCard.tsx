@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TimelineCard;
+export default memo(TimelineCard);

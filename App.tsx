@@ -35,30 +35,51 @@ export default function App() {
 
         if (response) {
           const { results } = response;
-          const { state, suburb } = results[0] && results[0]?.components;
+          const { suburb, state } = results[0] && results[0]?.components;
           const isTownshipAvailable = suburb || "";
           const geoCodedLocation = `${isTownshipAvailable}${
             isTownshipAvailable && ","
           }${state || ""}`;
           // This definies user short address for Timeline
           setGeoAddress(geoCodedLocation);
+          if (suburb != "" && suburb != undefined && results[0]?.formatted) {
+            setMapAddress(`${suburb}, ${results[0]?.formatted}`);
+          } else {
+            setMapAddress(results[0]?.formatted);
+          }
 
-          const residential =
-            (results[0] && results[0]?.components?.residential) || "";
-          const formattedAddress = results[0]?.formatted;
-          const geocodedAddress = `${
-            suburb || ""
-          },${residential}${formattedAddress}`;
-
-          // This defines user map address for Submit Pet Form
-          setMapAddress(geocodedAddress);
-
-          // This defines user coordinates for Map Point Case
           setUserCoordinates({
             latitude,
             longitude,
           });
         }
+
+        // if (response) {
+        //   const { results } = response;
+        //   const { state, suburb } = results[0] && results[0]?.components;
+        //   const isTownshipAvailable = suburb || "";
+        //   const geoCodedLocation = `${isTownshipAvailable}${
+        //     isTownshipAvailable && ","
+        //   }${state || ""}`;
+        //   // This definies user short address for Timeline
+        //   setGeoAddress(geoCodedLocation);
+
+        //   const residential =
+        //     (results[0] && results[0]?.components?.residential) || "";
+        //   const formattedAddress = results[0]?.formatted;
+        //   const geocodedAddress = `${
+        //     suburb || ""
+        //   },${residential}${formattedAddress}`;
+
+        //   // This defines user map address for Submit Pet Form
+        //   setMapAddress(geocodedAddress);
+
+        //   // This defines user coordinates for Map Point Case
+        //   setUserCoordinates({
+        //     latitude,
+        //     longitude,
+        //   });
+        // }
       }
     };
 

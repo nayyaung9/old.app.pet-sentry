@@ -10,8 +10,8 @@ import TimelineContainer from "~/components/Timeline/TimelineContainer";
 
 const DEVICE = Dimensions.get("window");
 
-const Route = ({ route: { key } }: { route: any }) => {
-  return <TimelineContainer queryKey={key} />;
+const Route = ({ route: { queryKey } }: { route: any }) => {
+  return <TimelineContainer {...{ queryKey }} />;
 };
 const renderScene = SceneMap({
   first: Route,
@@ -23,8 +23,8 @@ const HomeTab = () => {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "first", title: "Missing" },
-    { key: "second", title: "Report" },
+    { key: "first", title: "Missing", queryKey: "Missing" },
+    { key: "second", title: "Report", queryKey: "Found" },
   ]);
 
   const renderTabBar = (props: any) => (
@@ -52,7 +52,7 @@ const HomeTab = () => {
       renderLabel={({ route, focused }) => (
         <Text
           style={{
-         textTransform: "uppercase",
+            textTransform: "uppercase",
             color: focused ? "#ff4081" : "#555",
           }}
         >

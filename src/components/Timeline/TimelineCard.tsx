@@ -5,14 +5,14 @@ import {
   View,
   Image,
   Pressable,
-  Text,
 } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
+import moment from "moment";
 
-const TimelineCard = ({ item }: { item: any }) => {
+const TimelineCard = ({ item }: { item: PetSentry.Post }) => {
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Home">["navigation"]>();
   return (
@@ -29,7 +29,7 @@ const TimelineCard = ({ item }: { item: any }) => {
           style={{ width: 42, height: 42, borderRadius: 100 }}
         />
         <View style={{ marginLeft: 8 }}>
-          <ThemeText>{item?._owner?.fullname}</ThemeText>
+          <ThemeText>{item?._owner?.name}</ThemeText>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Ionicons
               name="md-location"
@@ -75,8 +75,7 @@ const TimelineCard = ({ item }: { item: any }) => {
             {item?.petName}
           </ThemeText>
           <ThemeText fontStyle={"XS"} color={"rgba(0, 0, 0, 0.6)"}>
-            {/* {moment(item?.createdAt).format("MMM, DDD, YYYY")} */}
-            Feb 24, 2023
+            {moment(item?.createdAt).format("MMM, DD, YYYY")}
           </ThemeText>
         </View>
 

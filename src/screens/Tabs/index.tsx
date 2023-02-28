@@ -2,7 +2,7 @@ import React from "react";
 import { Pressable, View } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 import type { BottomTabScreenParamList } from "~/@types/navigators";
 const Tab = createBottomTabNavigator<BottomTabScreenParamList>();
@@ -83,9 +83,9 @@ const ScreenTab = () => {
         options={() => ({
           title: "Compose",
           tabBarIcon: ({ focused, color }) => (
-            <AntDesign
-              name="appstore1"
-              size={24}
+            <MaterialIcons
+              name="post-add"
+              size={28}
               color={focused ? colors.primary : color}
             />
           ),

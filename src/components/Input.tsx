@@ -94,6 +94,16 @@ const Input: React.FC<InputProps> = ({
   };
 
   const isInputTextarea = as == "textarea";
+
+  const iOSPaddingTopStyleCalculate = useMemo(() => {
+    if (label) {
+      return isInputTextarea
+        ? StyleConstants.Spacing.L
+        : StyleConstants.Spacing.M;
+    }
+    return 0;
+  }, [label, isInputTextarea]);
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -102,13 +112,14 @@ const Input: React.FC<InputProps> = ({
           style={[
             styles.input,
             {
+              maxHeight: isInputTextarea ? 75 : 45,
               paddingTop: Platform.select({
                 android: !placeholder
                   ? StyleConstants.Spacing.M
                   : isInputTextarea
                   ? StyleConstants.Spacing.M
                   : 16,
-                ios: label || isInputTextarea ? StyleConstants.Spacing.M : 0,
+                ios: iOSPaddingTopStyleCalculate,
               }),
               height: isInputTextarea ? 200 : INPUT_HEIGHT,
               backgroundColor: colors.inputBackground,

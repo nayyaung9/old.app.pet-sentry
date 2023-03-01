@@ -4,11 +4,18 @@ import type {
 } from "@react-navigation/native";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { StackScreenProps } from "@react-navigation/stack";
+import type { DrawerScreenProps } from "@react-navigation/drawer";
+
+export type DrawerStackParamsList = {
+  "Screen-Tabs": NavigatorScreenParams<BottomTabScreenParamList>;
+};
+export type DrawerStackScreenProps<T extends keyof DrawerStackParamsList> =
+  DrawerScreenProps<DrawerStackParamsList, T>;
 
 export type RootStackParamList = {
-  "Screen-Tabs": NavigatorScreenParams<BottomTabScreenParamList>;
+  "App-Screens": NavigatorScreenParams<DrawerStackParamsList>;
   "Timeline-Detail": {
-    data: any;
+    postId: string;
   };
   "Map-Screen": {
     isPin: boolean;

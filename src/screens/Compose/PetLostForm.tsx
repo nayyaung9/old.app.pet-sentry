@@ -14,6 +14,8 @@ import collar_colors from "~/utils/constants/collar_colors.json";
 
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import { usePostCreateMutation } from "~/libs/mutation/post";
+import { Flow } from "react-native-animated-spinkit";
 
 const PetLostForm = () => {
   const navigation =
@@ -21,6 +23,10 @@ const PetLostForm = () => {
   const { colors } = useTheme();
   const mapAddress = useMapAddress();
   const userCoordinates = useUserCoordinates();
+
+  const mutation = usePostCreateMutation({
+    onSuccess: (res) => console.log("UI Success", res),
+  });
 
   const [petTypeModal, setPetTypeModal] = useState(false);
   const [genderModal, setGenderModal] = useState(false);
@@ -69,6 +75,32 @@ const PetLostForm = () => {
   const onSelectPetCollarColor = (value: string) => {
     setState({ ...state, collarColor: value });
     toggleCollarColorModal();
+  };
+
+  const onSubmit = () => {
+    const { petName, petType, information, collarColor, specialTrait, gender } =
+      state;
+    const payload = {
+      geolocation: [userCoordinates.longitude, userCoordinates.latitude],
+      address: state.address,
+      petName,
+      petType,
+      information,
+      collarColor,
+      activityType: "Missing",
+      specialTraits: specialTrait,
+      gender: gender,
+      photos: [
+        {
+          url: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHBldHN8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60",
+          _id: "63fe01d36c8c9740137dea6b",
+        },
+      ],
+      activityDate: "2023-02-27T16:54:15.307+00:00",
+    };
+
+    console.log("Payload", payload);
+    mutation.mutate(payload);
   };
 
   return (
@@ -164,6 +196,23 @@ const PetLostForm = () => {
           </View>
         </Pressable>
       </View>
+
+      <Pressable
+        onPress={onSubmit}
+        style={{
+          backgroundColor: colors.primary,
+          borderRadius: 4,
+          paddingVertical: StyleConstants.Spacing.M - 4,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {mutation.isLoading ? (
+          <Flow color="#fff" size={24} />
+        ) : (
+          <ThemeText color={"#fff"}>Submit</ThemeText>
+        )}
+      </Pressable>
 
       <BottomSheet
         visible={petTypeModal}

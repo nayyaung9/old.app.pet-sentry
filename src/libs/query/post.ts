@@ -1,6 +1,11 @@
 import PetSentry from "~/libs/api";
-import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
+import {
+  QueryFunctionContext,
+  useQuery,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { handleError } from "~/utils/handleError";
+import { AxiosError } from "axios";
 
 type PostQueryKey = ["Posts", { activityType: string }];
 
@@ -20,4 +25,28 @@ const usePosts = ({ ...queryKeyParams }: PostQueryKey[1]) => {
   return useQuery(queryKey, fetchPosts);
 };
 
-export { usePosts };
+type PostDetailQueryPost = ["Post", { postId: string }];
+
+const fetchPostDetail = async ({
+  queryKey,
+}: QueryFunctionContext<PostDetailQueryPost>) => {
+  const { postId } = queryKey[1];
+  try {
+    const { data } = await PetSentry.get(`/post/post/${postId}`);
+    return data.data;
+  } catch (err) {
+    handleError(err);
+  }
+};
+
+const usePostDetail = ({
+  options,
+  ...queryKeyParams
+}: PostDetailQueryPost[1] & {
+  options?: UseQueryOptions<PetSentry.Post, AxiosError>;
+}) => {
+  const queryKey: PostDetailQueryPost = ["Post", { ...queryKeyParams }];
+
+  return useQuery(queryKey, fetchPostDetail, options);
+};
+export { usePosts, usePostDetail };

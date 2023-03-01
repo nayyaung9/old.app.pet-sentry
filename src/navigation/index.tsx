@@ -10,11 +10,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 import { RootStackParamList } from "~/@types/navigators";
 
 // Screens
-import ScreenTabs from "~/screens/Tabs";
+import AppDrawerStack from "./Drawer";
 import TimelineDetail from "~/screens/TimelineDetail";
 import Map from "~/screens/Map/Root";
 import PetLostForm from "~/screens/Compose/PetLostForm";
-import { StyleConstants } from "~/utils/theme/constants";
 
 const ApplicationNavigator = () => {
   const insets = useSafeAreaInsets();
@@ -27,8 +26,8 @@ const ApplicationNavigator = () => {
         }}
       >
         <Stack.Screen
-          name="Screen-Tabs"
-          component={ScreenTabs}
+          name="App-Screens"
+          component={AppDrawerStack}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Timeline-Detail" component={TimelineDetail} />

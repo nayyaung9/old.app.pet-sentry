@@ -55,7 +55,10 @@ const ScreenTab = () => {
             />
           ),
           headerLeft: () => (
-            <Pressable style={{ marginLeft: 16 }}>
+            <Pressable
+              style={{ marginLeft: 16 }}
+              onPress={() => navigation.openDrawer()}
+            >
               <Ionicons name="menu" size={24} color="black" />
             </Pressable>
           ),

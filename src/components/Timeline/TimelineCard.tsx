@@ -49,7 +49,9 @@ const TimelineCard = ({ item }: { item: PetSentry.Post }) => {
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
         <Pressable
-          onPress={() => navigation.navigate("Timeline-Detail", { data: item })}
+          onPress={() =>
+            navigation.navigate("Timeline-Detail", { postId: item?._id })
+          }
         >
           <Image
             source={{

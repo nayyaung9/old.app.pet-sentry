@@ -1,23 +1,20 @@
 import React from "react";
-import { Pressable, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-import { RootStackParamList } from "~/@types/navigators";
+import type { RootStackParamList } from "~/@types/navigators";
 
 // Screens
 import AppDrawerStack from "./Drawer";
 import TimelineDetail from "~/screens/TimelineDetail";
 import Map from "~/screens/Map/Root";
 import PetLostForm from "~/screens/Compose/PetLostForm";
+import { useTheme } from "~/utils/theme/ThemeManager";
 
 const ApplicationNavigator = () => {
-  const insets = useSafeAreaInsets();
-
+  const { colors } = useTheme();
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -36,19 +33,7 @@ const ApplicationNavigator = () => {
           component={Map}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Pet-Lost-Screen"
-          component={PetLostForm}
-          options={({ navigation, route }) => ({
-            title: "Lost Pet",
-            headerTitleAlign: "center",
-            headerLeft: () => (
-              <Pressable onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color="black" />
-              </Pressable>
-            ),
-          })}
-        />
+        <Stack.Screen name="Pet-Lost-Screen" component={PetLostForm} />
       </Stack.Navigator>
     </NavigationContainer>
   );

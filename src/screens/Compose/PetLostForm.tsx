@@ -11,6 +11,7 @@ import { BottomSheet } from "react-native-btr";
 import pet_types from "~/utils/constants/pet_types.json";
 import genders from "~/utils/constants/genders.json";
 import collar_colors from "~/utils/constants/collar_colors.json";
+import { Ionicons } from "@expo/vector-icons";
 
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "~/utils/theme/ThemeManager";
@@ -23,6 +24,23 @@ const PetLostForm = () => {
   const { colors } = useTheme();
   const mapAddress = useMapAddress();
   const userCoordinates = useUserCoordinates();
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: "Lost Pet",
+      headerTitleAlign: "center",
+      headerLeft: () => (
+        <Pressable onPress={() => navigation.goBack()}>
+          <Ionicons name="chevron-back" size={24} color="black" />
+        </Pressable>
+      ),
+      headerRight: () => (
+        <Pressable>
+          <ThemeText color={colors.primary}>Publish</ThemeText>
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
 
   const mutation = usePostCreateMutation({
     onSuccess: (res) => console.log("UI Success", res),
@@ -196,7 +214,7 @@ const PetLostForm = () => {
           </View>
         </Pressable>
       </View>
-
+      {/* 
       <Pressable
         onPress={onSubmit}
         style={{
@@ -212,7 +230,7 @@ const PetLostForm = () => {
         ) : (
           <ThemeText color={"#fff"}>Submit</ThemeText>
         )}
-      </Pressable>
+      </Pressable> */}
 
       <BottomSheet
         visible={petTypeModal}

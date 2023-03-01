@@ -1,11 +1,13 @@
 import React from "react";
 import { StyleSheet, FlatList, View } from "react-native";
-import { usePosts } from "~/libs/query/post";
 import ComponentSeparator from "../Sperator";
 import TimelineCard from "./TimelineCard";
 import { Flow } from "react-native-animated-spinkit";
-import { useTheme } from "~/utils/theme/ThemeManager";
 import TimelineEmpty from "./TimelineEmpty";
+
+// Utils & Queries
+import { useTheme } from "~/utils/theme/ThemeManager";
+import { usePosts } from "~/libs/query/post";
 
 const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
   const { colors } = useTheme();

@@ -9,7 +9,8 @@ export type ColorDefinitions =
   | "textDisable"
   | "textWhite"
   | "textSecondary"
-  | "inputBackground";
+  | "inputBackground"
+  | "mediumDark";
 
 const themeColors: {
   [key in ColorDefinitions]: {
@@ -45,6 +46,10 @@ const themeColors: {
   inputBackground: {
     light: "#F2F7FC",
     dark: "#F00",
+  },
+  mediumDark: {
+    light: "rgba(0, 0, 0, 0.7)",
+    dark: "rgba(0, 0, 0, 0.7)",
   },
 };
 

@@ -1,10 +1,22 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Accouncement from "~/components/Account/Announcement";
+import Guest from "~/components/Account/Guest";
+import AccountRoot from "~/components/Account/Root";
+import ThemeText from "~/components/ThemeText";
 
 const ProfileTab = () => {
+  const isAuth = true;
   return (
     <View style={styles.root}>
-      <Text>Profile</Text>
+      {!isAuth ? (
+        <Guest />
+      ) : (
+        <>
+          <AccountRoot />
+          <Accouncement />
+        </>
+      )}
     </View>
   );
 };

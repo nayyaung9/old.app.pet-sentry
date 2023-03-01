@@ -1,4 +1,6 @@
 import React, { memo } from "react";
+
+// Components
 import {
   StyleSheet,
   TouchableOpacity,
@@ -7,45 +9,29 @@ import {
   Pressable,
 } from "react-native";
 import ThemeText from "~/components/ThemeText";
-import { Ionicons } from "@expo/vector-icons";
+
+// Utils & Queries
+import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
-import moment from "moment";
+import { StyleConstants } from "~/utils/theme/constants";
+import TimelineOwner from "./TimelineOwner";
 
 const TimelineCard = ({ item }: { item: PetSentry.Post }) => {
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Home">["navigation"]>();
+
   return (
     <TouchableOpacity activeOpacity={1} style={styles.timelineCard}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          paddingBottom: 16,
+      <TimelineOwner
+        {...{
+          postId: item?._id,
+          owner: {
+            profileUrl: item?._owner?.profileUrl,
+            name: item?._owner?.name,
+          },
         }}
-      >
-        <Image
-          source={{ uri: item?._owner?.profileUrl }}
-          style={{ width: 42, height: 42, borderRadius: 100 }}
-        />
-        <View style={{ marginLeft: 8 }}>
-          <ThemeText>{item?._owner?.name}</ThemeText>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Ionicons
-              name="md-location"
-              size={14}
-              color={"rgba(0, 0, 0, 0.7)"}
-            />
-            <ThemeText
-              fontStyle={"XS"}
-              fontWeight={"Medium"}
-              color={"rgba(0, 0, 0, 0.4)"}
-            >
-              Tarmwe, Yangon
-            </ThemeText>
-          </View>
-        </View>
-      </View>
+      />
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
         <Pressable
@@ -57,8 +43,6 @@ const TimelineCard = ({ item }: { item: PetSentry.Post }) => {
             source={{
               uri: item.photos[0].url,
             }}
-            // imageStyle={styles.timelineImage}
-            // blurHash={item?.photos[0]?.blurHashValue}
             style={styles.timelineImage}
           />
         </Pressable>
@@ -94,7 +78,7 @@ const TimelineCard = ({ item }: { item: PetSentry.Post }) => {
 const styles = StyleSheet.create({
   timelineCard: {
     backgroundColor: "#fff",
-    padding: 16,
+    padding: StyleConstants.Spacing.M,
   },
   timelineImage: {
     width: "100%",

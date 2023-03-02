@@ -10,7 +10,8 @@ export type ColorDefinitions =
   | "textWhite"
   | "textSecondary"
   | "inputBackground"
-  | "mediumDark";
+  | "mediumDark"
+  | "inactiveTabBar";
 
 const themeColors: {
   [key in ColorDefinitions]: {
@@ -50,6 +51,10 @@ const themeColors: {
   mediumDark: {
     light: "rgba(0, 0, 0, 0.7)",
     dark: "rgba(0, 0, 0, 0.7)",
+  },
+  inactiveTabBar: {
+    light: "#F1F4F8",
+    dark: "#F00",
   },
 };
 

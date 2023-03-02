@@ -40,45 +40,52 @@ const MapLabel = ({ pinPoint, getMapInfo }: MapGenerateLabelProps) => {
     }
   };
 
-  console.log("Data", data)
+  console.log("Data", data);
 
   return (
-    <>
-      <View style={styles.mapSearchView}>
-        <View style={styles.mapSearchHeader}>
-          <ThemeText
-            style={{ flex: 1, marginRight: 8 }}
-            color={isLoading ? colors.textDisable : "#000"}
-            numberOfLines={1}
-          >
-            {data || "Please pin your location on map."}
-          </ThemeText>
-          <Pressable
-            disabled={isLoading || data == ""}
-            onPress={onConfirmMapInfo}
-            children={() => (
-              <>
-                {isLoading ? (
-                  <ActivityIndicator color={colors.primary} size={"small"} />
-                ) : (
-                  <Ionicons name="md-checkmark" color="green" size={24} />
-                )}
-              </>
-            )}
-          />
-        </View>
+    <View style={styles.mapSearchView}>
+      <View style={styles.mapSearchHeader}>
+        <ThemeText
+          style={{ flex: 1, marginRight: 8 }}
+          color={isLoading ? colors.textDisable : "#000"}
+          numberOfLines={1}
+        >
+          {data || "Please pin your location on map."}
+        </ThemeText>
+        <Pressable
+          disabled={isLoading || data == ""}
+          onPress={onConfirmMapInfo}
+          children={() => (
+            <>
+              {isLoading ? (
+                <ActivityIndicator color={colors.primary} size={"small"} />
+              ) : (
+                <Ionicons name="md-checkmark" color="green" size={24} />
+              )}
+            </>
+          )}
+        />
       </View>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   mapSearchView: {
     position: "absolute",
-    top: 40,
+    top: 70,
     zIndex: 9,
     width: "100%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   mapSearchHeader: {
     width: device?.width - 48,

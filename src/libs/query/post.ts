@@ -25,6 +25,23 @@ const usePosts = ({ ...queryKeyParams }: PostQueryKey[1]) => {
   return useQuery(queryKey, fetchPosts);
 };
 
+// Fetch Owner Posts
+type PostOwnerQueryKey = ["Owner-Posts"];
+
+const fetchOwnerPosts = async () => {
+  try {
+    const { data } = await PetSentry.get("/post/fetch-owner-posts");
+    return data.data;
+  } catch (err) {
+    handleError(err);
+  }
+};
+const useOwnerPosts = () => {
+  const queryKey: PostOwnerQueryKey = ["Owner-Posts"];
+  return useQuery(queryKey, fetchOwnerPosts);
+};
+// Fetch Owner Posts
+
 type PostDetailQueryPost = ["Post", { postId: string }];
 
 const fetchPostDetail = async ({
@@ -49,4 +66,4 @@ const usePostDetail = ({
 
   return useQuery(queryKey, fetchPostDetail, options);
 };
-export { usePosts, usePostDetail };
+export { usePosts, useOwnerPosts, usePostDetail };

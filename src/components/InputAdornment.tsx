@@ -9,25 +9,35 @@ import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
   Platform,
+  Pressable,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import { FONT_FAMILY, StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import ThemeText from "./ThemeText";
 
 type InputProps = {
   as?: "textarea";
   label?: string;
+  disabled?: boolean;
   errorText?: string | any;
+  startAdornment?: React.ReactElement;
+  endAdornment?: React.ReactElement | null;
 } & TextInputProps;
 
 const INPUT_HEIGHT = 50;
 
-const Input: React.FC<InputProps> = ({
+const InputAdornment: React.FC<InputProps> = ({
   label,
   as,
   placeholder,
   onFocus,
+  disabled,
   onBlur,
   errorText,
+  startAdornment,
+  endAdornment,
   ...rest
 }) => {
   const { colors } = useTheme();
@@ -93,19 +103,6 @@ const Input: React.FC<InputProps> = ({
 
   const isInputTextarea = as == "textarea";
 
-  const iOSPaddingTopStyleCalculate = useMemo(() => {
-    if (label) {
-      return isInputTextarea
-        ? StyleConstants.Spacing.L
-        : StyleConstants.Spacing.M;
-    }
-    return 0;
-  }, [label, isInputTextarea]);
-
-  const androidPaddingTop = useMemo(() => {
-    return StyleConstants.Spacing.L;
-  }, [placeholder, isInputTextarea]);
-
   return (
     <>
       <View style={styles.inputContainer}>
@@ -114,14 +111,22 @@ const Input: React.FC<InputProps> = ({
           style={[
             styles.input,
             {
-              height: INPUT_HEIGHT,
               paddingTop: Platform.select({
-                android: androidPaddingTop,
-                ios: iOSPaddingTopStyleCalculate,
+                android: !placeholder
+                  ? StyleConstants.Spacing.M
+                  : isInputTextarea
+                  ? StyleConstants.Spacing.M
+                  : 0,
+                ios: label || isInputTextarea ? StyleConstants.Spacing.M : 0,
               }),
+              height: isInputTextarea ? 200 : INPUT_HEIGHT,
               backgroundColor: colors.inputBackground,
-              fontFamily: "Font-Regular",
-              fontSize: !rest.value ? 12 : 14,
+              paddingLeft: startAdornment
+                ? StyleConstants.Spacing.M + (24 + 8)
+                : StyleConstants.Spacing.M,
+              paddingRight: endAdornment
+                ? StyleConstants.Spacing.M + (24 + 8)
+                : StyleConstants.Spacing.M,
             },
           ]}
           autoCapitalize="none"
@@ -165,6 +170,15 @@ const Input: React.FC<InputProps> = ({
           ]}
           pointerEvents="none"
         />
+
+        {/* Managing Start and End Adornment Icons Here */}
+        {startAdornment && (
+          <View style={styles.startAdornmentView}>{startAdornment}</View>
+        )}
+
+        {endAdornment && (
+          <View style={styles.endAdornmentView}>{endAdornment}</View>
+        )}
       </View>
     </>
   );
@@ -173,11 +187,9 @@ const Input: React.FC<InputProps> = ({
 const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
-    borderRadius: 4,
   },
   input: {
     flex: 1,
-    paddingHorizontal: StyleConstants.Spacing.M,
     borderRadius: 4,
     zIndex: 1,
   },
@@ -194,10 +206,28 @@ const styles = StyleSheet.create({
     start: 0,
     end: 0,
     bottom: -1.5,
-    height: 8,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
+    height: 12,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  inputSuccess: {
+    position: "absolute",
+    zIndex: 1,
+    right: 18,
+    top: 14,
+  },
+  startAdornmentView: {
+    position: "absolute",
+    left: 16,
+    zIndex: 1,
+    top: 8,
+  },
+  endAdornmentView: {
+    position: "absolute",
+    right: 16,
+    zIndex: 1,
+    top: 15,
   },
 });
 
-export default Input;
+export default InputAdornment;

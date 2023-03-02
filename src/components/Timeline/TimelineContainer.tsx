@@ -8,6 +8,7 @@ import TimelineEmpty from "./TimelineEmpty";
 // Utils & Queries
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePosts } from "~/libs/query/post";
+import ThemeText from "../ThemeText";
 
 const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
   const { colors } = useTheme();
@@ -17,6 +18,12 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <Flow size={48} color={colors.primary} />
+        </View>
+      ) : error ? (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ThemeText>There was an error. Please try again later.</ThemeText>
         </View>
       ) : (
         <>

@@ -33,7 +33,11 @@ const ApplicationNavigator = () => {
           component={Map}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Pet-Lost-Screen" component={PetLostForm} />
+        <Stack.Screen
+          name="Pet-Lost-Screen"
+          component={PetLostForm}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

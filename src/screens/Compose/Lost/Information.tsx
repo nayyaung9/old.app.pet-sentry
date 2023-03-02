@@ -57,7 +57,6 @@ const PetInformation = ({
         <Pressable onPress={toggleLostDateModal}>
           <View pointerEvents="none">
             <Input
-              editable={false}
               label="Lost Date"
               value={moment(state.lostDate).format("MMM DD YYYY")}
             />

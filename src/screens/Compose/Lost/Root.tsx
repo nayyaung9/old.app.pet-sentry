@@ -64,6 +64,10 @@ const PetLostRoot = ({
         </Pressable>
       </View>
 
+      <View style={styles.inputView}>
+        <ThemeText>Photos</ThemeText>
+      </View>
+
       <BottomSheet
         visible={petTypeModal}
         onBackButtonPress={togglePetTypeModal}

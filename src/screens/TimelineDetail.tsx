@@ -21,6 +21,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePostDetail } from "~/libs/query/post";
 import { Flow } from "react-native-animated-spinkit";
+import TimelineInReview from "~/components/Timeline/TimelineInReview";
 
 const DEVICE = Dimensions.get("window");
 
@@ -76,9 +77,11 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar style={"light"} />
+      <StatusBar style={isLoading ? "dark" : "light"} />
       {isLoading ? (
-        <Flow />
+        <View style={styles.loadingContainer}>
+          <Flow />
+        </View>
       ) : (
         <ScrollView
           style={{
@@ -106,15 +109,41 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                 style={styles.linearGradient}
               >
                 <View style={styles.petInfo}>
-                  <ThemeText
-                    style={{ flex: 1, marginBottom: StyleConstants.Spacing.S }}
-                    fontWeight={"Medium"}
-                    fontStyle={"L"}
-                    numberOfLines={2}
-                    color={"#fff"}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: StyleConstants.Spacing.S,
+                    }}
                   >
-                    {data?.petName}
-                  </ThemeText>
+                    <ThemeText
+                      fontWeight={"Medium"}
+                      fontStyle={"L"}
+                      numberOfLines={2}
+                      color={"#fff"}
+                    >
+                      {data?.petName}
+                    </ThemeText>
+                    {!data?.isVerify && (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: -3,
+                        }}
+                      >
+                        <ThemeText
+                          color={colors.primary}
+                          style={{
+                            marginHorizontal: StyleConstants.Spacing.S - 2,
+                          }}
+                        >
+                          ·
+                        </ThemeText>
+                        <ThemeText color={colors.primary}>In Review</ThemeText>
+                      </View>
+                    )}
+                  </View>
                   <View
                     style={{
                       flexDirection: "row",
@@ -146,6 +175,7 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                       style={{
                         backgroundColor: colors.primary,
                         paddingHorizontal: 12,
+                        paddingBottom: 4,
                         borderRadius: 10,
                       }}
                     >
@@ -161,11 +191,15 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
 
           <View style={styles.contentContainer}>
             <View>
-              {data?.information != "" && (
-                <Label label="Information" value={data?.information as string} />
+              {!data?.isVerify && <TimelineInReview />}
+              {data?.information && (
+                <Label
+                  label="Information"
+                  value={data?.information as string}
+                />
               )}
 
-              {data?.geolocation?.address != "" && (
+              {data?.geolocation?.address && (
                 <Label
                   label="Missing here"
                   value={data?.geolocation?.address as string}
@@ -177,16 +211,9 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                 />
               )}
 
-              {data?.specialTraits != "" && data?.specialTraits != null && (
+              {data?.specialTraits && (
                 <Label label="Special Traits" value={data?.specialTraits} />
               )}
-
-              {/* {data?.reward != 0 && (
-                <Label
-                  label="Reward"
-                  value={`${currencyFormat(data?.reward)} MMK`}
-                />
-              )} */}
             </View>
 
             <View style={styles.basicInfoRow}>

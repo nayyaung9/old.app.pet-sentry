@@ -4,6 +4,11 @@ import ThemeText from "~/components/ThemeText";
 import { Ionicons } from "@expo/vector-icons";
 import AppBar from "~/components/AppBar";
 import ProgressBar from "~/components/ProgressBar";
+import { Flow } from "react-native-animated-spinkit";
+
+import PetInformation from "./Lost/Information";
+import PetLostRoot from "./Lost/Root";
+import PetIdentification from "./Lost/Identification";
 
 // Utils & Queries
 import useLostPet from "~/hooks/useLostPet";
@@ -13,11 +18,7 @@ import { StyleConstants } from "~/utils/theme/constants";
 import { useMapAddress } from "~/utils/state/useMapState";
 import { useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { usePostCreateMutation } from "~/libs/mutation/post";
-
 import type { BottomTabsScreenProps } from "~/@types/navigators";
-import PetInformation from "./Lost/Information";
-import PetLostRoot from "./Lost/Root";
-import PetIdentification from "./Lost/Identification";
 
 const STEP_COUNTS = 3;
 
@@ -60,7 +61,11 @@ const PetLostForm = () => {
     setState({ ...state, specialTrait: value });
 
   const mutation = usePostCreateMutation({
-    onSuccess: (res) => console.log("UI Success", res),
+    onSuccess: (res) => {
+      if (res?._id) {
+        navigation.navigate("Timeline-Detail", { postId: res?._id });
+      }
+    },
   });
 
   const onSelectPetType = (type: string) => {
@@ -127,6 +132,22 @@ const PetLostForm = () => {
     }
   };
 
+  const onCheckValidation = () => {
+    if (activeStepNo == 1) {
+      return !state.petName || !state.petType || !state.gender ? true : false;
+    }
+
+    if (activeStepNo == 2) {
+      return !state.address || !state.information || !state.lostDate
+        ? true
+        : false;
+    }
+
+    if (activeStepNo == 3) {
+      return !state.collarColor ? true : false;
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <AppBar
@@ -140,9 +161,13 @@ const PetLostForm = () => {
         }
         rightCustomComponent={
           <Pressable onPress={onPressHandler}>
-            <ThemeText color={colors.primary}>
-              {activeStepNo != STEP_COUNTS ? "Continue" : "Publish"}
-            </ThemeText>
+            {mutation.isLoading ? (
+              <Flow color={colors.primary} size={24} />
+            ) : (
+              <ThemeText color={onCheckValidation() ? "#ddd" : colors.primary}>
+                {activeStepNo != STEP_COUNTS ? "Continue" : "Publish"}
+              </ThemeText>
+            )}
           </Pressable>
         }
       />

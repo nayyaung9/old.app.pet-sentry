@@ -97,7 +97,7 @@ const ScreenTab = () => {
       <Tab.Screen
         name="Tab-Profile"
         component={ProfileTab}
-        options={() => ({
+        options={({ navigation }) => ({
           title: "Profile",
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
@@ -105,6 +105,22 @@ const ScreenTab = () => {
               size={24}
               color={focused ? colors.primary : color}
             />
+          ),
+          headerLeft: () => (
+            <Pressable
+              style={{ marginLeft: 16 }}
+              onPress={() => navigation.openDrawer()}
+            >
+              <Ionicons name="menu" size={24} color="black" />
+            </Pressable>
+          ),
+          headerRight: () => (
+            <Pressable
+              style={{ marginRight: 16 }}
+              onPress={() => navigation.navigate("Profile-Setting")}
+            >
+              <Ionicons name="md-settings-sharp" size={24} color="black" />
+            </Pressable>
           ),
         })}
       />

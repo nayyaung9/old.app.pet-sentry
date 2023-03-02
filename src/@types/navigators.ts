@@ -25,6 +25,9 @@ export type RootStackParamList = {
     };
   };
   "Pet-Lost-Screen": undefined;
+  "Profile-Setting": undefined;
+
+  "Login-Screen": undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

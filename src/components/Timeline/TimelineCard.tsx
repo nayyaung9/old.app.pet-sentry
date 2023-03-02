@@ -16,22 +16,32 @@ import { useNavigation } from "@react-navigation/native";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
 import { StyleConstants } from "~/utils/theme/constants";
 import TimelineOwner from "./TimelineOwner";
+import { useTheme } from "~/utils/theme/ThemeManager";
 
-const TimelineCard = ({ item }: { item: PetSentry.Post }) => {
+const TimelineCard = ({
+  item,
+  isHideOwner = false,
+}: {
+  item: PetSentry.Post;
+  isHideOwner?: boolean;
+}) => {
+  const { colors } = useTheme();
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Home">["navigation"]>();
 
   return (
     <TouchableOpacity activeOpacity={1} style={styles.timelineCard}>
-      <TimelineOwner
-        {...{
-          postId: item?._id,
-          owner: {
-            profileUrl: item?._owner?.profileUrl,
-            name: item?._owner?.name,
-          },
-        }}
-      />
+      {!isHideOwner && (
+        <TimelineOwner
+          {...{
+            postId: item?._id,
+            owner: {
+              profileUrl: item?._owner?.profileUrl,
+              name: item?._owner?.name,
+            },
+          }}
+        />
+      )}
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
         <Pressable
@@ -49,24 +59,41 @@ const TimelineCard = ({ item }: { item: PetSentry.Post }) => {
       )}
 
       <View style={styles.timelineCardContent}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingBottom: 8,
-          }}
-        >
-          <ThemeText fontStyle="M" fontWeight={"Medium"} color={"#ff4081"}>
-            {item?.petName}
-          </ThemeText>
-          <ThemeText fontStyle={"XS"} color={"rgba(0, 0, 0, 0.6)"}>
+        <View style={styles.timelineCardInfoRow}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <ThemeText
+              fontStyle="M"
+              fontWeight={"Medium"}
+              color={colors.primary}
+              style={{
+                marginRight: StyleConstants.Spacing.S - 4,
+              }}
+            >
+              {item?.petName}
+            </ThemeText>
+            {!item.isVerify && (
+              <>
+                <ThemeText
+                  color={colors.primary}
+                  style={{
+                    marginRight: StyleConstants.Spacing.S - 4,
+                  }}
+                >
+                  ·
+                </ThemeText>
+                <ThemeText fontStyle="S" color={colors.primary}>
+                  In Review
+                </ThemeText>
+              </>
+            )}
+          </View>
+          <ThemeText fontStyle={"XS"} color={colors.mediumDark}>
             {moment(item?.createdAt).format("MMM, DD, YYYY")}
           </ThemeText>
         </View>
 
         {(item?.information || item?.specialTraits) && (
-          <ThemeText numberOfLines={2} color={"rgba(0, 0, 0, 0.4)"}>
+          <ThemeText numberOfLines={2} color={colors.mediumDark}>
             {item?.information || item?.specialTraits}
           </ThemeText>
         )}
@@ -82,12 +109,18 @@ const styles = StyleSheet.create({
   },
   timelineImage: {
     width: "100%",
-    height: 250,
+    height: 220,
     borderRadius: 20,
   },
   timelineCardContent: {
     paddingTop: 12,
     paddingHorizontal: 8,
+  },
+  timelineCardInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingBottom: StyleConstants.Spacing.S - 4,
   },
   timelineCardImageBlurHashContainer: {
     width: "100%",

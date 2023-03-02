@@ -1,12 +1,26 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet } from "react-native";
 import Accouncement from "~/components/Account/Announcement";
 import Guest from "~/components/Account/Guest";
 import AccountRoot from "~/components/Account/Root";
-import ThemeText from "~/components/ThemeText";
+import { getAuthToken } from "~/utils/storage";
 
 const ProfileTab = () => {
-  const isAuth = true;
+  const [loading, setLoading] = useState(false);
+  const [isAuth, setIsAuth] = useState<boolean | null>(null);
+
+  const prepare = async () => {
+    setLoading(true);
+    const isTokenExist = await getAuthToken();
+    if (isTokenExist) {
+      setIsAuth(true);
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    prepare();
+  }, []);
+
   return (
     <View style={styles.root}>
       {!isAuth ? (

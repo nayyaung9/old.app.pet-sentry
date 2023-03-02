@@ -9,6 +9,7 @@ import TimelineEmpty from "./TimelineEmpty";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePosts } from "~/libs/query/post";
 import ThemeText from "../ThemeText";
+import { StyleConstants } from "~/utils/theme/constants";
 
 const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
   const { colors } = useTheme();
@@ -30,7 +31,9 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
           {Array.isArray(data) && !error && (
             <FlatList
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ flexGrow: 1 }}
+              contentContainerStyle={{
+                flexGrow: 1,
+              }}
               style={{ flex: 1, backgroundColor: "#fff" }}
               ItemSeparatorComponent={ComponentSeparator}
               data={data}

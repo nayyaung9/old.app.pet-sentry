@@ -75,7 +75,6 @@ const AppBar = ({
 
 const styles = StyleSheet.create({
   container: {
-    top: 0,
     height: 50,
     width: "100%",
     backgroundColor: "#fff",

@@ -7,6 +7,7 @@ declare namespace PetSentry {
   type Account = {
     _id: string;
     name: string;
+    email: string;
     profileUrl: string;
     contactNumbers: string[];
     createdAt: string;

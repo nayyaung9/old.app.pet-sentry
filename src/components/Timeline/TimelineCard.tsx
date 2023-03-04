@@ -88,7 +88,7 @@ const TimelineCard = ({
             )}
           </View>
           <ThemeText fontStyle={"XS"} color={colors.mediumDark}>
-            {moment(item?.createdAt).format("MMM, DD, YYYY")}
+            {moment(item?.activityDate).format("MMM, DD, YYYY")}
           </ThemeText>
         </View>
 

@@ -72,6 +72,7 @@ const Button: React.FC<ButtonProps> = ({
 const styles = StyleSheet.create({
   pressableButton: {
     width: "100%",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     height: 48,

@@ -7,11 +7,12 @@ import ThemeText from "~/components/ThemeText";
 import { useLoginMutation } from "~/libs/mutation/auth";
 import { StyleConstants } from "~/utils/theme/constants";
 import { RootStackScreenProps } from "~/@types/navigators";
-import { saveAuthToken } from "~/utils/storage";
+import { useAuthStore } from "~/utils/state/useAuth";
 
 const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
   navigation,
 }) => {
+  const authenticate = useAuthStore((state) => state.authenticate);
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -22,7 +23,7 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
   };
   const mutation = useLoginMutation({
     onSuccess: async (res) => {
-      await saveAuthToken(res?.token);
+      await authenticate({ token: res?.token, userId: res.user._id });
     },
     onError: (err) => console.log("Error", err),
   });

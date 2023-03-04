@@ -3,27 +3,21 @@ import { View, StyleSheet } from "react-native";
 import Accouncement from "~/components/Account/Announcement";
 import Guest from "~/components/Account/Guest";
 import AccountRoot from "~/components/Account/Root";
+import { useAuthState, useAuthStore } from "~/utils/state/useAuth";
 import { getAuthToken } from "~/utils/storage";
+import { shallow } from "zustand/shallow";
 
 const ProfileTab = () => {
-  const [loading, setLoading] = useState(false);
-  const [isAuth, setIsAuth] = useState<boolean | null>(null);
+  const { token, userId } = useAuthState();
+  const getCredential = useAuthStore((state) => state.getCredential);
 
-  const prepare = async () => {
-    setLoading(true);
-    const isTokenExist = await getAuthToken();
-    if (isTokenExist) {
-      setIsAuth(true);
-    }
-    setLoading(false);
-  };
   useEffect(() => {
-    prepare();
+    getCredential();
   }, []);
 
   return (
     <View style={styles.root}>
-      {!isAuth ? (
+      {!token ? (
         <Guest />
       ) : (
         <>

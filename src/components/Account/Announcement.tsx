@@ -18,7 +18,6 @@ const Accouncement = () => {
   const { colors } = useTheme();
   const { data, isLoading } = useOwnerPosts();
 
-  console.log("data", JSON.stringify(data, null, 2))
   return (
     <View style={styles.root}>
       {isLoading ? (

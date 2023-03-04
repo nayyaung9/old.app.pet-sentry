@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -8,20 +8,21 @@ import {
   Pressable,
   Image,
 } from "react-native";
+import Button from "~/components/Button";
 import ThemeText from "~/components/ThemeText";
 import type { RootStackScreenProps } from "~/@types/navigators";
-import { currencyFormat, extractShortLocation } from "~/utils/helpers";
+import { extractShortLocation } from "~/utils/helpers";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Label from "~/components/Label";
 import OwnerInfo from "~/components/OwnerInfo";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePostDetail } from "~/libs/query/post";
 import { Flow } from "react-native-animated-spinkit";
-import TimelineInReview from "~/components/Timeline/TimelineInReview";
+import moment from "moment";
 
 const DEVICE = Dimensions.get("window");
 
@@ -51,6 +52,10 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
       },
     });
   };
+
+  const isOwner = useMemo(() => {
+    return data?._owner?._id == "63fce037dce4dc34212aa459" ? true : false;
+  }, [data?._owner?._id]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -191,7 +196,6 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
 
           <View style={styles.contentContainer}>
             <View>
-              {!data?.isVerify && <TimelineInReview />}
               {data?.information && (
                 <Label
                   label="Information"
@@ -225,7 +229,7 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
               <Label
                 containerStyle={{ flex: 1 }}
                 label="Lost Date"
-                value={"Feb 30, 2023"}
+                value={moment(data?.activityDate).format("MMM DD, YYYY")}
               />
               <Label
                 containerStyle={{ flex: 1 }}
@@ -262,17 +266,29 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
               </View>
             </View>
 
-            {/* <Pressable
-      onPress={() =>
-        navigation.navigate("Map", {
-          isPin: false,
-          point: {
-            latitude: data?.geolocation?.coordinates[1],
-            longitude: data?.geolocation?.coordinates[0],
-          },
-        })
-      }
-    /> */}
+            {isOwner && (
+              <View style={{ marginTop: StyleConstants.Spacing.L }}>
+                <Button borderRadius={8}>
+                  <FontAwesome name="edit" size={24} color="#fff" />
+                  <ThemeText
+                    color={"#fff"}
+                    fontWeight={"Medium"}
+                    style={{ marginLeft: StyleConstants.Spacing.S }}
+                  >
+                    Edit Post
+                  </ThemeText>
+                </Button>
+                <Button borderRadius={8}>
+                  <ThemeText
+                    color={"#fff"}
+                    fontWeight={"Medium"}
+                    style={{ marginLeft: StyleConstants.Spacing.S }}
+                  >
+                    Set pet as Reunited
+                  </ThemeText>
+                </Button>
+              </View>
+            )}
           </View>
         </ScrollView>
       )}

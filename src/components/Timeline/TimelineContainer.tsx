@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, FlatList, View } from "react-native";
+import { StyleSheet, FlatList, View, Image } from "react-native";
 import ComponentSeparator from "../Sperator";
 import TimelineCard from "./TimelineCard";
 import { Flow } from "react-native-animated-spinkit";
@@ -24,6 +24,7 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
+        
           <ThemeText>There was an error. Please try again later.</ThemeText>
         </View>
       ) : (

@@ -10,19 +10,23 @@ import {
 } from "react-native";
 import Button from "~/components/Button";
 import ThemeText from "~/components/ThemeText";
-import type { RootStackScreenProps } from "~/@types/navigators";
-import { extractShortLocation } from "~/utils/helpers";
-import { StatusBar } from "expo-status-bar";
-import { LinearGradient } from "expo-linear-gradient";
-import { StyleConstants } from "~/utils/theme/constants";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Label from "~/components/Label";
 import OwnerInfo from "~/components/OwnerInfo";
+
+import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Flow } from "react-native-animated-spinkit";
+
+// Utils & Queries
+import moment from "moment";
+import { extractShortLocation } from "~/utils/helpers";
+import type { RootStackScreenProps } from "~/@types/navigators";
+import { StyleConstants } from "~/utils/theme/constants";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePostDetail } from "~/libs/query/post";
-import { Flow } from "react-native-animated-spinkit";
-import moment from "moment";
+import { useAuthState, useAuthStore } from "~/utils/state/useAuth";
 
 const DEVICE = Dimensions.get("window");
 
@@ -39,7 +43,13 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
     },
   });
 
-  console.log("Date", JSON.stringify(data, null, 2));
+  const { userId: currentAuthUserId } = useAuthState();
+  const getCredential = useAuthStore((state) => state.getCredential);
+
+  useEffect(() => {
+    getCredential();
+  }, []);
+
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -54,8 +64,8 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   };
 
   const isOwner = useMemo(() => {
-    return data?._owner?._id == "63fce037dce4dc34212aa459" ? true : false;
-  }, [data?._owner?._id]);
+    return data?._owner?._id == currentAuthUserId ? true : false;
+  }, [data?._owner?._id, currentAuthUserId]);
 
   useEffect(() => {
     navigation.setOptions({

@@ -1,23 +1,24 @@
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
+import ThemeText from "../ThemeText";
+
+// Utils
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
-import ThemeText from "../ThemeText";
+import { useMe } from "~/libs/query/user";
 
 const AccountRoot = () => {
   const { colors } = useTheme();
+  const { data } = useMe();
   return (
     <View style={styles.root}>
-      <Image
-        source={{ uri: "https://avatars.githubusercontent.com/u/45455924?v=4" }}
-        style={styles.profileImage}
-      />
+      <Image source={{ uri: data?.profileUrl }} style={styles.profileImage} />
       <View style={styles.profileInfo}>
         <ThemeText fontStyle="L" fontWeight="Medium">
-          Nay Yaung Lin Lakk
+          {data?.name}
         </ThemeText>
         <ThemeText fontStyle="S" color={colors.textSecondary}>
-          nayyaung.developer@gmail.com
+          {data?.email}
         </ThemeText>
       </View>
     </View>

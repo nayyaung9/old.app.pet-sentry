@@ -42,5 +42,9 @@ export const useAuthStore = create<AuthState>()((set) => ({
   },
 }));
 
+/** 
+ * Just extracting two auth state at once. 
+ * I don't want to use multiple state-picks
+ */
 export const useAuthState = () =>
   useAuthStore((state) => ({ token: state.authToken, userId: state.userId }));

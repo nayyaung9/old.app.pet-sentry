@@ -21,12 +21,16 @@ import { Flow } from "react-native-animated-spinkit";
 // Utils & Queries
 import moment from "moment";
 import { extractShortLocation } from "~/utils/helpers";
-import type { RootStackScreenProps } from "~/@types/navigators";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePostDetail } from "~/libs/query/post";
 import { useAuthState, useAuthStore } from "~/utils/state/useAuth";
+
+import { useQueryClient } from "@tanstack/react-query";
+import { usePostDeleteMutation } from "~/libs/mutation/post";
+
+import type { RootStackScreenProps } from "~/@types/navigators";
 
 const DEVICE = Dimensions.get("window");
 
@@ -36,6 +40,11 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   },
   navigation,
 }) => {
+  const queryClient = useQueryClient();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  // Query Hooks
   const { data, isLoading } = usePostDetail({
     postId,
     options: {
@@ -43,15 +52,24 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
     },
   });
 
+  const deleteMutation = usePostDeleteMutation({
+    onSuccess: (res) => {
+      if (res) {
+        queryClient.invalidateQueries(["Owner-Posts"]);
+        navigation.goBack();
+      }
+    },
+    onError: (error) => console.log("Error", error),
+  });
+
+  const onDeletePost = (id: string) => deleteMutation.mutate({ postId: id });
+
   const { userId: currentAuthUserId } = useAuthState();
   const getCredential = useAuthStore((state) => state.getCredential);
 
   useEffect(() => {
     getCredential();
   }, []);
-
-  const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
 
   const onNavigateToMap = () => {
     navigation.navigate("Map-Screen", {
@@ -278,7 +296,16 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
 
             {isOwner && (
               <View style={{ marginTop: StyleConstants.Spacing.L }}>
-                <Button borderRadius={8}>
+                <Button
+                  borderRadius={8}
+                  onPress={() => onDeletePost(data?._id as string)}
+                  loading={deleteMutation.isLoading}
+                >
+                  <ThemeText color={"#fff"} fontWeight={"Medium"}>
+                    Delete Post
+                  </ThemeText>
+                </Button>
+                <Button borderRadius={8} onPress={() => null}>
                   <FontAwesome name="edit" size={24} color="#fff" />
                   <ThemeText
                     color={"#fff"}
@@ -288,7 +315,7 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                     Edit Post
                   </ThemeText>
                 </Button>
-                <Button borderRadius={8}>
+                <Button borderRadius={8} onPress={() => null}>
                   <ThemeText
                     color={"#fff"}
                     fontWeight={"Medium"}

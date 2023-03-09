@@ -66,4 +66,5 @@ const usePostDetail = ({
 
   return useQuery(queryKey, fetchPostDetail, options);
 };
+
 export { usePosts, useOwnerPosts, usePostDetail };

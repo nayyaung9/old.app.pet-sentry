@@ -34,4 +34,21 @@ const usePostCreateMutation = (
   return useMutation(createPostMutationFunction, options);
 };
 
-export { usePostCreateMutation };
+type DeletePostParams = {
+  postId: string;
+};
+const deletePostFunction = async ({ postId }: DeletePostParams) => {
+  try {
+    const { data } = await apiInstance.delete(`/post/${postId}/delete`);
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+const usePostDeleteMutation = (
+  options: MutationOptions<PetSentry.Post, AxiosError, DeletePostParams>
+) => {
+  return useMutation(deletePostFunction, options);
+};
+
+export { usePostCreateMutation, usePostDeleteMutation };

@@ -42,12 +42,7 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         {loadingIndicator()}
-        {!loading && (
-          <>
-            <View style={{ marginLeft: StyleConstants.Spacing.S }} />
-            {children}
-          </>
-        )}
+        {!loading && <>{children}</>}
       </View>
     );
   };

@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 import React from "react";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -6,6 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import ThemeManager from "~/utils/theme/ThemeManager";
 
 import Navigation from "./src/navigation";
+import FlashMessage from "react-native-flash-message";
 
 // Loaders & Utils
 import axios from "axios";
@@ -98,6 +99,7 @@ export default function App() {
           <ThemeManager>
             <StatusBar />
             <Navigation />
+            <FlashMessage />
           </ThemeManager>
         </SafeAreaProvider>
       </QueryClientProvider>

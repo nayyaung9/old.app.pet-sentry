@@ -17,6 +17,7 @@ import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
 import { Flow } from "react-native-animated-spinkit";
+import { showMessage } from "react-native-flash-message";
 
 // Utils & Queries
 import moment from "moment";
@@ -56,10 +57,21 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
     onSuccess: (res) => {
       if (res) {
         queryClient.invalidateQueries(["Owner-Posts"]);
+        showMessage({
+          message: "Post Delete",
+          description: "Your post is deleted!",
+          type: "success",
+        });
         navigation.goBack();
       }
     },
-    onError: (error) => console.log("Error", error),
+    onError: () => {
+      showMessage({
+        message: "Post Delete",
+        description: "Your post is not delete. Please try again later.",
+        type: "danger",
+      });
+    },
   });
 
   const onDeletePost = (id: string) => deleteMutation.mutate({ postId: id });

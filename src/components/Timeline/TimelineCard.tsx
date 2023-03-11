@@ -17,6 +17,7 @@ import type { BottomTabsScreenProps } from "~/@types/navigators";
 import { StyleConstants } from "~/utils/theme/constants";
 import TimelineOwner from "./TimelineOwner";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import TimelineReunited from "./TimelineReunited";
 
 const TimelineCard = ({
   item,
@@ -28,6 +29,9 @@ const TimelineCard = ({
   const { colors } = useTheme();
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Home">["navigation"]>();
+
+  const onNavigateToTimelineDetail = (postId: string) =>
+    navigation.navigate("Timeline-Detail", { postId });
 
   return (
     <TouchableOpacity activeOpacity={1} style={styles.timelineCard}>
@@ -44,11 +48,7 @@ const TimelineCard = ({
       )}
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
-        <Pressable
-          onPress={() =>
-            navigation.navigate("Timeline-Detail", { postId: item?._id })
-          }
-        >
+        <Pressable onPress={() => onNavigateToTimelineDetail(item?._id)}>
           <Image
             source={{
               uri: item.photos[0].url,
@@ -58,7 +58,11 @@ const TimelineCard = ({
         </Pressable>
       )}
 
-      <View style={styles.timelineCardContent}>
+      {item?.isReunited && <TimelineReunited />}
+      <Pressable
+        style={styles.timelineCardContent}
+        onPress={() => onNavigateToTimelineDetail(item?._id)}
+      >
         <View style={styles.timelineCardInfoRow}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <ThemeText
@@ -97,7 +101,7 @@ const TimelineCard = ({
             {item?.information || item?.specialTraits}
           </ThemeText>
         )}
-      </View>
+      </Pressable>
     </TouchableOpacity>
   );
 };
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
   timelineImage: {
     width: "100%",
     height: 220,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   timelineCardContent: {
     paddingTop: 12,

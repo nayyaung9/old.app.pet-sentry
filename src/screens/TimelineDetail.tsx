@@ -32,6 +32,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { usePostDeleteMutation } from "~/libs/mutation/post";
 
 import type { RootStackScreenProps } from "~/@types/navigators";
+import TimelineReunited from "~/components/Timeline/TimelineReunited";
 
 const DEVICE = Dimensions.get("window");
 
@@ -57,6 +58,10 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
     onSuccess: (res) => {
       if (res) {
         queryClient.invalidateQueries(["Owner-Posts"]);
+        queryClient.invalidateQueries([
+          "Posts",
+          { activityType: res?.activityType },
+        ]);
         showMessage({
           message: "Post Delete",
           description: "Your post is deleted!",
@@ -235,7 +240,12 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
           )}
 
           <View style={styles.contentContainer}>
-            <View>
+            {data?.isReunited && <TimelineReunited />}
+            <View
+              style={{
+                marginTop: data?.isReunited ? StyleConstants.Spacing.M - 4 : 0,
+              }}
+            >
               {data?.information && (
                 <Label
                   label="Information"

@@ -11,7 +11,9 @@ export type ColorDefinitions =
   | "textSecondary"
   | "inputBackground"
   | "mediumDark"
-  | "inactiveTabBar";
+  | "inactiveTabBar"
+  | "notifyView"
+  | "textGreen";
 
 const themeColors: {
   [key in ColorDefinitions]: {
@@ -56,6 +58,14 @@ const themeColors: {
     light: "#F1F4F8",
     dark: "#F00",
   },
+  notifyView: {
+    light: "#e5fbf3",
+    dark: "#e5fbf3",
+  },
+  textGreen: {
+    light: "#31987c",
+    dark: "#31987c"
+  }
 };
 
 const getColors = (theme: Theme): { [key in ColorDefinitions]: string } => {

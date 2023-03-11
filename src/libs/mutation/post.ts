@@ -15,7 +15,7 @@ type MutationVarsPost = {
   specialTraits: string;
   gender: string;
   photos: any;
-  activityDate: string;
+  activityDate: Date;
 };
 const createPostMutationFunction = async (params: MutationVarsPost) => {
   try {

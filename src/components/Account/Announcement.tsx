@@ -41,6 +41,7 @@ const Accouncement = () => {
                 <ThemeText color={colors.primary}>See more</ThemeText>
               </View>
             }
+            contentContainerStyle={{ paddingBottom: 120 }}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={ComponentSeparator}
             data={data}

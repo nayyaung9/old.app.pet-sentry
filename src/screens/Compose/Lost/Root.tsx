@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, Image, ScrollView } from "react-native";
 import { BottomSheet } from "react-native-btr";
 import Input from "~/components/Input";
 import { AntDesign } from "@expo/vector-icons";
@@ -10,27 +10,32 @@ import pet_types from "~/utils/constants/pet_types.json";
 import genders from "~/utils/constants/genders.json";
 import ThemeText from "~/components/ThemeText";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import Button from "~/components/Button";
 
 type PetLostRootState = {
   petName: string;
   petType: string;
   gender: string;
+  photos: string | string[];
 };
 type PetLostRootProps = {
   state: PetLostRootState;
   onPetNameChange: (value: string) => void;
   onSelectPetType: (value: string) => void;
   onSelectPetGender: (value: string) => void;
+  onSelectPhoto: () => void;
 };
 const PetLostRoot = ({
   state,
   onPetNameChange,
   onSelectPetType,
   onSelectPetGender,
+  onSelectPhoto,
 }: PetLostRootProps) => {
   const { colors } = useTheme();
   const { togglePetTypeModal, petTypeModal, toggleGenderModal, genderModal } =
     useLostPet();
+
   return (
     <View>
       <ThemeText
@@ -66,6 +71,28 @@ const PetLostRoot = ({
 
       <View style={styles.inputView}>
         <ThemeText>Photos</ThemeText>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.photoViewLayout}
+        >
+          {Array.isArray(state.photos) &&
+            state.photos.length >= 1 &&
+            state.photos.map((img, index) => (
+              <Image
+                key={index}
+                source={{ uri: img }}
+                style={styles.uploadedPhoto}
+              />
+            ))}
+        </ScrollView>
+
+        <Button
+          onPress={onSelectPhoto}
+          style={{ marginTop: StyleConstants.Spacing.S }}
+        >
+          <ThemeText color="#fff">Upload an image</ThemeText>
+        </Button>
       </View>
 
       <BottomSheet
@@ -135,6 +162,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: StyleConstants.Spacing.M,
+  },
+  photoViewLayout: {
+    marginTop: StyleConstants.Spacing.S,
+  },
+  uploadedPhoto: {
+    width: 80,
+    height: 80,
+    marginRight: StyleConstants.Spacing.S,
+    borderRadius: 4,
   },
 });
 export default PetLostRoot;

@@ -51,7 +51,7 @@ const TimelineCard = ({
         <Pressable onPress={() => onNavigateToTimelineDetail(item?._id)}>
           <Image
             source={{
-              uri: item.photos[0].url,
+              uri: item.photos[0],
             }}
             style={styles.timelineImage}
           />

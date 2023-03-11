@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import { Flow } from "react-native-animated-spinkit";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
@@ -8,6 +8,7 @@ import { useLoginMutation } from "~/libs/mutation/auth";
 import { StyleConstants } from "~/utils/theme/constants";
 import { RootStackScreenProps } from "~/@types/navigators";
 import { useAuthStore } from "~/utils/state/useAuth";
+import { showMessage } from "react-native-flash-message";
 
 const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
   navigation,
@@ -22,8 +23,14 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
     setState({ ...state, [name]: value });
   };
   const mutation = useLoginMutation({
-    onSuccess: async (res) => {
-      await authenticate({ token: res?.token, userId: res.user._id });
+    onSuccess: (res) => {
+      authenticate({ token: res?.token, userId: res.user._id });
+      showMessage({
+        message: "Login Success!",
+        type: "success",
+        position: "bottom",
+      });
+      navigation.goBack();
     },
     onError: (err) => console.log("Error", err),
   });
@@ -33,7 +40,7 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
   };
 
   return (
-    <View
+    <SafeAreaView
       style={[
         styles.root,
         {
@@ -75,7 +82,7 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
           </ThemeText>
         )}
       </Button>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -15,6 +15,7 @@ import useCachedResources from "~/hooks/useCachedResources";
 import { useGeoAddressAction } from "~/utils/state/useGeoAddress";
 import { useMapAddressActions } from "~/utils/state/useMapState";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useAuthStore } from "~/utils/state/useAuth";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,10 @@ export default function App() {
   const { setGeoAddress, setUserCoordinates } = useGeoAddressAction();
   const { setMapAddress } = useMapAddressActions();
 
+  const { getCredential } = useAuthStore();
+
   useEffect(() => {
+    getCredential();
     const loadedUserGeoAddress = async () => {
       const { latitude, longitude } = location;
 

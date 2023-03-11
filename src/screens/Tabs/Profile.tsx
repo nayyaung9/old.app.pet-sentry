@@ -1,17 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, StyleSheet } from "react-native";
 import Accouncement from "~/components/Account/Announcement";
 import Guest from "~/components/Account/Guest";
 import AccountRoot from "~/components/Account/Root";
-import { useAuthState, useAuthStore } from "~/utils/state/useAuth";
+import { useAuthState } from "~/utils/state/useAuth";
 
 const ProfileTab = () => {
   const { token } = useAuthState();
-  const getCredential = useAuthStore((state) => state.getCredential);
-
-  useEffect(() => {
-    getCredential();
-  }, []);
 
   return (
     <View style={styles.root}>

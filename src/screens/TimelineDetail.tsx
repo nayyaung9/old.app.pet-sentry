@@ -21,6 +21,7 @@ import { showMessage } from "react-native-flash-message";
 
 // Utils & Queries
 import moment from "moment";
+import _ from "lodash";
 import { extractShortLocation } from "~/utils/helpers";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -141,9 +142,9 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
           contentContainerStyle={{ paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          {data?.photos?.length >= 1 && (
+          {Array.isArray(data?.photos) && data?.photos?.length >= 1 && (
             <ImageBackground
-              source={{ uri: data?.photos[0]?.url }}
+              source={{ uri: data?.photos[0] }}
               style={styles.petImageContainer}
             >
               <LinearGradient
@@ -301,18 +302,20 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                   marginTop: StyleConstants.Spacing.S,
                 }}
               >
-                {images.map((img, index) => (
-                  <Image
-                    key={index}
-                    source={{ uri: img }}
-                    style={{
-                      width: 70,
-                      height: 70,
-                      marginRight: StyleConstants.Spacing.S,
-                      borderRadius: 8,
-                    }}
-                  />
-                ))}
+                {_.tail(data?.photos).map((img, index) => {
+                  return (
+                    <Image
+                      key={index}
+                      source={{ uri: img }}
+                      style={{
+                        width: 70,
+                        height: 70,
+                        marginRight: StyleConstants.Spacing.S,
+                        borderRadius: 8,
+                      }}
+                    />
+                  );
+                })}
               </View>
             </View>
 
@@ -355,12 +358,6 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   );
 };
 
-const images = [
-  "https://images.pexels.com/photos/1643457/pexels-photo-1643457.jpeg?auto=compress&cs=tinysrgb&w=800",
-  "https://images.pexels.com/photos/1828875/pexels-photo-1828875.jpeg?auto=compress&cs=tinysrgb&w=800",
-  "https://images.pexels.com/photos/1404819/pexels-photo-1404819.jpeg?auto=compress&cs=tinysrgb&w=800",
-  "https://images.pexels.com/photos/3777622/pexels-photo-3777622.jpeg?auto=compress&cs=tinysrgb&w=800",
-];
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",

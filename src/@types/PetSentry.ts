@@ -14,11 +14,6 @@ declare namespace PetSentry {
     updatedAt: string;
   };
 
-  type PostPhoto = {
-    url: string;
-    _id: string;
-  };
-
   type Geolocation = {
     type: string;
     coordinates: number[];
@@ -37,7 +32,7 @@ declare namespace PetSentry {
     activityType: "Missing" | "Found";
     specialTraits: string;
     gender: string;
-    photos: PostPhoto[];
+    photos: string[];
     activityDate: string;
     isVerify: boolean;
     createdAt: string;

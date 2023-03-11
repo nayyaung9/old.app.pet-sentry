@@ -9,8 +9,10 @@ import { Flow } from "react-native-animated-spinkit";
 import PetInformation from "./Lost/Information";
 import PetLostRoot from "./Lost/Root";
 import PetIdentification from "./Lost/Identification";
+import * as ImagePicker from "expo-image-picker";
 
 // Utils & Queries
+import { firebase } from "~/libs/firebase";
 import useLostPet from "~/hooks/useLostPet";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { useNavigation } from "@react-navigation/native";
@@ -18,11 +20,14 @@ import { StyleConstants } from "~/utils/theme/constants";
 import { useMapAddress } from "~/utils/state/useMapState";
 import { useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { usePostCreateMutation } from "~/libs/mutation/post";
+import { useQueryClient } from "@tanstack/react-query";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
+import moment from "moment";
 
 const STEP_COUNTS = 3;
 
 const PetLostForm = () => {
+  const queryClient = useQueryClient();
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Compose">["navigation"]>();
   const { colors } = useTheme();
@@ -31,6 +36,7 @@ const PetLostForm = () => {
   const { activeStepNo, onNext, onPrev } = useLostPet();
 
   // States
+  const [imageUploading, setImageUploading] = useState(false);
   const [state, setState] = useState({
     petName: "",
     petType: "",
@@ -39,6 +45,7 @@ const PetLostForm = () => {
     collarColor: "",
     specialTrait: "",
     information: "",
+    photos: [],
     lostDate: new Date(),
   });
 
@@ -60,14 +67,6 @@ const PetLostForm = () => {
   const onPetSpecialTraitChange = (value: string) =>
     setState({ ...state, specialTrait: value });
 
-  const mutation = usePostCreateMutation({
-    onSuccess: (res) => {
-      if (res?._id) {
-        navigation.navigate("Timeline-Detail", { postId: res?._id });
-      }
-    },
-  });
-
   const onSelectPetType = (type: string) => {
     setState({ ...state, petType: type });
   };
@@ -84,6 +83,58 @@ const PetLostForm = () => {
     setState({ ...state, lostDate: selectedDate });
   };
 
+  const onSelectPhoto = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const file = result.assets[0];
+      const fileName = `PetSentryApp-${moment(new Date).format("MMMYYYYDDss")}`;
+
+      await uploadImageToFirebaseStorage(file.uri, fileName)
+        .then((res) => console.log("RES", res))
+        .catch((err) => console.log("Image Uplladed Error", err));
+    }
+  };
+
+  const uploadImageToFirebaseStorage = async (
+    uri: string,
+    fileName: string
+  ) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    console.log(fileName);
+
+    const ref = firebase
+      .storage()
+      .ref()
+      .child("pets/" + fileName);
+    const snapshot = ref.put(blob);
+    return snapshot.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      () => {
+        setImageUploading(true);
+      },
+      (error) => {
+        setImageUploading(false);
+        console.log(error);
+        blob.close();
+        return;
+      },
+      () => {
+        snapshot.snapshot.ref.getDownloadURL().then((url) => {
+          setImageUploading(false);
+          setState({ ...state, photos: [...state.photos, url] });
+          blob.close();
+          return url;
+        });
+      }
+    );
+  };
   /**
    * We'll implement this map feature in coming release version.
    */
@@ -97,9 +148,25 @@ const PetLostForm = () => {
   //   });
   // };
 
+  const mutation = usePostCreateMutation({
+    onSuccess: (res) => {
+      if (res?._id) {
+        navigation.navigate("Timeline-Detail", { postId: res?._id });
+      }
+    },
+  });
+
   const onSubmit = () => {
-    const { petName, petType, information, collarColor, specialTrait, gender } =
-      state;
+    const {
+      petName,
+      petType,
+      information,
+      collarColor,
+      specialTrait,
+      gender,
+      lostDate,
+      photos,
+    } = state;
     const payload = {
       geolocation: [userCoordinates.longitude, userCoordinates.latitude],
       address: state.address,
@@ -110,16 +177,9 @@ const PetLostForm = () => {
       activityType: "Missing",
       specialTraits: specialTrait,
       gender: gender,
-      photos: [
-        {
-          url: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHBldHN8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60",
-          _id: "63fe01d36c8c9740137dea6b",
-        },
-      ],
-      activityDate: "2023-02-27T16:54:15.307+00:00",
+      photos,
+      activityDate: lostDate,
     };
-
-    console.log("Payload", JSON.stringify(payload, null, 2));
     mutation.mutate(payload);
   };
 
@@ -194,7 +254,9 @@ const PetLostForm = () => {
                 petName: state.petName,
                 petType: state.petType,
                 gender: state.gender,
+                photos: state.photos,
               },
+              onSelectPhoto,
               onPetNameChange,
               onSelectPetType,
               onSelectPetGender,

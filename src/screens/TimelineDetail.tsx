@@ -34,6 +34,7 @@ import { usePostDeleteMutation } from "~/libs/mutation/post";
 
 import type { RootStackScreenProps } from "~/@types/navigators";
 import TimelineReunited from "~/components/Timeline/TimelineReunited";
+import NicelyImage from "~/components/NicelyImage";
 
 const DEVICE = Dimensions.get("window");
 
@@ -142,103 +143,107 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
           contentContainerStyle={{ paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          {Array.isArray(data?.photos) && data?.photos?.length >= 1 && (
-            <ImageBackground
-              source={{ uri: data?.photos[0] }}
-              style={styles.petImageContainer}
-            >
-              <LinearGradient
-                colors={["rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 0.1)"]}
-                style={{
-                  position: "absolute",
-                  width: "100%",
-                  height: insets.top,
-                }}
-              />
-              <LinearGradient
-                colors={["transparent", "rgba(37, 37, 37, 0.7)"]}
-                style={styles.linearGradient}
+          {Array.isArray(data?.photos) &&
+            data?.photos &&
+            data?.photos?.length >= 1 && (
+              <ImageBackground
+                source={{ uri: data?.photos[0] }}
+                style={styles.petImageContainer}
               >
-                <View style={styles.petInfo}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginBottom: StyleConstants.Spacing.S,
-                    }}
-                  >
-                    <ThemeText
-                      fontWeight={"Medium"}
-                      fontStyle={"L"}
-                      numberOfLines={2}
-                      color={"#fff"}
-                    >
-                      {data?.petName}
-                    </ThemeText>
-                    {!data?.isVerify && (
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          marginBottom: -3,
-                        }}
-                      >
-                        <ThemeText
-                          color={colors.primary}
-                          style={{
-                            marginHorizontal: StyleConstants.Spacing.S - 2,
-                          }}
-                        >
-                          ·
-                        </ThemeText>
-                        <ThemeText color={colors.primary}>In Review</ThemeText>
-                      </View>
-                    )}
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                <LinearGradient
+                  colors={["rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 0.1)"]}
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: insets.top,
+                  }}
+                />
+                <LinearGradient
+                  colors={["transparent", "rgba(37, 37, 37, 0.7)"]}
+                  style={styles.linearGradient}
+                >
+                  <View style={styles.petInfo}>
                     <View
                       style={{
-                        flex: 1,
                         flexDirection: "row",
                         alignItems: "center",
-                        marginLeft: -4,
+                        marginBottom: StyleConstants.Spacing.S,
                       }}
                     >
-                      <Ionicons name="location" size={20} color="#fff" />
                       <ThemeText
-                        fontStyle={"M"}
-                        style={{ marginLeft: StyleConstants.Spacing.S - 4 }}
-                        color={"#fff"}
+                        fontWeight={"Medium"}
+                        fontStyle={"L"}
                         numberOfLines={2}
+                        color={"#fff"}
                       >
-                        {extractShortLocation(
-                          data?.geolocation?.address as string
-                        )}
+                        {data?.petName}
                       </ThemeText>
+                      {!data?.isVerify && (
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginBottom: -3,
+                          }}
+                        >
+                          <ThemeText
+                            color={colors.primary}
+                            style={{
+                              marginHorizontal: StyleConstants.Spacing.S - 2,
+                            }}
+                          >
+                            ·
+                          </ThemeText>
+                          <ThemeText color={colors.primary}>
+                            In Review
+                          </ThemeText>
+                        </View>
+                      )}
                     </View>
                     <View
                       style={{
-                        backgroundColor: colors.primary,
-                        paddingHorizontal: 12,
-                        paddingBottom: 4,
-                        borderRadius: 10,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <ThemeText fontStyle={"L"} color={"#fff"}>
-                        {data?.activityType}
-                      </ThemeText>
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginLeft: -4,
+                        }}
+                      >
+                        <Ionicons name="location" size={20} color="#fff" />
+                        <ThemeText
+                          fontStyle={"M"}
+                          style={{ marginLeft: StyleConstants.Spacing.S - 4 }}
+                          color={"#fff"}
+                          numberOfLines={2}
+                        >
+                          {extractShortLocation(
+                            data?.geolocation?.address as string
+                          )}
+                        </ThemeText>
+                      </View>
+                      <View
+                        style={{
+                          backgroundColor: colors.primary,
+                          paddingHorizontal: 12,
+                          paddingBottom: 4,
+                          borderRadius: 10,
+                        }}
+                      >
+                        <ThemeText fontStyle={"L"} color={"#fff"}>
+                          {data?.activityType}
+                        </ThemeText>
+                      </View>
                     </View>
                   </View>
-                </View>
-              </LinearGradient>
-            </ImageBackground>
-          )}
+                </LinearGradient>
+              </ImageBackground>
+            )}
 
           <View style={styles.contentContainer}>
             {data?.isReunited && <TimelineReunited />}
@@ -304,15 +309,15 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
               >
                 {_.tail(data?.photos).map((img, index) => {
                   return (
-                    <Image
-                      key={index}
-                      source={{ uri: img }}
-                      style={{
+                    <NicelyImage
+                      uri={img}
+                      containerStyle={{
                         width: 70,
                         height: 70,
                         marginRight: StyleConstants.Spacing.S,
                         borderRadius: 8,
                       }}
+                      key={index}
                     />
                   );
                 })}

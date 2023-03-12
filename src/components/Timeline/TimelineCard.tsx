@@ -18,6 +18,7 @@ import { StyleConstants } from "~/utils/theme/constants";
 import TimelineOwner from "./TimelineOwner";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import TimelineReunited from "./TimelineReunited";
+import NicelyImage from "../NicelyImage";
 
 const TimelineCard = ({
   item,
@@ -49,11 +50,9 @@ const TimelineCard = ({
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
         <Pressable onPress={() => onNavigateToTimelineDetail(item?._id)}>
-          <Image
-            source={{
-              uri: item.photos[0],
-            }}
-            style={styles.timelineImage}
+          <NicelyImage
+            uri={item.photos[0]}
+            containerStyle={styles.timelineImage}
           />
         </Pressable>
       )}
@@ -65,35 +64,41 @@ const TimelineCard = ({
       >
         <View style={styles.timelineCardInfoRow}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <ThemeText
-              fontStyle="M"
-              fontWeight={"Medium"}
-              color={colors.primary}
-              style={{
-                marginRight: StyleConstants.Spacing.S - 4,
-              }}
-            >
-              {item?.petName}
-            </ThemeText>
-            {!item.isVerify && (
-              <>
-                <ThemeText
-                  color={colors.primary}
-                  style={{
-                    marginRight: StyleConstants.Spacing.S - 4,
-                  }}
-                >
-                  ·
-                </ThemeText>
-                <ThemeText fontStyle="S" color={colors.primary}>
-                  In Review
-                </ThemeText>
-              </>
-            )}
+            <View style={{ flex: 0.7, flexDirection: "row" }}>
+              <ThemeText
+                fontStyle="M"
+                fontWeight={"Medium"}
+                color={colors.primary}
+                numberOfLines={1}
+                style={{
+                  marginRight: StyleConstants.Spacing.S - 4,
+                }}
+              >
+                {item?.petName}
+              </ThemeText>
+
+              {!item.isVerify && (
+                <>
+                  <ThemeText
+                    color={colors.primary}
+                    style={{
+                      marginRight: StyleConstants.Spacing.S - 4,
+                    }}
+                  >
+                    ·
+                  </ThemeText>
+                  <ThemeText fontStyle="S" color={colors.primary}>
+                    In Review
+                  </ThemeText>
+                </>
+              )}
+            </View>
           </View>
-          <ThemeText fontStyle={"XS"} color={colors.mediumDark}>
-            {moment(item?.activityDate).format("MMM, DD, YYYY")}
-          </ThemeText>
+          <View style={{ flex: 1, alignItems: "flex-end" }}>
+            <ThemeText fontStyle={"XS"} color={colors.mediumDark}>
+              {moment(item?.activityDate).format("MMM, DD, YYYY")}
+            </ThemeText>
+          </View>
         </View>
 
         {(item?.information || item?.specialTraits) && (

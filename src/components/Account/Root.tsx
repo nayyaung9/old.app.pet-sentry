@@ -12,13 +12,21 @@ const AccountRoot = () => {
   const { data } = useMe();
   return (
     <View style={styles.root}>
-      <Image source={{ uri: data?.profileUrl }} style={styles.profileImage} />
+      {data?.profileUrl ? (
+        <Image source={{ uri: data?.profileUrl }} style={styles.profileImage} />
+      ) : (
+        <Image
+          source={require("assets/images/default_avatar.png")}
+          style={styles.profileImage}
+        />
+      )}
+
       <View style={styles.profileInfo}>
         <ThemeText fontStyle="L" fontWeight="Medium">
           {data?.name}
         </ThemeText>
         <ThemeText fontStyle="S" color={colors.textSecondary}>
-          {data?.email}
+          Tap to view your profile
         </ThemeText>
       </View>
     </View>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getAuthToken } from "~/utils/storage";
 
-const API_ENDPOINT = "http://192.168.1.3:8000/api";
+const API_ENDPOINT = "http://192.168.1.4:8000/api";
 
 const instance = axios.create({
   baseURL: API_ENDPOINT,

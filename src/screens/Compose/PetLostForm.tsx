@@ -92,12 +92,22 @@ const PetLostForm = () => {
 
     if (!result.canceled) {
       const file = result.assets[0];
-      const fileName = `PetSentryApp-${moment(new Date).format("MMMYYYYDDss")}`;
+      const fileName = `PetSentryApp-${moment(new Date()).format(
+        "MMMYYYYDDss"
+      )}`;
 
-      await uploadImageToFirebaseStorage(file.uri, fileName)
-        .then((res) => console.log("RES", res))
-        .catch((err) => console.log("Image Uplladed Error", err));
+      setState({ ...state, photos: [...state.photos, file.uri] });
+
+      // await uploadImageToFirebaseStorage(file.uri, fileName)
+      //   .then((res) => console.log("RES", res))
+      //   .catch((err) => console.log("Image Uplladed Error", err));
     }
+  };
+
+  const onRemovePhoto = (uri: string) => {
+    let selectedPhotos = state.photos.filter((photo) => photo != uri);
+
+    setState({ ...state, photos: selectedPhotos });
   };
 
   const uploadImageToFirebaseStorage = async (
@@ -128,7 +138,7 @@ const PetLostForm = () => {
       () => {
         snapshot.snapshot.ref.getDownloadURL().then((url) => {
           setImageUploading(false);
-          setState({ ...state, photos: [...state.photos, url] });
+          // setState({ ...state, photos: [...state.photos, url] });
           blob.close();
           return url;
         });
@@ -260,6 +270,7 @@ const PetLostForm = () => {
               onPetNameChange,
               onSelectPetType,
               onSelectPetGender,
+              onRemovePhoto,
             }}
           />
         )}

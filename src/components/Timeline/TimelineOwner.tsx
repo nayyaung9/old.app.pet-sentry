@@ -24,10 +24,18 @@ const TimelineOwner = ({
   const { colors } = useTheme();
   return (
     <View style={styles.infoRoot}>
-      <Image
-        source={{ uri: profileUrl }}
-        style={{ width: 42, height: 42, borderRadius: 100 }}
-      />
+      {profileUrl ? (
+        <Image
+          source={{ uri: profileUrl }}
+          style={{ width: 42, height: 42, borderRadius: 100 }}
+        />
+      ) : (
+        <Image
+          source={require("assets/images/default_avatar.png")}
+          style={{ width: 42, height: 42, borderRadius: 100 }}
+        />
+      )}
+
       <View style={styles.infoContent}>
         <ThemeText fontWeight="Medium" style={styles.authorName}>
           {name}

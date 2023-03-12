@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pressable, View } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -20,7 +20,6 @@ const ScreenTab = () => {
   const { colors } = useTheme();
   const geoAddress = useGeoAddress();
   const userCoordinates = useUserCoordinates();
-
   return (
     <Tab.Navigator
       initialRouteName="Tab-Home"

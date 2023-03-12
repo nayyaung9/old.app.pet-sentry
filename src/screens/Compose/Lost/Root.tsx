@@ -2,7 +2,7 @@ import React from "react";
 import { Pressable, StyleSheet, View, Image, ScrollView } from "react-native";
 import { BottomSheet } from "react-native-btr";
 import Input from "~/components/Input";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 import useLostPet from "~/hooks/useLostPet";
 import { StyleConstants } from "~/utils/theme/constants";
@@ -10,7 +10,6 @@ import pet_types from "~/utils/constants/pet_types.json";
 import genders from "~/utils/constants/genders.json";
 import ThemeText from "~/components/ThemeText";
 import { useTheme } from "~/utils/theme/ThemeManager";
-import Button from "~/components/Button";
 
 type PetLostRootState = {
   petName: string;
@@ -23,6 +22,7 @@ type PetLostRootProps = {
   onPetNameChange: (value: string) => void;
   onSelectPetType: (value: string) => void;
   onSelectPetGender: (value: string) => void;
+  onRemovePhoto: (value: string) => void;
   onSelectPhoto: () => void;
 };
 const PetLostRoot = ({
@@ -31,6 +31,7 @@ const PetLostRoot = ({
   onSelectPetType,
   onSelectPetGender,
   onSelectPhoto,
+  onRemovePhoto,
 }: PetLostRootProps) => {
   const { colors } = useTheme();
   const { togglePetTypeModal, petTypeModal, toggleGenderModal, genderModal } =
@@ -70,29 +71,56 @@ const PetLostRoot = ({
       </View>
 
       <View style={styles.inputView}>
-        <ThemeText>Photos</ThemeText>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.photoViewLayout}
+        <ThemeText fontWeight="Medium">Photos</ThemeText>
+        <ThemeText
+          fontStyle={"S"}
+          color={colors.textSecondary}
+          fontWeight="Medium"
         >
-          {Array.isArray(state.photos) &&
-            state.photos.length >= 1 &&
-            state.photos.map((img, index) => (
-              <Image
-                key={index}
-                source={{ uri: img }}
-                style={styles.uploadedPhoto}
-              />
-            ))}
-        </ScrollView>
+          Maxium 5 photos are allowed.
+        </ThemeText>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: StyleConstants.Spacing.M,
+          }}
+        >
+          {state.photos.length < 5 && (
+            <Pressable onPress={onSelectPhoto} style={styles.imageUploadButton}>
+              <Ionicons name="image-outline" size={32} color="#a4a9ac" />
+            </Pressable>
+          )}
 
-        <Button
-          onPress={onSelectPhoto}
-          style={{ marginTop: StyleConstants.Spacing.S }}
-        >
-          <ThemeText color="#fff">Upload an image</ThemeText>
-        </Button>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.photoViewLayout}
+          >
+            {Array.isArray(state.photos) &&
+              state.photos.length >= 1 &&
+              state.photos.map((img, index) => (
+                <View key={index} style={styles.uploadPhotoView}>
+                  <Image source={{ uri: img }} style={styles.uploadedPhoto} />
+                  <Pressable
+                    onPress={() => onRemovePhoto(img)}
+                    style={{
+                      position: "absolute",
+                      right: -8,
+                      top: -10,
+                      backgroundColor: "#fff",
+                      borderRadius: 50,
+                      zIndex: 9,
+                      borderWidth: 1,
+                      borderColor: "#f0f2f5",
+                    }}
+                  >
+                    <Ionicons name="remove" size={24} color="black" />
+                  </Pressable>
+                </View>
+              ))}
+          </ScrollView>
+        </View>
       </View>
 
       <BottomSheet
@@ -164,13 +192,29 @@ const styles = StyleSheet.create({
     marginBottom: StyleConstants.Spacing.M,
   },
   photoViewLayout: {
-    marginTop: StyleConstants.Spacing.S,
+    paddingVertical: StyleConstants.Spacing.M - 4,
   },
-  uploadedPhoto: {
+  uploadPhotoView: {
     width: 80,
     height: 80,
-    marginRight: StyleConstants.Spacing.S,
+    marginRight: StyleConstants.Spacing.M - 4,
+  },
+  uploadedPhoto: {
+    width: "100%",
+    height: "100%",
     borderRadius: 4,
+  },
+  imageUploadButton: {
+    borderWidth: 1,
+    borderColor: "#c4c6c8",
+    borderStyle: "dashed",
+    borderRadius: 4,
+    width: 80,
+    height: 80,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: StyleConstants.Spacing.M - 4,
+    marginTop: StyleConstants.Spacing.M - 16,
   },
 });
 export default PetLostRoot;

@@ -1,10 +1,9 @@
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import ThemeText from "../ThemeText";
 import { useOwnerPosts } from "~/libs/query/post";
-import NicelyImage from "../NicelyImage";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -49,9 +48,9 @@ const Accouncement = () => {
             {data.map((post: PetSentry.Post, index: number) => (
               <View key={index} style={styles.postCardItem}>
                 <Pressable onPress={() => onNavigateToPostDetail(post?._id)}>
-                  <NicelyImage
-                    uri={post.photos[0]}
-                    containerStyle={{
+                  <Image
+                    source={{ uri: post.photos[0] }}
+                    style={{
                       width: 100,
                       height: 100,
                       borderRadius: 4,

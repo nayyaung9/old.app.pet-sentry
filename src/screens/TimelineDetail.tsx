@@ -207,26 +207,26 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                         justifyContent: "space-between",
                       }}
                     >
-                      <View
-                        style={{
-                          flex: 1,
-                          flexDirection: "row",
-                          alignItems: "center",
-                          marginLeft: -4,
-                        }}
-                      >
-                        <Ionicons name="location" size={20} color="#fff" />
-                        <ThemeText
-                          fontStyle={"M"}
-                          style={{ marginLeft: StyleConstants.Spacing.S - 4 }}
-                          color={"#fff"}
-                          numberOfLines={2}
+                      {data?.systemedShortAddress && (
+                        <View
+                          style={{
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginLeft: -4,
+                          }}
                         >
-                          {extractShortLocation(
-                            data?.geolocation?.address as string
-                          )}
-                        </ThemeText>
-                      </View>
+                          <Ionicons name="location" size={20} color="#fff" />
+                          <ThemeText
+                            fontStyle={"M"}
+                            style={{ marginLeft: StyleConstants.Spacing.S - 4 }}
+                            color={"#fff"}
+                            numberOfLines={2}
+                          >
+                            {data?.systemedShortAddress}
+                          </ThemeText>
+                        </View>
+                      )}
                       <View
                         style={{
                           backgroundColor: colors.primary,
@@ -296,33 +296,41 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
 
             <OwnerInfo />
 
-            <View>
-              <ThemeText color={"#000"} fontStyle={"M"} fontWeight={"Medium"}>
-                Photos
-              </ThemeText>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginTop: StyleConstants.Spacing.S,
-                }}
-              >
-                {_.tail(data?.photos).map((img, index) => {
-                  return (
-                    <NicelyImage
-                      uri={img}
-                      containerStyle={{
-                        width: 70,
-                        height: 70,
-                        marginRight: StyleConstants.Spacing.S,
-                        borderRadius: 8,
-                      }}
-                      key={index}
-                    />
-                  );
-                })}
-              </View>
-            </View>
+            {Array.isArray(data?.photos) &&
+              data?.photos &&
+              data?.photos?.length >= 2 && (
+                <View>
+                  <ThemeText
+                    color={"#000"}
+                    fontStyle={"M"}
+                    fontWeight={"Medium"}
+                  >
+                    Photos
+                  </ThemeText>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: StyleConstants.Spacing.S,
+                    }}
+                  >
+                    {_.tail(data?.photos).map((img, index) => {
+                      return (
+                        <Image
+                          source={{ uri: img }}
+                          style={{
+                            width: 70,
+                            height: 70,
+                            marginRight: StyleConstants.Spacing.S,
+                            borderRadius: 8,
+                          }}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </View>
+                </View>
+              )}
 
             {isOwner && (
               <View style={{ marginTop: StyleConstants.Spacing.L }}>

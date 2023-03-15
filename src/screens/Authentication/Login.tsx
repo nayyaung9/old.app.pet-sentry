@@ -48,40 +48,42 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
         },
       ]}
     >
-      <ThemeText
-        fontStyle="L"
-        fontWeight="Medium"
-        style={{
-          alignSelf: "center",
-          marginBottom: StyleConstants.Spacing.M,
-        }}
-      >
-        Welcome Back!
-      </ThemeText>
-      <View style={styles.inputView}>
-        <Input
-          label="Email"
-          value={state.email}
-          onChangeText={(value) => onHandleInputChange("email")(value)}
-        />
+      <View style={styles.container}>
+        <ThemeText
+          fontStyle="L"
+          fontWeight="Medium"
+          style={{
+            alignSelf: "center",
+            marginBottom: StyleConstants.Spacing.M,
+          }}
+        >
+          Welcome Back!
+        </ThemeText>
+        <View style={styles.inputView}>
+          <Input
+            label="Email"
+            value={state.email}
+            onChangeText={(value) => onHandleInputChange("email")(value)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <Input
+            label="Password"
+            secureTextEntry
+            value={state.password}
+            onChangeText={(value) => onHandleInputChange("password")(value)}
+          />
+        </View>
+        <Button borderRadius={8} onPress={onLogin}>
+          {mutation.isLoading ? (
+            <Flow color={"#fff"} size={38} />
+          ) : (
+            <ThemeText color={"#fff"} fontWeight={"Medium"}>
+              Login
+            </ThemeText>
+          )}
+        </Button>
       </View>
-      <View style={styles.inputView}>
-        <Input
-          label="Password"
-          secureTextEntry
-          value={state.password}
-          onChangeText={(value) => onHandleInputChange("password")(value)}
-        />
-      </View>
-      <Button borderRadius={8} onPress={onLogin}>
-        {mutation.isLoading ? (
-          <Flow color={"#fff"} size={38} />
-        ) : (
-          <ThemeText color={"#fff"} fontWeight={"Medium"}>
-            Login
-          </ThemeText>
-        )}
-      </Button>
     </SafeAreaView>
   );
 };
@@ -90,6 +92,10 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: "#fff",
+    justifyContent: "center",
+  },
+  container: {
+    flex: 1,
     justifyContent: "center",
     paddingHorizontal: StyleConstants.Spacing.L,
   },

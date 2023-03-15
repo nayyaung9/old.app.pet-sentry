@@ -6,7 +6,7 @@ type Props =
   | {
       style?: Omit<TextStyle, "fontSize" | "lineHeight" | "fontWeight">;
       fontStyle?: undefined;
-      fontSize?: "XS" | "S" | "M" | "L";
+      fontSize?: "XS" | "S" | "M" | "L" | "XL";
       lineHeight?: "S" | "M" | "L";
       fontWeight?: "Regular" | "Light" | "Medium" | "Bold";
       textTransform?: "Lowercase" | "Capitalize" | "Uppercase";
@@ -14,7 +14,7 @@ type Props =
     }
   | {
       style?: Omit<TextStyle, "fontSize" | "lineHeight" | "fontWeight">;
-      fontStyle: "XS" | "S" | "M" | "L";
+      fontStyle: "XS" | "S" | "M" | "L" | "XL";
       fontSize?: undefined;
       lineHeight?: undefined;
       fontWeight?: "Regular" | "Light" | "Medium" | "Bold";

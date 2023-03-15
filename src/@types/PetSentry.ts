@@ -35,6 +35,7 @@ declare namespace PetSentry {
     photos: string[];
     activityDate: string;
     isVerify: boolean;
+    systemedShortAddress: string | null;
     createdAt: string;
     updatedAt: string;
   };

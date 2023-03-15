@@ -1,6 +1,6 @@
 import React from "react";
 import CachedImage from "expo-cached-image";
-import { ActivityIndicator, ImageStyle, StyleProp } from "react-native";
+import { ActivityIndicator, ImageStyle, StyleProp, View } from "react-native";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { getFilenameFromURL } from "~/utils/helpers";
 
@@ -11,21 +11,32 @@ type NicelyImageProps = {
 const NicelyImage = ({ uri, containerStyle }: NicelyImageProps) => {
   const { colors } = useTheme();
   const cacheKey = getFilenameFromURL(uri);
+
   return (
     <CachedImage
       source={{
-        uri,
+        uri: `${uri}`,
       }}
-      cacheKey={cacheKey}
+      cacheKey={`${cacheKey}`}
       placeholderContent={
-        <ActivityIndicator
-          color={colors.background}
-          size="small"
+        <View
           style={{
+            backgroundColor: "#ddd",
             flex: 1,
+            borderRadius: 4,
+            alignItems: "center",
             justifyContent: "center",
           }}
-        />
+        >
+          <ActivityIndicator
+            color={colors.inactiveTabBar}
+            size="small"
+            style={{
+              flex: 1,
+              justifyContent: "center",
+            }}
+          />
+        </View>
       }
       style={containerStyle}
     />

@@ -1,14 +1,23 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
 import ThemeText from "~/components/ThemeText";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
+import { useAuthState } from "~/utils/state/useAuth";
 
 const ComposeTab: React.FC<BottomTabsScreenProps<"Tab-Compose">> = ({
   navigation,
 }) => {
   const { colors } = useTheme();
+  const { token } = useAuthState();
   return (
     <View style={styles.root}>
       <View style={styles.container}>

@@ -15,11 +15,13 @@ import ProfileTab from "./Profile";
 // Utils
 import { useGeoAddress, useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import { useAuthState } from "~/utils/state/useAuth";
 
 const ScreenTab = () => {
   const { colors } = useTheme();
   const geoAddress = useGeoAddress();
   const userCoordinates = useUserCoordinates();
+  const { token } = useAuthState();
   return (
     <Tab.Navigator
       initialRouteName="Tab-Home"
@@ -79,25 +81,28 @@ const ScreenTab = () => {
           ),
         })}
       />
-      <Tab.Screen
-        name="Tab-Compose"
-        component={ComposeTab}
-        options={() => ({
-          title: "Compose",
-          tabBarIcon: ({ focused, color }) => (
-            <MaterialIcons
-              name="post-add"
-              size={28}
-              color={focused ? colors.primary : color}
-            />
-          ),
-        })}
-      />
+      {token && (
+        <Tab.Screen
+          name="Tab-Compose"
+          component={ComposeTab}
+          options={() => ({
+            title: "Compose",
+            tabBarIcon: ({ focused, color }) => (
+              <MaterialIcons
+                name="post-add"
+                size={28}
+                color={focused ? colors.primary : color}
+              />
+            ),
+          })}
+        />
+      )}
+
       <Tab.Screen
         name="Tab-Profile"
         component={ProfileTab}
         options={({ navigation }) => ({
-          title: "Profile",
+          title: token ? "Profile" : "Account",
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
               name="person"
@@ -105,22 +110,24 @@ const ScreenTab = () => {
               color={focused ? colors.primary : color}
             />
           ),
-          headerLeft: () => (
-            <Pressable
-              style={{ marginLeft: 16 }}
-              onPress={() => navigation.openDrawer()}
-            >
-              <Ionicons name="menu" size={24} color="black" />
-            </Pressable>
-          ),
-          headerRight: () => (
-            <Pressable
-              style={{ marginRight: 16 }}
-              onPress={() => navigation.navigate("Profile-Setting")}
-            >
-              <Ionicons name="md-settings-sharp" size={24} color="black" />
-            </Pressable>
-          ),
+          ...(token && {
+            headerLeft: () => (
+              <Pressable
+                style={{ marginLeft: 16 }}
+                onPress={() => navigation.openDrawer()}
+              >
+                <Ionicons name="menu" size={24} color="black" />
+              </Pressable>
+            ),
+            headerRight: () => (
+              <Pressable
+                style={{ marginRight: 16 }}
+                onPress={() => navigation.navigate("Profile-Setting")}
+              >
+                <Ionicons name="md-settings-sharp" size={24} color="black" />
+              </Pressable>
+            ),
+          }),
         })}
       />
     </Tab.Navigator>

@@ -18,7 +18,6 @@ import { StyleConstants } from "~/utils/theme/constants";
 import TimelineOwner from "./TimelineOwner";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import TimelineReunited from "./TimelineReunited";
-import NicelyImage from "../NicelyImage";
 
 const TimelineCard = ({
   item,
@@ -43,16 +42,19 @@ const TimelineCard = ({
             owner: {
               profileUrl: item?._owner?.profileUrl,
               name: item?._owner?.name,
+              systemedShortAddress: item?.systemedShortAddress,
             },
           }}
         />
       )}
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
-        <Pressable onPress={() => onNavigateToTimelineDetail(item?._id)}>
-          <NicelyImage
-            uri={item.photos[0]}
-            containerStyle={styles.timelineImage}
+        <Pressable
+          onPress={() => onNavigateToTimelineDetail(item?._id)}
+        >
+          <Image
+            source={{ uri: item.photos[0] }}
+            style={styles.timelineImage}
           />
         </Pressable>
       )}

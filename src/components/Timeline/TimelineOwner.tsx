@@ -11,6 +11,7 @@ import { useTheme } from "~/utils/theme/ThemeManager";
 type OwnerProps = {
   profileUrl: string;
   name: string;
+  systemedShortAddress: string | null;
 };
 type TimelineOwnerProps = {
   postId: string;
@@ -19,7 +20,7 @@ type TimelineOwnerProps = {
 
 const TimelineOwner = ({
   postId,
-  owner: { profileUrl, name },
+  owner: { profileUrl, name, systemedShortAddress },
 }: TimelineOwnerProps) => {
   const { colors } = useTheme();
   return (
@@ -40,16 +41,19 @@ const TimelineOwner = ({
         <ThemeText fontWeight="Medium" style={styles.authorName}>
           {name}
         </ThemeText>
-        <View style={styles.infoLocationRow}>
-          <Ionicons name="md-location" size={14} color={colors.mediumDark} />
-          <ThemeText
-            fontStyle={"XS"}
-            fontWeight={"Medium"}
-            color={colors.mediumDark}
-          >
-            Tarmwe, Yangon
-          </ThemeText>
-        </View>
+        {systemedShortAddress && (
+          <View style={styles.infoLocationRow}>
+            <Ionicons name="md-location" size={14} color={colors.mediumDark} />
+
+            <ThemeText
+              fontStyle={"XS"}
+              fontWeight={"Medium"}
+              color={colors.mediumDark}
+            >
+              {systemedShortAddress}
+            </ThemeText>
+          </View>
+        )}
       </View>
       <View style={styles.infoMenuRoot}>
         <Pressable>

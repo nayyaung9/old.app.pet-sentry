@@ -18,7 +18,7 @@ import { useTheme } from "~/utils/theme/ThemeManager";
 import { useNavigation } from "@react-navigation/native";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useMapAddress } from "~/utils/state/useMapState";
-import { useUserCoordinates } from "~/utils/state/useGeoAddress";
+import { useGeoAddress, useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { usePostCreateMutation } from "~/libs/mutation/post";
 import { useQueryClient } from "@tanstack/react-query";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
@@ -32,6 +32,8 @@ const PetLostForm = () => {
     useNavigation<BottomTabsScreenProps<"Tab-Compose">["navigation"]>();
   const { colors } = useTheme();
   const mapAdress = useMapAddress();
+  const geoAddress = useGeoAddress();
+  console.log("geoAddress", geoAddress);
   const userCoordinates = useUserCoordinates();
   const { activeStepNo, onNext, onPrev } = useLostPet();
 
@@ -96,11 +98,11 @@ const PetLostForm = () => {
         "MMMYYYYDDss"
       )}`;
 
-      setState({ ...state, photos: [...state.photos, file.uri] });
+      // setState({ ...state, photos: [...state.photos, file.uri] });
 
-      // await uploadImageToFirebaseStorage(file.uri, fileName)
-      //   .then((res) => console.log("RES", res))
-      //   .catch((err) => console.log("Image Uplladed Error", err));
+      await uploadImageToFirebaseStorage(file.uri, fileName)
+        .then((res) => console.log("RES", res))
+        .catch((err) => console.log("Image Uplladed Error", err));
     }
   };
 
@@ -138,7 +140,7 @@ const PetLostForm = () => {
       () => {
         snapshot.snapshot.ref.getDownloadURL().then((url) => {
           setImageUploading(false);
-          // setState({ ...state, photos: [...state.photos, url] });
+          setState({ ...state, photos: [...state.photos, url] });
           blob.close();
           return url;
         });
@@ -189,6 +191,7 @@ const PetLostForm = () => {
       gender: gender,
       photos,
       activityDate: lostDate,
+      systemedShortAddress: geoAddress || null,
     };
     mutation.mutate(payload);
   };

@@ -15,10 +15,11 @@ const useLostPet = () => {
   const [collarModal, setCollarModal] = useState(false);
   const [lostDateModal, setLostDateModal] = useState(false);
 
-  const togglePetTypeModal = () => setPetTypeModal(!petTypeModal);
-  const toggleGenderModal = () => setGenderModal(!genderModal);
-  const toggleCollarColorModal = () => setCollarModal(!collarModal);
-  const toggleLostDateModal = () => setLostDateModal(!lostDateModal);
+  const togglePetTypeModal = () => setPetTypeModal((prevState) => !prevState);
+  const toggleGenderModal = () => setGenderModal((prevState) => !prevState);
+  const toggleCollarColorModal = () =>
+    setCollarModal((prevState) => !prevState);
+  const toggleLostDateModal = () => setLostDateModal((prevState) => !prevState);
 
   return {
     activeStepNo,

@@ -1,31 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import Input from "~/components/Input";
-import useLostPet from "~/hooks/useLostPet";
+import ComposeContext from "../utils/createContext";
+import ThemeText from "~/components/ThemeText";
 import { BottomSheet } from "react-native-btr";
+
+import useLostPet from "~/hooks/useLostPet";
 import collar_colors from "~/utils/constants/collar_colors.json";
 import { AntDesign } from "@expo/vector-icons";
-
 import { StyleConstants } from "~/utils/theme/constants";
-import ThemeText from "~/components/ThemeText";
 import { useTheme } from "~/utils/theme/ThemeManager";
 
-type PetLostIdentificationState = {
-  collarColor: string;
-  specialTrait: string;
-};
-type PetLostIdentificationProps = {
-  state: PetLostIdentificationState;
-  onPetSpecialTraitChange: (value: string) => void;
-  onSelectPetCollarColor: (value: string) => void;
-};
-const PetIdentification = ({
-  state,
-  onPetSpecialTraitChange,
-  onSelectPetCollarColor,
-}: PetLostIdentificationProps) => {
+const PetIdentification = () => {
   const { colors } = useTheme();
   const { toggleCollarColorModal, collarModal } = useLostPet();
+  const { composeState, composeDispatch } = useContext(ComposeContext);
+
+  const onHandleInputChange = (key: string, value: string) =>
+    composeDispatch({
+      type: "onChangeText",
+      payload: { key, value },
+    });
+
   return (
     <View>
       <ThemeText
@@ -38,7 +34,7 @@ const PetIdentification = ({
       <View style={styles.inputView}>
         <Pressable onPress={toggleCollarColorModal}>
           <View pointerEvents="none">
-            <Input label="Collar Color" value={state.collarColor} />
+            <Input label="Collar Color" value={composeState.collarColor} />
           </View>
         </Pressable>
       </View>
@@ -47,8 +43,8 @@ const PetIdentification = ({
         <Input
           label="Special traits"
           as="textarea"
-          value={state.specialTrait}
-          onChangeText={(value) => onPetSpecialTraitChange(value)}
+          value={composeState.specialTrait}
+          onChangeText={(value) => onHandleInputChange("specialTrait", value)}
         />
       </View>
 
@@ -64,11 +60,11 @@ const PetIdentification = ({
               style={styles.modalItem}
               onPress={() => {
                 toggleCollarColorModal();
-                onSelectPetCollarColor(collar_color?.name);
+                onHandleInputChange("collarColor", collar_color?.name);
               }}
             >
               <ThemeText fontWeight="Medium">{collar_color?.name}</ThemeText>
-              {state?.collarColor == collar_color.name && (
+              {composeState?.collarColor == collar_color.name && (
                 <AntDesign name="check" size={20} color={colors.primary} />
               )}
             </Pressable>

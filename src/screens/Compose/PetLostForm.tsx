@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Pressable, View } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import { Ionicons } from "@expo/vector-icons";
 import AppBar from "~/components/AppBar";
 import ProgressBar from "~/components/ProgressBar";
 import { Flow } from "react-native-animated-spinkit";
-
 import PetInformation from "./Lost/Information";
 import PetLostRoot from "./Lost/Root";
 import PetIdentification from "./Lost/Identification";
 import * as ImagePicker from "expo-image-picker";
 
 // Utils & Queries
-import { firebase } from "~/libs/firebase";
+
+import composeReducer from "./utils/reducer";
+import { ComposeState } from "./utils/types";
+import ComposeContext from "./utils/createContext";
+
+import moment from "moment";
 import useLostPet from "~/hooks/useLostPet";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { useNavigation } from "@react-navigation/native";
@@ -20,26 +24,21 @@ import { StyleConstants } from "~/utils/theme/constants";
 import { useMapAddress } from "~/utils/state/useMapState";
 import { useGeoAddress, useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { usePostCreateMutation } from "~/libs/mutation/post";
-import { useQueryClient } from "@tanstack/react-query";
+import { firebase } from "~/libs/firebase";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
-import moment from "moment";
 
 const STEP_COUNTS = 3;
 
 const PetLostForm = () => {
-  const queryClient = useQueryClient();
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Compose">["navigation"]>();
   const { colors } = useTheme();
   const mapAdress = useMapAddress();
   const geoAddress = useGeoAddress();
-  console.log("geoAddress", geoAddress);
   const userCoordinates = useUserCoordinates();
   const { activeStepNo, onNext, onPrev } = useLostPet();
 
-  // States
-  const [imageUploading, setImageUploading] = useState(false);
-  const [state, setState] = useState({
+  const initialReducerState: ComposeState = {
     petName: "",
     petType: "",
     gender: "",
@@ -47,46 +46,28 @@ const PetLostForm = () => {
     collarColor: "",
     specialTrait: "",
     information: "",
-    photos: [],
     lostDate: new Date(),
-  });
+  };
+
+  const [composeState, composeDispatch] = useReducer(
+    composeReducer,
+    initialReducerState
+  );
 
   useEffect(() => {
     if (mapAdress) {
-      setState({ ...state, address: mapAdress });
+      composeDispatch({
+        type: "onChangeText",
+        payload: { key: "address", value: mapAdress },
+      });
     }
   }, [mapAdress]);
 
-  const onPetNameChange = (value: string) =>
-    setState({ ...state, petName: value });
-
-  const onPetAddressChange = (value: string) =>
-    setState({ ...state, address: value });
-
-  const onPetInformationChange = (value: string) =>
-    setState({ ...state, information: value });
-
-  const onPetSpecialTraitChange = (value: string) =>
-    setState({ ...state, specialTrait: value });
-
-  const onSelectPetType = (type: string) => {
-    setState({ ...state, petType: type });
-  };
-
-  const onSelectPetGender = (value: string) => {
-    setState({ ...state, gender: value });
-  };
-
-  const onSelectPetCollarColor = (value: string) => {
-    setState({ ...state, collarColor: value });
-  };
-
-  const onSelectLostDate = (selectedDate: any) => {
-    setState({ ...state, lostDate: selectedDate });
-  };
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [tempImagePreview, setTempImagePreview] = useState("");
+  const [imageUploading, setImageUploading] = useState(false);
 
   const onSelectPhoto = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 1,
@@ -98,18 +79,9 @@ const PetLostForm = () => {
         "MMMYYYYDDss"
       )}`;
 
-      // setState({ ...state, photos: [...state.photos, file.uri] });
-
-      await uploadImageToFirebaseStorage(file.uri, fileName)
-        .then((res) => console.log("RES", res))
-        .catch((err) => console.log("Image Uplladed Error", err));
+      setTempImagePreview(file.uri);
+      await uploadImageToFirebaseStorage(file.uri, fileName);
     }
-  };
-
-  const onRemovePhoto = (uri: string) => {
-    let selectedPhotos = state.photos.filter((photo) => photo != uri);
-
-    setState({ ...state, photos: selectedPhotos });
   };
 
   const uploadImageToFirebaseStorage = async (
@@ -117,9 +89,7 @@ const PetLostForm = () => {
     fileName: string
   ) => {
     const response = await fetch(uri);
-    const blob = await response.blob();
-
-    console.log(fileName);
+    const blob = (await response.blob()) as any;
 
     const ref = firebase
       .storage()
@@ -140,13 +110,20 @@ const PetLostForm = () => {
       () => {
         snapshot.snapshot.ref.getDownloadURL().then((url) => {
           setImageUploading(false);
-          setState({ ...state, photos: [...state.photos, url] });
+          setPhotos([...photos, url]);
           blob.close();
           return url;
         });
       }
     );
   };
+
+  const onRemovePhoto = (uri: string) => {
+    let selectedPhotos = photos.filter((photo) => photo != uri);
+
+    setPhotos(selectedPhotos);
+  };
+
   /**
    * We'll implement this map feature in coming release version.
    */
@@ -172,23 +149,23 @@ const PetLostForm = () => {
     const {
       petName,
       petType,
+      address,
       information,
       collarColor,
       specialTrait,
       gender,
       lostDate,
-      photos,
-    } = state;
+    } = composeState;
     const payload = {
       geolocation: [userCoordinates.longitude, userCoordinates.latitude],
-      address: state.address,
-      petName,
+      address,
+      petName: petName as string,
       petType,
       information,
       collarColor,
       activityType: "Missing",
-      specialTraits: specialTrait,
-      gender: gender,
+      specialTraits: specialTrait as string,
+      gender,
       photos,
       activityDate: lostDate,
       systemedShortAddress: geoAddress || null,
@@ -196,115 +173,91 @@ const PetLostForm = () => {
     mutation.mutate(payload);
   };
 
-  const onPressHandler = async () => {
-    if (activeStepNo != STEP_COUNTS) {
-      onNext();
-    } else {
-      onSubmit();
-      console.log("Final Submit");
-    }
+  const onPressHandler = () => {
+    return activeStepNo != STEP_COUNTS ? onNext() : onSubmit();
   };
 
   const onCheckValidation = () => {
     if (activeStepNo == 1) {
-      return !state.petName || !state.petType || !state.gender ? true : false;
-    }
-
-    if (activeStepNo == 2) {
-      return !state.address || !state.information || !state.lostDate
+      return !composeState.petName ||
+        !composeState.petType ||
+        !composeState.gender ||
+        photos.length < 1
         ? true
         : false;
     }
-
+    if (activeStepNo == 2) {
+      return !composeState.address ||
+        !composeState.information ||
+        !composeState.lostDate
+        ? true
+        : false;
+    }
     if (activeStepNo == 3) {
-      return !state.collarColor ? true : false;
+      return !composeState.collarColor ? true : false;
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <AppBar
-        title="Lost Pet"
-        leftCustomComponent={
-          <Pressable
-            onPress={() => (activeStepNo != 1 ? onPrev() : navigation.goBack())}
-          >
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </Pressable>
-        }
-        rightCustomComponent={
-          <Pressable onPress={onPressHandler}>
-            {mutation.isLoading ? (
-              <Flow color={colors.primary} size={24} />
-            ) : (
-              <ThemeText color={onCheckValidation() ? "#ddd" : colors.primary}>
-                {activeStepNo != STEP_COUNTS ? "Continue" : "Publish"}
-              </ThemeText>
-            )}
-          </Pressable>
-        }
-      />
-      <View
-        style={{
-          paddingHorizontal: StyleConstants.Spacing.M,
-          backgroundColor: "#fff",
-        }}
-      >
-        <ProgressBar activeStep={activeStepNo} stepCounts={STEP_COUNTS} />
+    <ComposeContext.Provider value={{ composeState, composeDispatch }}>
+      <View style={{ flex: 1 }}>
+        <AppBar
+          title="Lost Pet"
+          leftCustomComponent={
+            <Pressable
+              onPress={() =>
+                activeStepNo != 1 ? onPrev() : navigation.goBack()
+              }
+            >
+              <Ionicons name="chevron-back" size={24} color="black" />
+            </Pressable>
+          }
+          rightCustomComponent={
+            <Pressable onPress={onPressHandler} disabled={onCheckValidation()}>
+              {mutation.isLoading ? (
+                <Flow color={colors.primary} size={24} />
+              ) : (
+                <ThemeText
+                  color={onCheckValidation() ? "#ddd" : colors.primary}
+                >
+                  {activeStepNo != STEP_COUNTS ? "Continue" : "Publish"}
+                </ThemeText>
+              )}
+            </Pressable>
+          }
+        />
+        <View
+          style={{
+            paddingHorizontal: StyleConstants.Spacing.M,
+            backgroundColor: "#fff",
+          }}
+        >
+          <ProgressBar activeStep={activeStepNo} stepCounts={STEP_COUNTS} />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "#fff",
+            paddingTop: StyleConstants.Spacing.M,
+            paddingHorizontal: StyleConstants.Spacing.M,
+          }}
+        >
+          {activeStepNo == 1 && (
+            <PetLostRoot
+              {...{
+                photos,
+                onRemovePhoto,
+                onSelectPhoto,
+                tempImagePreview,
+                imageUploading,
+              }}
+            />
+          )}
+          {activeStepNo == 2 && <PetInformation />}
+          {activeStepNo == 3 && <PetIdentification />}
+        </View>
       </View>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "#fff",
-          paddingTop: StyleConstants.Spacing.M,
-          paddingHorizontal: StyleConstants.Spacing.M,
-        }}
-      >
-        {activeStepNo == 1 && (
-          <PetLostRoot
-            {...{
-              state: {
-                petName: state.petName,
-                petType: state.petType,
-                gender: state.gender,
-                photos: state.photos,
-              },
-              onSelectPhoto,
-              onPetNameChange,
-              onSelectPetType,
-              onSelectPetGender,
-              onRemovePhoto,
-            }}
-          />
-        )}
-        {activeStepNo == 2 && (
-          <PetInformation
-            {...{
-              state: {
-                address: state.address,
-                information: state.information,
-                lostDate: state.lostDate,
-              },
-              onPetAddressChange,
-              onPetInformationChange,
-              onSelectLostDate,
-            }}
-          />
-        )}
-        {activeStepNo == 3 && (
-          <PetIdentification
-            {...{
-              state: {
-                collarColor: state.collarColor,
-                specialTrait: state.specialTrait,
-              },
-              onPetSpecialTraitChange,
-              onSelectPetCollarColor,
-            }}
-          />
-        )}
-      </View>
-    </View>
+    </ComposeContext.Provider>
   );
 };
 

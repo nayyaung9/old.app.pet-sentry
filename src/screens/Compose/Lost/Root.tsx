@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, StyleSheet, View, Image, ScrollView } from "react-native";
 import { BottomSheet } from "react-native-btr";
 import Input from "~/components/Input";
@@ -10,33 +10,28 @@ import pet_types from "~/utils/constants/pet_types.json";
 import genders from "~/utils/constants/genders.json";
 import ThemeText from "~/components/ThemeText";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import { Flow } from "react-native-animated-spinkit";
+import ComposeContext from "../utils/createContext";
 
-type PetLostRootState = {
-  petName: string;
-  petType: string;
-  gender: string;
-  photos: string | string[];
-};
 type PetLostRootProps = {
-  state: PetLostRootState;
-  onPetNameChange: (value: string) => void;
-  onSelectPetType: (value: string) => void;
-  onSelectPetGender: (value: string) => void;
+  photos: string[];
+  tempImagePreview: string;
   onRemovePhoto: (value: string) => void;
   onSelectPhoto: () => void;
+  imageUploading: boolean;
 };
 const PetLostRoot = ({
-  state,
-  onPetNameChange,
-  onSelectPetType,
-  onSelectPetGender,
+  photos,
   onSelectPhoto,
   onRemovePhoto,
+  tempImagePreview,
+  imageUploading,
 }: PetLostRootProps) => {
   const { colors } = useTheme();
   const { togglePetTypeModal, petTypeModal, toggleGenderModal, genderModal } =
     useLostPet();
 
+  const { composeState, composeDispatch } = useContext(ComposeContext);
   return (
     <View>
       <ThemeText
@@ -49,15 +44,20 @@ const PetLostRoot = ({
       <View style={styles.inputView}>
         <Input
           label="Pet Name"
-          value={state.petName}
-          onChangeText={(value) => onPetNameChange(value)}
+          value={composeState.petName}
+          onChangeText={(value) =>
+            composeDispatch({
+              type: "onChangeText",
+              payload: { key: "petName", value },
+            })
+          }
         />
       </View>
 
       <View style={styles.inputView}>
         <Pressable onPress={togglePetTypeModal}>
           <View pointerEvents="none">
-            <Input label="Select Pet Type" value={state.petType} />
+            <Input label="Select Pet Type" value={composeState.petType} />
           </View>
         </Pressable>
       </View>
@@ -65,7 +65,7 @@ const PetLostRoot = ({
       <View style={styles.inputView}>
         <Pressable onPress={toggleGenderModal}>
           <View pointerEvents="none">
-            <Input label="Gender" value={state.gender} />
+            <Input label="Gender" value={composeState.gender} />
           </View>
         </Pressable>
       </View>
@@ -86,10 +86,39 @@ const PetLostRoot = ({
             marginTop: StyleConstants.Spacing.M,
           }}
         >
-          {state.photos.length < 5 && (
+          {photos.length < 5 && (
             <Pressable onPress={onSelectPhoto} style={styles.imageUploadButton}>
               <Ionicons name="image-outline" size={32} color="#a4a9ac" />
             </Pressable>
+          )}
+
+          {tempImagePreview?.length >= 1 && imageUploading && (
+            <View style={{ width: 80, height: 80, marginRight: 12 }}>
+              <Image
+                source={{ uri: tempImagePreview }}
+                style={styles.uploadPhotoView}
+              />
+
+              <View
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0, 0, 0, 0.4)",
+                  borderRadius: 4,
+                }}
+              />
+
+              <View
+                style={{
+                  position: "absolute",
+                  alignSelf: "center",
+                  bottom: "45%",
+                }}
+              >
+                <Flow size={32} color={"#fff"} />
+              </View>
+            </View>
           )}
 
           <ScrollView
@@ -97,9 +126,9 @@ const PetLostRoot = ({
             showsHorizontalScrollIndicator={false}
             style={styles.photoViewLayout}
           >
-            {Array.isArray(state.photos) &&
-              state.photos.length >= 1 &&
-              state.photos.map((img, index) => (
+            {Array.isArray(photos) &&
+              photos.length >= 1 &&
+              photos.map((img, index) => (
                 <View key={index} style={styles.uploadPhotoView}>
                   <Image source={{ uri: img }} style={styles.uploadedPhoto} />
                   <Pressable
@@ -135,11 +164,14 @@ const PetLostRoot = ({
               style={styles.modalItem}
               onPress={() => {
                 togglePetTypeModal();
-                onSelectPetType(petType?.label);
+                composeDispatch({
+                  type: "onChangeText",
+                  payload: { key: "petType", value: petType?.label },
+                });
               }}
             >
               <ThemeText fontWeight="Medium">{petType?.label}</ThemeText>
-              {state?.petType == petType.label && (
+              {composeState?.petType == petType.label && (
                 <AntDesign name="check" size={20} color={colors.primary} />
               )}
             </Pressable>
@@ -159,11 +191,14 @@ const PetLostRoot = ({
               style={styles.modalItem}
               onPress={() => {
                 toggleGenderModal();
-                onSelectPetGender(gender?.value);
+                composeDispatch({
+                  type: "onChangeText",
+                  payload: { key: "gender", value: gender?.value },
+                });
               }}
             >
               <ThemeText fontWeight="Medium">{gender?.label}</ThemeText>
-              {state?.gender == gender.value && (
+              {composeState?.gender == gender.value && (
                 <AntDesign name="check" size={20} color={colors.primary} />
               )}
             </Pressable>

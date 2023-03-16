@@ -7,6 +7,7 @@ import ThemeManager from "~/utils/theme/ThemeManager";
 
 import Navigation from "./src/navigation";
 import FlashMessage from "react-native-flash-message";
+import { MenuProvider } from "react-native-popup-menu";
 
 // Loaders & Utils
 import axios from "axios";
@@ -92,8 +93,6 @@ export default function App() {
     loadedUserGeoAddress();
   }, [location?.latitude, location?.longitude]);
 
-  // console.log("location", JSON.stringify(location, null, 2))
-
   if (!isLoadingComplete) {
     return null;
   } else {
@@ -101,9 +100,11 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <ThemeManager>
-            <StatusBar />
-            <Navigation />
-            <FlashMessage />
+            <MenuProvider>
+              <StatusBar />
+              <Navigation />
+              <FlashMessage />
+            </MenuProvider>
           </ThemeManager>
         </SafeAreaProvider>
       </QueryClientProvider>

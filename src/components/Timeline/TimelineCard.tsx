@@ -40,6 +40,7 @@ const TimelineCard = ({
           {...{
             postId: item?._id,
             owner: {
+              ownerId: item?._owner?._id,
               profileUrl: item?._owner?.profileUrl,
               name: item?._owner?.name,
               systemedShortAddress: item?.systemedShortAddress,
@@ -49,9 +50,7 @@ const TimelineCard = ({
       )}
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
-        <Pressable
-          onPress={() => onNavigateToTimelineDetail(item?._id)}
-        >
+        <Pressable onPress={() => onNavigateToTimelineDetail(item?._id)}>
           <Image
             source={{ uri: item.photos[0] }}
             style={styles.timelineImage}

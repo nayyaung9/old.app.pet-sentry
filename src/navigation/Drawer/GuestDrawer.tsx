@@ -43,7 +43,8 @@ const GuestDrawer = () => {
 
 const styles = StyleSheet.create({
   menuItem: {
-    padding: StyleConstants.Spacing.S,
+    paddingHorizontal: StyleConstants.Spacing.S,
+    paddingVertical: StyleConstants.Spacing.M,
   },
 });
 export default GuestDrawer;

@@ -22,8 +22,7 @@ const themeColors: {
   };
 } = {
   primary: {
-    light: "#ec417a",
-    // light: '#9f73fe',
+    light: "#ff4081",
     dark: "#282828",
   },
   background: {
@@ -64,8 +63,8 @@ const themeColors: {
   },
   textGreen: {
     light: "#31987c",
-    dark: "#31987c"
-  }
+    dark: "#31987c",
+  },
 };
 
 const getColors = (theme: Theme): { [key in ColorDefinitions]: string } => {

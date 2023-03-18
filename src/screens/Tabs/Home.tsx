@@ -1,24 +1,27 @@
 import React from "react";
-import { Text, View, useWindowDimensions, Dimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import {
   TabView,
   SceneMap,
   TabBar,
   TabBarIndicator,
 } from "react-native-tab-view";
+import ThemeText from "~/components/ThemeText";
 import TimelineContainer from "~/components/Timeline/TimelineContainer";
+import { calculateTabIndicatorWidth } from "~/utils/helpers";
+import { useTheme } from "~/utils/theme/ThemeManager";
 
-const DEVICE = Dimensions.get("window");
+const Route = ({ route: { queryKey } }: { route: any }) => (
+  <TimelineContainer {...{ queryKey }} />
+);
 
-const Route = ({ route: { queryKey } }: { route: any }) => {
-  return <TimelineContainer {...{ queryKey }} />;
-};
 const renderScene = SceneMap({
   first: Route,
   second: Route,
 });
 
 const HomeTab = () => {
+  const { colors } = useTheme();
   const layout = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
@@ -30,34 +33,32 @@ const HomeTab = () => {
   const renderTabBar = (props: any) => (
     <TabBar
       {...props}
-      style={{ backgroundColor: "#fff" }}
+      style={{ backgroundColor: colors.textWhite }}
       renderIndicator={(indicatorProps) => {
         const singleTabWidth = indicatorProps.getTabWidth(index);
-        const numberOfTabs = 2;
-        const widthOfIndicator = 40;
-        const spaingLeftExtra = widthOfIndicator / 2;
 
-        const spaingTab =
-          DEVICE.width / numberOfTabs -
-          singleTabWidth / numberOfTabs -
-          spaingLeftExtra;
+        const { left, tabWidth } = calculateTabIndicatorWidth({
+          singleTabWidth,
+          numberOfTabs: 2,
+        });
+
         return (
           <TabBarIndicator
             {...indicatorProps}
-            width={widthOfIndicator}
-            style={{ left: spaingTab, backgroundColor: "#ff4081" }}
+            width={tabWidth}
+            style={{ left: left, backgroundColor: colors.primary }}
           />
         );
       }}
       renderLabel={({ route, focused }) => (
-        <Text
+        <ThemeText
+          color={focused ? colors.primary : colors.textSecondary}
           style={{
             textTransform: "uppercase",
-            color: focused ? "#ff4081" : "#555",
           }}
         >
           {route.title}
-        </Text>
+        </ThemeText>
       )}
     />
   );

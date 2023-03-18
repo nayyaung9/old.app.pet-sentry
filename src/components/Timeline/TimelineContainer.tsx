@@ -2,16 +2,16 @@ import React from "react";
 import { StyleSheet, FlatList, View } from "react-native";
 import ComponentSeparator from "../Sperator";
 import TimelineCard from "./TimelineCard";
-import { Flow } from "react-native-animated-spinkit";
 import TimelineEmpty from "./TimelineEmpty";
+import TimelineError from "./TimelineError";
+import TimelineMenuRoot from "./Menu/Root";
+import ThemeModal from "../ThemeModal";
+import Loading from "../Loading";
 
 // Utils & Queries
-import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePosts } from "~/libs/query/post";
-import ThemeText from "../ThemeText";
-import TimelineMenuRoot from "./Menu/Root";
 import { useTimelineState, useTimelineStore } from "~/utils/state/timeline";
-import ThemeModal from "../ThemeModal";
+import { useTheme } from "~/utils/theme/ThemeManager";
 
 const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
   const { colors } = useTheme();
@@ -22,26 +22,20 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
   return (
     <View style={styles.root}>
       {isLoading ? (
-        <View style={styles.loadingContainer}>
-          <Flow size={48} color={colors.primary} />
-        </View>
+        <Loading />
       ) : error ? (
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <ThemeText>There was an error. Please try again later.</ThemeText>
-        </View>
+        <TimelineError />
       ) : (
         <>
           {Array.isArray(data) && !error && (
             <FlatList
+              data={data}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
                 flexGrow: 1,
               }}
-              style={{ flex: 1, backgroundColor: "#fff" }}
+              style={{ flex: 1, backgroundColor: colors.textWhite }}
               ItemSeparatorComponent={ComponentSeparator}
-              data={data}
               ListEmptyComponent={TimelineEmpty}
               renderItem={({ item, index }) => (
                 <TimelineCard {...{ item, index }} />
@@ -50,6 +44,8 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
           )}
         </>
       )}
+
+      {/* We control Timeline Status Menu with Global State */}
       <ThemeModal
         openThemeModal={statusMenu}
         onCloseThemeModal={onToggleStatusMenu}
@@ -63,10 +59,5 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-  loadingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
 });
 export default TimelineContainer;

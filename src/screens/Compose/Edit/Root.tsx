@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     paddingHorizontal: StyleConstants.Spacing.M,
-    paddingVertical: StyleConstants.Spacing.S,
+    paddingVertical: StyleConstants.Spacing.M,
   },
 });
 export default PetEditRoot;

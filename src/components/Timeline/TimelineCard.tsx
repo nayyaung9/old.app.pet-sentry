@@ -1,6 +1,4 @@
 import React, { memo } from "react";
-
-// Components
 import {
   StyleSheet,
   TouchableOpacity,
@@ -9,15 +7,15 @@ import {
   Pressable,
 } from "react-native";
 import ThemeText from "~/components/ThemeText";
+import TimelineReunited from "./TimelineReunited";
+import TimelineOwner from "./TimelineOwner";
 
 // Utils & Queries
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
-import type { BottomTabsScreenProps } from "~/@types/navigators";
 import { StyleConstants } from "~/utils/theme/constants";
-import TimelineOwner from "./TimelineOwner";
 import { useTheme } from "~/utils/theme/ThemeManager";
-import TimelineReunited from "./TimelineReunited";
+import type { BottomTabsScreenProps } from "~/@types/navigators";
 
 const TimelineCard = ({
   item,
@@ -64,6 +62,7 @@ const TimelineCard = ({
       )}
 
       {item?.isReunited && <TimelineReunited />}
+
       <Pressable
         style={styles.timelineCardContent}
         onPress={() => onNavigateToTimelineDetail(item?._id, item?.petName)}
@@ -136,13 +135,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingBottom: StyleConstants.Spacing.S - 4,
-  },
-  timelineCardImageBlurHashContainer: {
-    width: "100%",
-    height: 250,
-    borderRadius: 20,
-    overflow: "hidden",
-    position: "absolute",
   },
 });
 

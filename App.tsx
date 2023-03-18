@@ -7,7 +7,6 @@ import ThemeManager from "~/utils/theme/ThemeManager";
 
 import Navigation from "./src/navigation";
 import FlashMessage from "react-native-flash-message";
-import { MenuProvider } from "react-native-popup-menu";
 
 // Loaders & Utils
 import axios from "axios";
@@ -60,33 +59,6 @@ export default function App() {
             longitude,
           });
         }
-
-        // if (response) {
-        //   const { results } = response;
-        //   const { state, suburb } = results[0] && results[0]?.components;
-        //   const isTownshipAvailable = suburb || "";
-        //   const geoCodedLocation = `${isTownshipAvailable}${
-        //     isTownshipAvailable && ","
-        //   }${state || ""}`;
-        //   // This definies user short address for Timeline
-        //   setGeoAddress(geoCodedLocation);
-
-        //   const residential =
-        //     (results[0] && results[0]?.components?.residential) || "";
-        //   const formattedAddress = results[0]?.formatted;
-        //   const geocodedAddress = `${
-        //     suburb || ""
-        //   },${residential}${formattedAddress}`;
-
-        //   // This defines user map address for Submit Pet Form
-        //   setMapAddress(geocodedAddress);
-
-        //   // This defines user coordinates for Map Point Case
-        //   setUserCoordinates({
-        //     latitude,
-        //     longitude,
-        //   });
-        // }
       }
     };
 
@@ -100,11 +72,9 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <ThemeManager>
-            <MenuProvider>
-              <StatusBar />
-              <Navigation />
-              <FlashMessage />
-            </MenuProvider>
+            <StatusBar />
+            <Navigation />
+            <FlashMessage />
           </ThemeManager>
         </SafeAreaProvider>
       </QueryClientProvider>

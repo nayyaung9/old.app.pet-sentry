@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
     width: "100%",
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    padding: StyleConstants.Spacing.M,
   },
   modalItem: {
     flexDirection: "row",

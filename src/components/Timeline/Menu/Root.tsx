@@ -1,22 +1,67 @@
 import React from "react";
-import { Modal, Platform, Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import ComponentSeparator from "~/components/Sperator";
 import MenuIconButton from "./MenuIconButton";
+import { showMessage } from "react-native-flash-message";
 
 import { useAuthState } from "~/utils/state/useAuth";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { StyleConstants } from "~/utils/theme/constants";
+import { useTimelineState, useTimelineStore } from "~/utils/state/timeline";
+import { usePostDeleteMutation } from "~/libs/mutation/post";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackScreenProps } from "~/@types/navigators";
 
 const TimelineMenuRoot = () => {
+  const navigation =
+    useNavigation<RootStackScreenProps<"App-Screens">["navigation"]>();
   const { userId } = useAuthState();
   const { colors } = useTheme();
-  // const isCurrentUserAnOwner = ownerId == userId;
+  const { selectedInfo } = useTimelineState();
+  const { onToggleStatusMenu } = useTimelineStore();
+  const queryClient = useQueryClient();
+
+  const isCurrentUserAnOwner = selectedInfo?.ownerId == userId;
+
+  const deleteMutation = usePostDeleteMutation({
+    onSuccess: (res) => {
+      if (res) {
+        queryClient.invalidateQueries(["Owner-Posts"]);
+        queryClient.invalidateQueries([
+          "Posts",
+          { activityType: res?.activityType },
+        ]);
+        showMessage({
+          message: "Post Delete",
+          description: "Your post is deleted!",
+          type: "success",
+        });
+        onToggleStatusMenu();
+        navigation.goBack();
+      }
+    },
+    onError: () => {
+      showMessage({
+        message: "Post Delete",
+        description: "Your post is not delete. Please try again later.",
+        type: "danger",
+      });
+    },
+  });
+
+  const onDeletePost = (id: string) => deleteMutation.mutate({ postId: id });
+
+  const onEditPost = (id: string) => {
+    onToggleStatusMenu();
+    navigation.navigate("Pet-Edit-Root", { postId: id });
+  };
 
   return (
     <View style={styles.timelineStatusMenu}>
-      {true && (
+      {isCurrentUserAnOwner && Object.keys(selectedInfo).length >= 1 && (
         <View>
           <Pressable style={styles.menuItem}>
             <MenuIconButton
@@ -32,7 +77,10 @@ const TimelineMenuRoot = () => {
             />
           </Pressable>
           <ComponentSeparator />
-          <Pressable style={styles.menuItem}>
+          <Pressable
+            style={styles.menuItem}
+            onPress={() => onEditPost(selectedInfo?.postId as string)}
+          >
             <MenuIconButton
               icon={
                 <Feather name="edit-3" size={24} color={colors.mediumDark} />
@@ -44,7 +92,7 @@ const TimelineMenuRoot = () => {
           <ComponentSeparator />
           <Pressable
             style={styles.menuItem}
-            // onPress={() => onDeletePost(data?._id as string)}
+            onPress={() => onDeletePost(selectedInfo?.postId as string)}
           >
             <MenuIconButton
               icon={
@@ -55,7 +103,6 @@ const TimelineMenuRoot = () => {
                 />
               }
               title="Delete"
-              helperText="Deleting your pet"
             />
           </Pressable>
           <ComponentSeparator />
@@ -88,6 +135,7 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     paddingVertical: StyleConstants.Spacing.S,
+    paddingHorizontal: StyleConstants.Spacing.M,
   },
 });
 export default TimelineMenuRoot;

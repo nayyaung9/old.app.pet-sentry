@@ -23,8 +23,14 @@ const TimelineOwner = ({
   postId,
   owner: { profileUrl, name, systemedShortAddress, ownerId },
 }: TimelineOwnerProps) => {
-  const { onToggleStatusMenu } = useTimelineStore();
+  const { onToggleStatusMenu, setPostInfoForModal } = useTimelineStore();
   const { colors } = useTheme();
+
+  const onMakeActionStatusModal = () => {
+    onToggleStatusMenu();
+
+    setPostInfoForModal({ postId: postId, ownerId });
+  };
 
   return (
     <View style={styles.infoRoot}>
@@ -59,7 +65,7 @@ const TimelineOwner = ({
         )}
       </View>
       <View style={styles.infoMenuRoot}>
-        <Pressable onPress={onToggleStatusMenu}>
+        <Pressable onPress={onMakeActionStatusModal}>
           <MaterialCommunityIcons
             name="dots-vertical"
             size={24}

@@ -18,6 +18,7 @@ import PetReportForm from "~/screens/Compose/PetReportForm";
 import ProfileSetting from "~/screens/Profile/Setting";
 import Login from "~/screens/Authentication/Login";
 import ThemeText from "~/components/ThemeText";
+import PetEditRoot from "~/screens/Compose/Edit/Root";
 
 const ApplicationNavigator = () => {
   const { colors } = useTheme();
@@ -50,10 +51,19 @@ const ApplicationNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Profile-Setting"
-          component={ProfileSetting}
-          // options={{ headerShown: false }}
+          name="Pet-Edit-Root"
+          component={PetEditRoot}
+          options={({ navigation }) => ({
+            title: "Edit Post",
+            headerTitleAlign: "center",
+            headerLeft: () => (
+              <Pressable onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back" size={24} color="#555" />
+              </Pressable>
+            ),
+          })}
         />
+        <Stack.Screen name="Profile-Setting" component={ProfileSetting} />
         <Stack.Screen
           name="Login-Screen"
           component={Login}

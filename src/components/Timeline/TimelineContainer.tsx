@@ -53,6 +53,7 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
       <ThemeModal
         openThemeModal={statusMenu}
         onCloseThemeModal={onToggleStatusMenu}
+        parentPaddingEnabled={false}
       >
         <TimelineMenuRoot />
       </ThemeModal>

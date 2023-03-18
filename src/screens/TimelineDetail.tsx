@@ -18,9 +18,8 @@ import TimelineMenuRoot from "~/components/Timeline/Menu/Root";
 
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
-import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Flow } from "react-native-animated-spinkit";
-import { showMessage } from "react-native-flash-message";
 
 // Utils & Queries
 import moment from "moment";
@@ -29,10 +28,6 @@ import { StyleConstants } from "~/utils/theme/constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePostDetail } from "~/libs/query/post";
-import { useAuthState } from "~/utils/state/useAuth";
-
-import { useQueryClient } from "@tanstack/react-query";
-import { usePostDeleteMutation } from "~/libs/mutation/post";
 import { useTimelineStore, useTimelineState } from "~/utils/state/timeline";
 
 import type { RootStackScreenProps } from "~/@types/navigators";
@@ -46,10 +41,9 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   navigation,
 }) => {
   const insets = useSafeAreaInsets();
-  const queryClient = useQueryClient();
   const { colors } = useTheme();
   const { statusMenu } = useTimelineState();
-  const { onToggleStatusMenu } = useTimelineStore();
+  const { onToggleStatusMenu, setPostInfoForModal } = useTimelineStore();
 
   // Query Hooks
   const { data, isLoading } = usePostDetail({
@@ -59,48 +53,20 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
     },
   });
 
-  const deleteMutation = usePostDeleteMutation({
-    onSuccess: (res) => {
-      if (res) {
-        queryClient.invalidateQueries(["Owner-Posts"]);
-        queryClient.invalidateQueries([
-          "Posts",
-          { activityType: res?.activityType },
-        ]);
-        showMessage({
-          message: "Post Delete",
-          description: "Your post is deleted!",
-          type: "success",
-        });
-        navigation.goBack();
-      }
-    },
-    onError: () => {
-      showMessage({
-        message: "Post Delete",
-        description: "Your post is not delete. Please try again later.",
-        type: "danger",
-      });
-    },
-  });
+  // const onNavigateToMap = () => {
+  //   navigation.navigate("Map-Screen", {
+  //     isPin: false,
+  //     point: {
+  //       latitude: data?.geolocation?.coordinates[1],
+  //       longitude: data?.geolocation?.coordinates[0],
+  //     },
+  //   });
+  // };
 
-  const onDeletePost = (id: string) => deleteMutation.mutate({ postId: id });
-
-  const { userId: currentAuthUserId } = useAuthState();
-
-  const onNavigateToMap = () => {
-    navigation.navigate("Map-Screen", {
-      isPin: false,
-      point: {
-        latitude: data?.geolocation?.coordinates[1],
-        longitude: data?.geolocation?.coordinates[0],
-      },
-    });
+  const onMakeActionStatusModal = () => {
+    onToggleStatusMenu();
+    setPostInfoForModal({ postId, ownerId: data?._owner?._id as string });
   };
-
-  const isOwner = useMemo(() => {
-    return data?._owner?._id == currentAuthUserId ? true : false;
-  }, [data?._owner?._id, currentAuthUserId]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -121,7 +87,7 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
             <Pressable
               disabled={isLoading}
               style={styles.iconButton}
-              onPress={onToggleStatusMenu}
+              onPress={onMakeActionStatusModal}
             >
               <MaterialCommunityIcons
                 name="dots-vertical"
@@ -346,6 +312,7 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
       <ThemeModal
         openThemeModal={statusMenu}
         onCloseThemeModal={onToggleStatusMenu}
+        parentPaddingEnabled={false}
       >
         <TimelineMenuRoot />
       </ThemeModal>

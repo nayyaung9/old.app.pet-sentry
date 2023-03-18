@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -7,16 +7,18 @@ import {
   ImageBackground,
   Pressable,
   Image,
+  Platform,
 } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import Label from "~/components/Label";
 import OwnerInfo from "~/components/OwnerInfo";
 import TimelineReunited from "~/components/Timeline/TimelineReunited";
 import ThemeModal from "~/components/ThemeModal";
+import TimelineMenuRoot from "~/components/Timeline/Menu/Root";
 
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Flow } from "react-native-animated-spinkit";
 import { showMessage } from "react-native-flash-message";
 
@@ -34,7 +36,6 @@ import { usePostDeleteMutation } from "~/libs/mutation/post";
 import { useTimelineStore, useTimelineState } from "~/utils/state/timeline";
 
 import type { RootStackScreenProps } from "~/@types/navigators";
-import TimelineMenuRoot from "~/components/Timeline/Menu/Root";
 
 const DEVICE = Dimensions.get("window");
 
@@ -44,9 +45,9 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   },
   navigation,
 }) => {
+  const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
   const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
   const { statusMenu } = useTimelineState();
   const { onToggleStatusMenu } = useTimelineStore();
 
@@ -117,21 +118,29 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
             <Ionicons name="chevron-back" size={24} color="#555" />
           </Pressable>
           <View>
-            <Pressable style={styles.iconButton} onPress={onToggleStatusMenu}>
-              <AntDesign name="hearto" size={14} color="black" />
+            <Pressable
+              disabled={isLoading}
+              style={styles.iconButton}
+              onPress={onToggleStatusMenu}
+            >
+              <MaterialCommunityIcons
+                name="dots-vertical"
+                size={24}
+                color="#555"
+              />
             </Pressable>
           </View>
         </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, isLoading]);
 
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style={isLoading ? "dark" : "light"} />
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <Flow />
+          <Flow color={colors.primary} />
         </View>
       ) : (
         <ScrollView
@@ -166,7 +175,9 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
-                        marginBottom: StyleConstants.Spacing.S,
+                        marginBottom: data?.systemedShortAddress
+                          ? 0
+                          : StyleConstants.Spacing.S,
                       }}
                     >
                       <ThemeText
@@ -230,11 +241,14 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                         style={{
                           backgroundColor: colors.primary,
                           paddingHorizontal: 12,
-                          paddingBottom: 4,
                           borderRadius: 10,
+                          paddingBottom: Platform.select({
+                            ios: 4,
+                            android: 0,
+                          }),
                         }}
                       >
-                        <ThemeText fontStyle={"L"} color={"#fff"}>
+                        <ThemeText color={"#fff"}>
                           {data?.activityType}
                         </ThemeText>
                       </View>
@@ -360,14 +374,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  backButton: {
-    width: 32,
-    height: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 100,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   petImageContainer: {
     width: "100%",

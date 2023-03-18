@@ -4,12 +4,12 @@ export type ComposeStateDraft = {
 };
 
 export type ComposeState = {
-  petName?: string; // null case for "Report Pet"
+  petName: string | null; // null case for "Report Pet"
   petType: string;
   gender: string;
   address: string;
   collarColor: string;
-  specialTrait?: string;
+  specialTrait?: string | null;
   information: string;
   lostDate: Date;
 };

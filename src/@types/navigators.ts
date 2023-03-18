@@ -25,6 +25,7 @@ export type RootStackParamList = {
     };
   };
   "Pet-Lost-Screen": undefined;
+  "Pet-Report-Screen": undefined;
   "Profile-Setting": undefined;
 
   "Login-Screen": undefined;

@@ -7,12 +7,12 @@ import { handleError } from "~/utils/handleError";
 type MutationVarsPost = {
   geolocation: number[];
   address: string;
-  petName: string;
+  petName: string | null;
   petType: string;
   information: string;
   collarColor: string;
   activityType: string;
-  specialTraits: string;
+  specialTraits: string | null;
   gender: string;
   photos: any;
   activityDate: Date;

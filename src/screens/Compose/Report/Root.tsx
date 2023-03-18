@@ -41,18 +41,6 @@ const PetLostRoot = ({
       >
         Basic Information
       </ThemeText>
-      <View style={styles.inputView}>
-        <Input
-          label="Pet Name"
-          value={composeState.petName as string}
-          onChangeText={(value) =>
-            composeDispatch({
-              type: "onChangeText",
-              payload: { key: "petName", value },
-            })
-          }
-        />
-      </View>
 
       <View style={styles.inputView}>
         <Pressable onPress={togglePetTypeModal}>

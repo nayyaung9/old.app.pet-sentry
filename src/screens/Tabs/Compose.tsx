@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ImageBackground,
-  Dimensions,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
@@ -23,7 +16,9 @@ const ComposeTab: React.FC<BottomTabsScreenProps<"Tab-Compose">> = ({
       <View style={styles.container}>
         {activities?.map((activity, index) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate("Pet-Lost-Screen")}
+            onPress={() =>
+              navigation.navigate(activity?.route)
+            }
             disabled={activity?.isDisabled}
             key={index}
             style={[
@@ -87,13 +82,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const activities = [
+type activityProps = {
+  id: number;
+  title: string;
+  label: string;
+  type: string;
+  icon: React.ReactElement;
+  route: string;
+  isDisabled: boolean;
+};
+const activities: activityProps[] = [
   {
     id: 1,
     title: "Have you lost your pet? submit help here!",
     label: "Report Missing",
     type: "missing",
     icon: require("assets/images/missing-pet.png"),
+    route: "Pet-Lost-Screen",
     isDisabled: false,
   },
   {
@@ -102,6 +107,7 @@ const activities = [
     label: "Report Found",
     type: "found",
     icon: require("assets/images/found-pet.png"),
+    route: "Pet-Report-Screen",
     isDisabled: false,
   },
 ];

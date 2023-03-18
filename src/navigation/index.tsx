@@ -14,6 +14,7 @@ import AppDrawerStack from "./Drawer";
 import TimelineDetail from "~/screens/TimelineDetail";
 import Map from "~/screens/Map/Root";
 import PetLostForm from "~/screens/Compose/PetLostForm";
+import PetReportForm from "~/screens/Compose/PetReportForm";
 import ProfileSetting from "~/screens/Profile/Setting";
 import Login from "~/screens/Authentication/Login";
 
@@ -40,6 +41,11 @@ const ApplicationNavigator = () => {
         <Stack.Screen
           name="Pet-Lost-Screen"
           component={PetLostForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Pet-Report-Screen"
+          component={PetReportForm}
           options={{ headerShown: false }}
         />
         <Stack.Screen

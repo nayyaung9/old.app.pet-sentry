@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import ComponentSeparator from "~/components/Sperator";
 import MenuIconButton from "./MenuIconButton";
 import { showMessage } from "react-native-flash-message";
@@ -13,7 +13,7 @@ import { useTimelineState, useTimelineStore } from "~/utils/state/timeline";
 import { usePostDeleteMutation } from "~/libs/mutation/post";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackScreenProps } from "~/@types/navigators";
+import type { RootStackScreenProps } from "~/@types/navigators";
 
 const TimelineMenuRoot = () => {
   const navigation =
@@ -63,64 +63,59 @@ const TimelineMenuRoot = () => {
     <View style={styles.timelineStatusMenu}>
       {isCurrentUserAnOwner && Object.keys(selectedInfo).length >= 1 && (
         <View>
-          <Pressable style={styles.menuItem}>
-            <MenuIconButton
-              icon={
-                <FontAwesome5
-                  name="hand-holding-heart"
-                  size={24}
-                  color={colors.mediumDark}
-                />
-              }
-              title="Set pet as Reunited"
-              helperText="This will let everyone know you've meet your pet"
-            />
-          </Pressable>
+          <MenuIconButton
+            onPress={() => console.log("AAA")}
+            icon={
+              <FontAwesome5
+                name="hand-holding-heart"
+                size={24}
+                color={colors.mediumDark}
+              />
+            }
+            title="Set pet as Reunited"
+            helperText="This will let everyone know you've meet your pet"
+            containerStyle={styles.menuItem}
+          />
           <ComponentSeparator />
-          <Pressable
-            style={styles.menuItem}
+
+          <MenuIconButton
+            icon={<Feather name="edit-3" size={24} color={colors.mediumDark} />}
+            title="Edit"
+            helperText="Edit your pet's information, missing place & photos."
+            containerStyle={styles.menuItem}
             onPress={() => onEditPost(selectedInfo?.postId as string)}
-          >
-            <MenuIconButton
-              icon={
-                <Feather name="edit-3" size={24} color={colors.mediumDark} />
-              }
-              title="Edit"
-              helperText="Edit your pet's information, missing place & photos."
-            />
-          </Pressable>
+          />
           <ComponentSeparator />
-          <Pressable
-            style={styles.menuItem}
+
+          <MenuIconButton
+            icon={
+              <MaterialCommunityIcons
+                name="delete-empty"
+                size={24}
+                color={colors.mediumDark}
+              />
+            }
+            title="Delete"
+            containerStyle={styles.menuItem}
             onPress={() => onDeletePost(selectedInfo?.postId as string)}
-          >
-            <MenuIconButton
-              icon={
-                <MaterialCommunityIcons
-                  name="delete-empty"
-                  size={24}
-                  color={colors.mediumDark}
-                />
-              }
-              title="Delete"
-            />
-          </Pressable>
+          />
           <ComponentSeparator />
         </View>
       )}
-      <Pressable style={styles.menuItem}>
-        <MenuIconButton
-          icon={
-            <FontAwesome5
-              name="hands-helping"
-              size={24}
-              color={colors.mediumDark}
-            />
-          }
-          title="Share on social media"
-          helperText="You're a value contributor"
-        />
-      </Pressable>
+
+      <MenuIconButton
+        icon={
+          <FontAwesome5
+            name="hands-helping"
+            size={24}
+            color={colors.mediumDark}
+          />
+        }
+        title="Share on social media"
+        helperText="You're a value contributor"
+        containerStyle={styles.menuItem}
+        onPress={() => null}
+      />
     </View>
   );
 };

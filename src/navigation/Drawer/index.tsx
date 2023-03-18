@@ -5,7 +5,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 // Screens
 import ScreenTabs from "~/screens/Tabs";
 import { DrawerStackParamsList } from "~/@types/navigators";
-import DrawerContent from "./DrawerContent";
+import DrawerContent from "./Root";
 
 const Drawer = createDrawerNavigator<DrawerStackParamsList>();
 

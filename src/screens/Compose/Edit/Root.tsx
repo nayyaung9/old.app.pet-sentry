@@ -12,35 +12,33 @@ const PetEditRoot = () => {
     <View style={styles.root}>
       <StatusBar backgroundColor="#fff" style={"dark"} />
       <View style={styles.menuRoot}>
-        <View style={styles.menuItem}>
-          <MenuIconButton
-            icon={<MaterialIcons name="pets" size={24} color="#555" />}
-            title="Edit Pet's Basic Information"
-            helperText="Include your pet name, gender & so on."
-          />
-        </View>
+        <MenuIconButton
+          icon={<MaterialIcons name="pets" size={24} color="#555" />}
+          title="Edit Pet's Basic Information"
+          helperText="Include your pet name, gender & so on."
+          containerStyle={styles.menuItem}
+          onPress={() => null}
+        />
         <ComponentSeparator />
-        <View style={styles.menuItem}>
-          <MenuIconButton
-            icon={<MaterialIcons name="place" size={24} color="#555" />}
-            title="Edit Missing Information"
-            helperText="Including missing place, lost date & address."
-          />
-        </View>
+
+        <MenuIconButton
+          icon={<MaterialIcons name="place" size={24} color="#555" />}
+          title="Edit Missing Information"
+          helperText="Including missing place, lost date & address."
+          containerStyle={styles.menuItem}
+          onPress={() => null}
+        />
         <ComponentSeparator />
-        <View style={styles.menuItem}>
-          <MenuIconButton
-            icon={
-              <MaterialCommunityIcons
-                name="identifier"
-                size={24}
-                color="#555"
-              />
-            }
-            title="Edit Pet's Identification"
-            helperText="Including collar color & special traits."
-          />
-        </View>
+
+        <MenuIconButton
+          icon={
+            <MaterialCommunityIcons name="identifier" size={24} color="#555" />
+          }
+          title="Edit Pet's Identification"
+          helperText="Including collar color & special traits."
+          containerStyle={styles.menuItem}
+          onPress={() => null}
+        />
       </View>
     </View>
   );

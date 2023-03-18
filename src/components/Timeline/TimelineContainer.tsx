@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, FlatList, View, Image } from "react-native";
+import { StyleSheet, FlatList, View } from "react-native";
 import ComponentSeparator from "../Sperator";
 import TimelineCard from "./TimelineCard";
 import { Flow } from "react-native-animated-spinkit";
@@ -9,11 +9,16 @@ import TimelineEmpty from "./TimelineEmpty";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePosts } from "~/libs/query/post";
 import ThemeText from "../ThemeText";
-import { StyleConstants } from "~/utils/theme/constants";
+import TimelineMenuRoot from "./Menu/Root";
+import { useTimelineState, useTimelineStore } from "~/utils/state/timeline";
+import ThemeModal from "../ThemeModal";
 
 const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
   const { colors } = useTheme();
   const { isLoading, data, error } = usePosts({ activityType: queryKey });
+  const { statusMenu } = useTimelineState();
+  const { onToggleStatusMenu } = useTimelineStore();
+
   return (
     <View style={styles.root}>
       {isLoading ? (
@@ -24,7 +29,6 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-        
           <ThemeText>There was an error. Please try again later.</ThemeText>
         </View>
       ) : (
@@ -46,6 +50,12 @@ const TimelineContainer = ({ queryKey }: { queryKey: string }) => {
           )}
         </>
       )}
+      <ThemeModal
+        openThemeModal={statusMenu}
+        onCloseThemeModal={onToggleStatusMenu}
+      >
+        <TimelineMenuRoot />
+      </ThemeModal>
     </View>
   );
 };

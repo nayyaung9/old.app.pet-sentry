@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Pressable, StyleSheet, View, Image, ScrollView } from "react-native";
-import { BottomSheet } from "react-native-btr";
+import ThemeModal from "~/components/ThemeModal";
 import Input from "~/components/Input";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
@@ -140,10 +140,9 @@ const PetLostRoot = ({
         </View>
       </View>
 
-      <BottomSheet
-        visible={petTypeModal}
-        onBackButtonPress={togglePetTypeModal}
-        onBackdropPress={togglePetTypeModal}
+      <ThemeModal
+        openThemeModal={petTypeModal}
+        onCloseThemeModal={togglePetTypeModal}
       >
         <View style={styles.bottomNavigationView}>
           {pet_types?.map((petType, index) => (
@@ -165,12 +164,11 @@ const PetLostRoot = ({
             </Pressable>
           ))}
         </View>
-      </BottomSheet>
+      </ThemeModal>
 
-      <BottomSheet
-        visible={genderModal}
-        onBackButtonPress={toggleGenderModal}
-        onBackdropPress={toggleGenderModal}
+      <ThemeModal
+        openThemeModal={genderModal}
+        onCloseThemeModal={toggleGenderModal}
       >
         <View style={styles.bottomNavigationView}>
           {genders?.map((gender, index) => (
@@ -192,7 +190,7 @@ const PetLostRoot = ({
             </Pressable>
           ))}
         </View>
-      </BottomSheet>
+      </ThemeModal>
     </View>
   );
 };

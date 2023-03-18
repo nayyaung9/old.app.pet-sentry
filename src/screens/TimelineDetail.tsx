@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -8,33 +8,33 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import Button from "~/components/Button";
 import ThemeText from "~/components/ThemeText";
 import Label from "~/components/Label";
 import OwnerInfo from "~/components/OwnerInfo";
+import TimelineReunited from "~/components/Timeline/TimelineReunited";
+import ThemeModal from "~/components/ThemeModal";
 
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Flow } from "react-native-animated-spinkit";
 import { showMessage } from "react-native-flash-message";
 
 // Utils & Queries
 import moment from "moment";
 import _ from "lodash";
-import { extractShortLocation } from "~/utils/helpers";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { usePostDetail } from "~/libs/query/post";
-import { useAuthState, useAuthStore } from "~/utils/state/useAuth";
+import { useAuthState } from "~/utils/state/useAuth";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { usePostDeleteMutation } from "~/libs/mutation/post";
+import { useTimelineStore, useTimelineState } from "~/utils/state/timeline";
 
 import type { RootStackScreenProps } from "~/@types/navigators";
-import TimelineReunited from "~/components/Timeline/TimelineReunited";
-import NicelyImage from "~/components/NicelyImage";
+import TimelineMenuRoot from "~/components/Timeline/Menu/Root";
 
 const DEVICE = Dimensions.get("window");
 
@@ -47,6 +47,8 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   const queryClient = useQueryClient();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const { statusMenu } = useTimelineState();
+  const { onToggleStatusMenu } = useTimelineStore();
 
   // Query Hooks
   const { data, isLoading } = usePostDetail({
@@ -84,11 +86,6 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   const onDeletePost = (id: string) => deleteMutation.mutate({ postId: id });
 
   const { userId: currentAuthUserId } = useAuthState();
-  const getCredential = useAuthStore((state) => state.getCredential);
-
-  useEffect(() => {
-    getCredential();
-  }, []);
 
   const onNavigateToMap = () => {
     navigation.navigate("Map-Screen", {
@@ -119,9 +116,11 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
           >
             <Ionicons name="chevron-back" size={24} color="#555" />
           </Pressable>
-          <Pressable style={styles.iconButton}>
-            <AntDesign name="hearto" size={14} color="black" />
-          </Pressable>
+          <View>
+            <Pressable style={styles.iconButton} onPress={onToggleStatusMenu}>
+              <AntDesign name="hearto" size={14} color="black" />
+            </Pressable>
+          </View>
         </View>
       ),
     });
@@ -263,11 +262,6 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                 <Label
                   label="Missing here"
                   value={data?.geolocation?.address as string}
-                  leftComponent={
-                    <Pressable onPress={onNavigateToMap}>
-                      <AntDesign name="arrowright" size={24} color="black" />
-                    </Pressable>
-                  }
                 />
               )}
 
@@ -331,42 +325,16 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
                   </View>
                 </View>
               )}
-
-            {isOwner && (
-              <View style={{ marginTop: StyleConstants.Spacing.L }}>
-                <Button
-                  borderRadius={8}
-                  onPress={() => onDeletePost(data?._id as string)}
-                  loading={deleteMutation.isLoading}
-                >
-                  <ThemeText color={"#fff"} fontWeight={"Medium"}>
-                    Delete Post
-                  </ThemeText>
-                </Button>
-                <Button borderRadius={8} onPress={() => null}>
-                  <FontAwesome name="edit" size={24} color="#fff" />
-                  <ThemeText
-                    color={"#fff"}
-                    fontWeight={"Medium"}
-                    style={{ marginLeft: StyleConstants.Spacing.S }}
-                  >
-                    Edit Post
-                  </ThemeText>
-                </Button>
-                <Button borderRadius={8} onPress={() => null}>
-                  <ThemeText
-                    color={"#fff"}
-                    fontWeight={"Medium"}
-                    style={{ marginLeft: StyleConstants.Spacing.S }}
-                  >
-                    Set pet as Reunited
-                  </ThemeText>
-                </Button>
-              </View>
-            )}
           </View>
         </ScrollView>
       )}
+
+      <ThemeModal
+        openThemeModal={statusMenu}
+        onCloseThemeModal={onToggleStatusMenu}
+      >
+        <TimelineMenuRoot />
+      </ThemeModal>
     </View>
   );
 };

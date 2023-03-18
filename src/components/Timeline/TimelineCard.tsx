@@ -30,8 +30,11 @@ const TimelineCard = ({
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Home">["navigation"]>();
 
-  const onNavigateToTimelineDetail = (postId: string) =>
-    navigation.navigate("Timeline-Detail", { postId });
+  const onNavigateToTimelineDetail = (postId: string, petName: string | null) =>
+    navigation.navigate("Timeline-Detail", {
+      postId,
+      petName: petName as string,
+    });
 
   return (
     <TouchableOpacity activeOpacity={1} style={styles.timelineCard}>
@@ -50,7 +53,9 @@ const TimelineCard = ({
       )}
 
       {Array.isArray(item?.photos) && item?.photos?.length >= 1 && (
-        <Pressable onPress={() => onNavigateToTimelineDetail(item?._id)}>
+        <Pressable
+          onPress={() => onNavigateToTimelineDetail(item?._id, item?.petName)}
+        >
           <Image
             source={{ uri: item.photos[0] }}
             style={styles.timelineImage}
@@ -61,7 +66,7 @@ const TimelineCard = ({
       {item?.isReunited && <TimelineReunited />}
       <Pressable
         style={styles.timelineCardContent}
-        onPress={() => onNavigateToTimelineDetail(item?._id)}
+        onPress={() => onNavigateToTimelineDetail(item?._id, item?.petName)}
       >
         <View style={styles.timelineCardInfoRow}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
   },
   timelineImage: {
     width: "100%",
-    height: 220,
+    height: 250,
     borderRadius: 10,
   },
   timelineCardContent: {

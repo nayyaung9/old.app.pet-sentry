@@ -2817,7 +2817,7 @@ balanced-match@^1.0.0:
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-base64-js@^1.1.2, base64-js@^1.2.3, base64-js@^1.3.1, base64-js@^1.5.1:
+base64-js@^1.1.2, base64-js@^1.2.3, base64-js@^1.3.0, base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
@@ -3746,6 +3746,13 @@ expo-constants@~14.2.0, expo-constants@~14.2.1:
   dependencies:
     "@expo/config" "~8.0.0"
     uuid "^3.3.2"
+
+expo-crypto@~12.2.1:
+  version "12.2.1"
+  resolved "https://registry.yarnpkg.com/expo-crypto/-/expo-crypto-12.2.1.tgz#d4f0ef5e2148e1168628d0ebcc2697da3e5df8b3"
+  integrity sha512-NfKsREzj55xCm0v9OKuNw3DU1r6i6VNTYrQcYSZfGOp7o+tvZsJRyr+NyrUg5YVH93TUkothCtsPahdYA4r1Wg==
+  dependencies:
+    base64-js "^1.3.0"
 
 expo-dev-client@~2.1.5:
   version "2.1.5"
@@ -5102,7 +5109,7 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
-lodash.isequal@4.5.0, lodash.isequal@^4.5.0:
+lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
   integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
@@ -6323,7 +6330,7 @@ prompts@^2.3.2, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@*, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -6467,26 +6474,10 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-native-animatable@1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.3.tgz#a13a4af8258e3bb14d0a9d839917e9bb9274ec8a"
-  integrity sha512-2ckIxZQAsvWn25Ho+DK3d1mXIgj7tITkrS4pYDvx96WyOttSvzzFeQnM2od0+FUMzILbdHDsDEqZvnz1DYNQ1w==
-  dependencies:
-    prop-types "^15.7.2"
-
 react-native-animated-spinkit@^1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/react-native-animated-spinkit/-/react-native-animated-spinkit-1.5.2.tgz#b1c00ecbadf48634273e6a843f8dfbcb7c006186"
   integrity sha512-YCQGR3HzEQvyaAnepiyf/hv88Sta3UIZ2CFZPtFqwu+VbFJfMgjJZniOx4157TuR5AAYajEJP9Fgy+JLIU3jzQ==
-
-react-native-btr@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-btr/-/react-native-btr-2.2.0.tgz#6f273f610a0a2ecee8461b131a6ba963293556a7"
-  integrity sha512-a1r74i1oPvDteciFS0kj+4Y5K8OyC3HbDOvUzZCd6ftcv7xdNwEsCcAZIsW9h0YNJEb059AV4UneDL3+C8wDzA==
-  dependencies:
-    react-native-modal "^13.0.1"
-    react-native-radio-buttons-group "^2.2.11"
-    react-native-vector-icons "^9.2.0"
 
 react-native-codegen@^0.71.5:
   version "0.71.5"
@@ -6534,14 +6525,6 @@ react-native-maps@1.3.2:
   dependencies:
     "@types/geojson" "^7946.0.8"
 
-react-native-modal@^13.0.1:
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-13.0.1.tgz#691f1e646abb96fa82c1788bf18a16d585da37cd"
-  integrity sha512-UB+mjmUtf+miaG/sDhOikRfBOv0gJdBU2ZE1HtFWp6UixW9jCk/bhGdHUgmZljbPpp0RaO/6YiMmQSSK3kkMaw==
-  dependencies:
-    prop-types "^15.6.2"
-    react-native-animatable "1.3.3"
-
 react-native-pager-view@6.1.2:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.1.2.tgz#3522079b9a9d6634ca5e8d153bc0b4d660254552"
@@ -6551,13 +6534,6 @@ react-native-popup-menu@^0.16.1:
   version "0.16.1"
   resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.16.1.tgz#b1bb56be5c0838bbc2f532af7b1f554b7ceef566"
   integrity sha512-xRS7mRh0exwu7Iw8PPVHdM11d13A/KzYjy0/fZx3zVtxISxPkNaDGayau6oa7HqO3Nj0oS9ulFCYjcQfG6vahA==
-
-react-native-radio-buttons-group@^2.2.11:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/react-native-radio-buttons-group/-/react-native-radio-buttons-group-2.3.2.tgz#3dd50e9137b722d98543ae038671308af1421a9c"
-  integrity sha512-ebYKTddyon/+8OxZIfuowB2/0gDcRnc+H0Jn5JBjIBqh5Zo2atIbXt1RrblA5V7dAvwlLCP4B/uzR2kFcLi8VA==
-  dependencies:
-    lodash.isequal "4.5.0"
 
 react-native-reanimated@~2.14.4:
   version "2.14.4"
@@ -6591,14 +6567,6 @@ react-native-tab-view@^3.5.0:
   integrity sha512-Dvvs54zPtI4f8x6GuTGy4VUMeMSnmjQFa0PsJkogWuRnxcYT+CunCDMOvxzSesh2AbL6UaTNPmTQ0Le9ybYsHg==
   dependencies:
     use-latest-callback "^0.1.5"
-
-react-native-vector-icons@^9.2.0:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-9.2.0.tgz#3c0c82e95defd274d56363cbe8fead8d53167ebd"
-  integrity sha512-wKYLaFuQST/chH3AJRjmOLoLy3JEs1JR6zMNgTaemFpNoXs0ztRnTxcxFD9xhX7cJe1/zoN5BpQYe7kL0m5yyA==
-  dependencies:
-    prop-types "^15.7.2"
-    yargs "^16.1.1"
 
 react-native@0.71.3:
   version "0.71.3"
@@ -8022,7 +7990,7 @@ yargs@^15.1.0:
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
 
-yargs@^16.1.1, yargs@^16.2.0:
+yargs@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
   integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==

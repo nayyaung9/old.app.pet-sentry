@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import React from "react";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import ThemeText from "~/components/ThemeText";
-import TimelineMenu from "./TimelineMenu";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 // Utils
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import { useTimelineStore } from "~/utils/state/timeline";
 
 type OwnerProps = {
   ownerId: string;
@@ -23,12 +23,8 @@ const TimelineOwner = ({
   postId,
   owner: { profileUrl, name, systemedShortAddress, ownerId },
 }: TimelineOwnerProps) => {
+  const { onToggleStatusMenu } = useTimelineStore();
   const { colors } = useTheme();
-
-  /** States for Timeline Status Popup Menu */
-  const [isVisible, setVisible] = useState(false);
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
 
   return (
     <View style={styles.infoRoot}>
@@ -63,15 +59,13 @@ const TimelineOwner = ({
         )}
       </View>
       <View style={styles.infoMenuRoot}>
-        <TimelineMenu
-          {...{
-            isVisible,
-            hideMenu,
-            showMenu,
-            ownerId,
-            postId,
-          }}
-        />
+        <Pressable onPress={onToggleStatusMenu}>
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={24}
+            color="black"
+          />
+        </Pressable>
       </View>
     </View>
   );

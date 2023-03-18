@@ -4,7 +4,7 @@ import { Pressable } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTheme } from "~/utils/theme/ThemeManager";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 import type { RootStackParamList } from "~/@types/navigators";
@@ -17,6 +17,7 @@ import PetLostForm from "~/screens/Compose/PetLostForm";
 import PetReportForm from "~/screens/Compose/PetReportForm";
 import ProfileSetting from "~/screens/Profile/Setting";
 import Login from "~/screens/Authentication/Login";
+import ThemeText from "~/components/ThemeText";
 
 const ApplicationNavigator = () => {
   const { colors } = useTheme();

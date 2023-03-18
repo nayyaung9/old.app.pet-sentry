@@ -16,6 +16,7 @@ export type RootStackParamList = {
   "App-Screens": NavigatorScreenParams<DrawerStackParamsList>;
   "Timeline-Detail": {
     postId: string;
+    petName?: string;
   };
   "Map-Screen": {
     isPin: boolean;

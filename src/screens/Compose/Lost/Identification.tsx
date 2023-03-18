@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import Input from "~/components/Input";
 import ComposeContext from "../utils/createContext";
 import ThemeText from "~/components/ThemeText";
-import { BottomSheet } from "react-native-btr";
+import ThemeModal from "~/components/ThemeModal";
 
 import useLostPet from "~/hooks/useLostPet";
 import collar_colors from "~/utils/constants/collar_colors.json";
@@ -43,15 +43,14 @@ const PetIdentification = () => {
         <Input
           label="Special traits"
           as="textarea"
-          value={composeState.specialTrait}
+          value={composeState.specialTrait as string}
           onChangeText={(value) => onHandleInputChange("specialTrait", value)}
         />
       </View>
 
-      <BottomSheet
-        visible={collarModal}
-        onBackButtonPress={toggleCollarColorModal}
-        onBackdropPress={toggleCollarColorModal}
+      <ThemeModal
+        openThemeModal={collarModal}
+        onCloseThemeModal={toggleCollarColorModal}
       >
         <View style={styles.bottomNavigationView}>
           {collar_colors?.map((collar_color, index) => (
@@ -70,7 +69,7 @@ const PetIdentification = () => {
             </Pressable>
           ))}
         </View>
-      </BottomSheet>
+      </ThemeModal>
     </View>
   );
 };

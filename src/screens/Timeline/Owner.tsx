@@ -7,16 +7,16 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import { StyleConstants } from "~/utils/theme/constants";
-import ThemeText from "./ThemeText";
+import ThemeText from "~/components/ThemeText";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { StyleConstants } from "~/utils/theme/constants";
 
 type OwnerInfoProps = {
   containerStyle?: StyleProp<ViewStyle>;
-  value?: string;
+  owner?: PetSentry.Account;
 };
 
-const OwnerInfo: React.FC<OwnerInfoProps> = ({ containerStyle, value }) => {
+const OwnerInfo: React.FC<OwnerInfoProps> = ({ containerStyle, owner }) => {
   return (
     <View style={[styles.labelContainer, containerStyle]}>
       <ThemeText color={"#000"} fontStyle={"M"} fontWeight={"Medium"}>
@@ -32,10 +32,10 @@ const OwnerInfo: React.FC<OwnerInfoProps> = ({ containerStyle, value }) => {
           />
           <View style={{ marginLeft: StyleConstants.Spacing.S }}>
             <ThemeText color={"#000"} fontStyle={"S"} fontWeight={"Medium"}>
-              Nay Yaung Lin Lakk
+              {owner?.name}
             </ThemeText>
             <ThemeText color={"#555"} fontStyle={"S"}>
-              (+95) 9 79770 5667
+              {owner?.contactNumbers[0]}
             </ThemeText>
           </View>
           <View style={styles.profileActionContainer}>

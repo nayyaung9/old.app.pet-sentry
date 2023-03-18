@@ -1,17 +1,25 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import ThemeText from "../ThemeText";
 
 // Utils
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { useMe } from "~/libs/query/user";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackScreenProps } from "~/@types/navigators";
 
 const AccountRoot = () => {
+  const navigation =
+    useNavigation<RootStackScreenProps<"Profile-Setting">["navigation"]>();
   const { colors } = useTheme();
   const { data } = useMe();
+
+  const onNavigateToMyProfile = () =>
+    navigation.navigate("Profile-Root", { name: data?.name as string });
+
   return (
-    <View style={styles.root}>
+    <Pressable style={styles.root} onPress={onNavigateToMyProfile}>
       {data?.profileUrl ? (
         <Image source={{ uri: data?.profileUrl }} style={styles.profileImage} />
       ) : (
@@ -29,7 +37,7 @@ const AccountRoot = () => {
           Tap to view your profile
         </ThemeText>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

@@ -28,6 +28,9 @@ export type RootStackParamList = {
   "Pet-Lost-Screen": undefined;
   "Pet-Report-Screen": undefined;
   "Profile-Setting": undefined;
+  "Profile-Root": {
+    name: string;
+  };
   "Pet-Edit-Root": {
     postId: string;
   };

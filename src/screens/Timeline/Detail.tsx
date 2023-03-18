@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import Label from "~/components/Label";
-import OwnerInfo from "~/components/OwnerInfo";
+import OwnerInfo from "./Owner";
 import TimelineReunited from "~/components/Timeline/TimelineReunited";
 import ThemeModal from "~/components/ThemeModal";
 import TimelineMenuRoot from "~/components/Timeline/Menu/Root";
@@ -268,7 +268,13 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
               />
             </View>
 
-            <OwnerInfo />
+            {data?._owner && Object.keys(data?._owner).length >= 1 && (
+              <OwnerInfo
+                {...{
+                  owner: data?._owner,
+                }}
+              />
+            )}
 
             {Array.isArray(data?.photos) &&
               data?.photos &&

@@ -7,19 +7,21 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import ThemeText from "~/components/ThemeText";
 
-import { useLoginMutation } from "~/libs/mutation/auth";
+import { useRegisterEmailMutation } from "~/libs/mutation/auth";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useAuthStore } from "~/utils/state/useAuth";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "~/utils/helpers";
+import { registerSchema } from "~/utils/helpers";
 import type { RootStackScreenProps } from "~/@types/navigators";
 
-type LoginInput = {
+type RegisterInput = {
+  fullname: string;
   email: string;
   password: string;
+  passwordConfirmation: string;
 };
 
-const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
+const Register: React.FC<RootStackScreenProps<"Register-Screen">> = ({
   navigation,
 }) => {
   const authenticate = useAuthStore((state) => state.authenticate);
@@ -28,21 +30,23 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: yupResolver(loginSchema),
+  } = useForm<RegisterInput>({
+    resolver: yupResolver(registerSchema),
   });
 
-  const onSubmit = (data: LoginInput) => {
-    mutation.mutate(data);
+  const onSubmit = (data: RegisterInput) => {
+    const { passwordConfirmation, ...rest } = data;
+
+    console.log(JSON.stringify(rest, null, 2))
+    mutation.mutate(rest);
   };
 
-  const mutation = useLoginMutation({
+  const mutation = useRegisterEmailMutation({
     onSuccess: (res) => {
       authenticate({ token: res?.token, userId: res.user._id });
       showMessage({
-        message: "Login Success!",
+        message: "Your account is created successfully!",
         type: "success",
-        position: "bottom",
       });
       navigation.goBack();
     },
@@ -67,8 +71,23 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
             marginBottom: StyleConstants.Spacing.M,
           }}
         >
-          Welcome Back!
+          Create a new account
         </ThemeText>
+        <View style={styles.inputView}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label="Fullname"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                errorText={errors.fullname?.message}
+              />
+            )}
+            name="fullname"
+          />
+        </View>
         <View style={styles.inputView}>
           <Controller
             control={control}
@@ -100,12 +119,28 @@ const Login: React.FC<RootStackScreenProps<"Login-Screen">> = ({
             name="password"
           />
         </View>
+        <View style={styles.inputView}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                label="Confirm Password"
+                value={value}
+                onBlur={onBlur}
+                secureTextEntry
+                onChangeText={onChange}
+                errorText={errors.passwordConfirmation?.message}
+              />
+            )}
+            name="passwordConfirmation"
+          />
+        </View>
         <Button borderRadius={8} onPress={handleSubmit(onSubmit)}>
           {mutation.isLoading ? (
             <Flow color={"#fff"} size={38} />
           ) : (
             <ThemeText color={"#fff"} fontWeight={"Medium"}>
-              Login
+              Register
             </ThemeText>
           )}
         </Button>
@@ -129,4 +164,4 @@ const styles = StyleSheet.create({
     marginBottom: StyleConstants.Spacing.M,
   },
 });
-export default Login;
+export default Register;

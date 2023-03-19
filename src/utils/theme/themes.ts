@@ -13,7 +13,8 @@ export type ColorDefinitions =
   | "mediumDark"
   | "inactiveTabBar"
   | "notifyView"
-  | "textGreen";
+  | "textGreen"
+  | "errorText";
 
 const themeColors: {
   [key in ColorDefinitions]: {
@@ -64,6 +65,10 @@ const themeColors: {
   textGreen: {
     light: "#31987c",
     dark: "#31987c",
+  },
+  errorText: {
+    light: "#D02828",
+    dark: "#D02828",
   },
 };
 

@@ -1,4 +1,32 @@
 import { Dimensions } from "react-native";
+import * as yup from "yup";
+
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .email("Invalid email")
+    .required("Please provide your email."),
+  password: yup
+    .string()
+    .required("Please provide your password.")
+    .min(8, "Password is too short - should be 8 chars minimum."),
+});
+
+export const registerSchema = yup.object({
+  fullname: yup.string().min(3).required("Please provide your fullname"),
+  email: yup
+    .string()
+    .email("Invalid email")
+    .required("Please provide your email."),
+  password: yup
+    .string()
+    .required("Please provide your password.")
+    .min(8, "Password is too short - should be 8 chars minimum."),
+  passwordConfirmation: yup
+    .string()
+    .required("Please re-type your password.")
+    .oneOf([yup.ref("password")], "Your passwords do not match."),
+});
 
 export const extractShortLocation = (value: string) => {
   const getShortAddress = value?.split(",");

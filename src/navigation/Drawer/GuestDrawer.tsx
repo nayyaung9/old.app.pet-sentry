@@ -34,7 +34,7 @@ const GuestDrawer = () => {
         title={"Register"}
         icon={<AntDesign name="adduser" size={24} color="black" />}
         containerStyle={styles.menuItem}
-        onPress={() => navigation.navigate("Login-Screen")}
+        onPress={() => navigation.navigate("Register-Screen")}
       />
       <ComponentSeparator />
     </>

@@ -36,6 +36,7 @@ export type RootStackParamList = {
   };
 
   "Login-Screen": undefined;
+  "Register-Screen": undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

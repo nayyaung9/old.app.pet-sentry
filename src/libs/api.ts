@@ -1,10 +1,15 @@
 import axios from "axios";
 import { getAuthToken } from "~/utils/storage";
 
-const API_ENDPOINT = "https://api-pet-sentry.onrender.com/api";
+const environment = "release";
+
+const API_ENDPOINT = {
+  development: "http://192.168.1.3:8000/api",
+  release: "https://api-pet-sentry.onrender.com/api",
+};
 
 const instance = axios.create({
-  baseURL: API_ENDPOINT,
+  baseURL: API_ENDPOINT[environment],
   headers: {
     "secret-key": "PetSentryApp2023",
   },

@@ -3,17 +3,20 @@ import { MutationOptions, useMutation } from "@tanstack/react-query";
 import apiInstance from "~/libs/api";
 import { handleError } from "~/utils/handleError";
 
+type MutationAuthResponse = {
+  user: PetSentry.Account;
+  token: string;
+};
+
 type MutationVarsLogin = {
   email: string;
   password: string;
 };
-type MutationLoginResponse = {
-  user: PetSentry.Account;
-  token: string;
-};
 const loginMutationFunction = async (params: MutationVarsLogin) => {
   try {
-    const { data } = await apiInstance.post("/auth/authenticate", { ...params });
+    const { data } = await apiInstance.post("/auth/authenticate", {
+      ...params,
+    });
     return data;
   } catch (error) {
     return handleError(error);
@@ -21,36 +24,33 @@ const loginMutationFunction = async (params: MutationVarsLogin) => {
 };
 
 const useLoginMutation = (
-  options: MutationOptions<MutationLoginResponse, AxiosError, MutationVarsLogin>
+  options: MutationOptions<MutationAuthResponse, AxiosError, MutationVarsLogin>
 ) => {
   return useMutation(loginMutationFunction, options);
 };
 
 /* Register with Email */
 type MutationEmailRegister = {
-  username: string;
+  fullname: string;
   email: string;
   password: string;
 };
 const registerEmailMutationFunction = async (params: MutationEmailRegister) => {
-  const body = {
-    ...params,
-    agreement: "true",
-    reason: "test",
-    locale: "en",
-  };
   try {
-    const { data } = await apiInstance.post(
-      "/api/v1/register_with_email",
-      body
-    );
+    const { data } = await apiInstance.post("/auth/register", {
+      ...params,
+    });
     return data;
   } catch (error) {
     return handleError(error);
   }
 };
 const useRegisterEmailMutation = (
-  options: MutationOptions<any, AxiosError, MutationEmailRegister>
+  options: MutationOptions<
+    MutationAuthResponse,
+    AxiosError,
+    MutationEmailRegister
+  >
 ) => {
   return useMutation(registerEmailMutationFunction, options);
 };

@@ -4,10 +4,13 @@ import { Image, Pressable, StyleSheet, View } from "react-native";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import ThemeText from "../ThemeText";
+import Button from "../Button";
+import { RootStackScreenProps } from "~/@types/navigators";
 
 const Guest = () => {
   const { colors } = useTheme();
-  const navigation = useNavigation<any>();
+  const navigation =
+    useNavigation<RootStackScreenProps<"Profile-Root">["navigation"]>();
   return (
     <View style={styles.root}>
       <Image
@@ -44,19 +47,16 @@ const Guest = () => {
         </View>
 
         <View style={{ flex: 1 }}>
-          <Pressable
+          <Button
+            onPress={() => navigation.navigate("Register-Screen")}
             style={{
               backgroundColor: "#fff",
-              borderRadius: 100,
-              paddingVertical: StyleConstants.Spacing.S + 4,
-              alignItems: "center",
-              marginBottom: StyleConstants.Spacing.M,
             }}
           >
             <ThemeText color={colors.primary} fontWeight={"Medium"}>
               Join now
             </ThemeText>
-          </Pressable>
+          </Button>
 
           <View
             style={{

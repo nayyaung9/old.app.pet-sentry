@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { FONT_FAMILY, StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import ThemeText from "./ThemeText";
 
 type InputProps = {
   as?: "textarea";
@@ -166,6 +167,13 @@ const Input: React.FC<InputProps> = ({
           pointerEvents="none"
         />
       </View>
+      {errorText && (
+        <View style={{ marginTop: StyleConstants.Spacing.S - 6 }}>
+          <ThemeText color={colors.errorText} fontStyle={"S"}>
+            {errorText}
+          </ThemeText>
+        </View>
+      )}
     </>
   );
 };

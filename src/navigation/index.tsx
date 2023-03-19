@@ -16,6 +16,7 @@ import PetReportForm from "~/screens/Compose/PetReportForm";
 import ProfileRoot from "~/screens/Profile/Root";
 import ProfileSetting from "~/screens/Profile/Edit";
 import Login from "~/screens/Authentication/Login";
+import Register from "~/screens/Authentication/Register";
 import PetEditRoot from "~/screens/Compose/Edit/Root";
 
 import type { RootStackParamList } from "~/@types/navigators";
@@ -92,6 +93,19 @@ const ApplicationNavigator = () => {
           component={Login}
           options={({ navigation }) => ({
             title: "Login",
+            headerTitleAlign: "center",
+            headerLeft: () => (
+              <Pressable onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back" size={24} color="#555" />
+              </Pressable>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="Register-Screen"
+          component={Register}
+          options={({ navigation }) => ({
+            title: "Register",
             headerTitleAlign: "center",
             headerLeft: () => (
               <Pressable onPress={() => navigation.goBack()}>

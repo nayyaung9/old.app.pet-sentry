@@ -19,13 +19,13 @@ const Label: React.FC<LabelProps> = ({
   return (
     <View style={[styles.labelContainer, containerStyle]}>
       <View style={styles.labelWithAction}>
-        <ThemeText color={"#000"} fontStyle={"M"} fontWeight={"Medium"}>
+        <ThemeText color={"#000"} fontWeight={"Medium"}>
           {label}
         </ThemeText>
         {leftComponent}
       </View>
 
-      <ThemeText color={"#555"} fontStyle={"S"}>
+      <ThemeText color={"#555"}>
         {value}
       </ThemeText>
     </View>

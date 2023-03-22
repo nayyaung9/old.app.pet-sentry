@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Pressable, View } from "react-native";
 import ThemeText from "~/components/ThemeText";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialIcons,
+  AntDesign,
+  FontAwesome,
+} from "@expo/vector-icons";
 
 import type { BottomTabScreenParamList } from "~/@types/navigators";
 const Tab = createBottomTabNavigator<BottomTabScreenParamList>();
@@ -16,12 +21,16 @@ import ProfileTab from "./Profile";
 import { useGeoAddress, useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { useAuthState } from "~/utils/state/useAuth";
+import { StyleConstants } from "~/utils/theme/constants";
+import { useTimelineStore } from "~/utils/state/timeline";
 
 const ScreenTab = () => {
   const { colors } = useTheme();
   const geoAddress = useGeoAddress();
   const userCoordinates = useUserCoordinates();
   const { token } = useAuthState();
+  const { onToggleFilteringModal } = useTimelineStore();
+
   return (
     <Tab.Navigator
       initialRouteName="Tab-Home"
@@ -64,20 +73,28 @@ const ScreenTab = () => {
             </Pressable>
           ),
           headerRight: () => (
-            <Pressable
-              style={{ marginRight: 16 }}
-              onPress={() =>
-                navigation.navigate("Map-Screen", {
-                  isPin: false,
-                  point: {
-                    latitude: userCoordinates?.latitude,
-                    longitude: userCoordinates?.longitude,
-                  },
-                })
-              }
-            >
-              <Ionicons name="map" size={24} color="#555" />
-            </Pressable>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Pressable onPress={onToggleFilteringModal}>
+                <AntDesign name="filter" size={24} color="black" />
+              </Pressable>
+              <Pressable
+                style={{
+                  marginRight: StyleConstants.Spacing.M,
+                  marginLeft: StyleConstants.Spacing.S,
+                }}
+                onPress={() =>
+                  navigation.navigate("Map-Screen", {
+                    isPin: false,
+                    point: {
+                      latitude: userCoordinates?.latitude,
+                      longitude: userCoordinates?.longitude,
+                    },
+                  })
+                }
+              >
+                <Ionicons name="map-outline" size={24} color="black" />
+              </Pressable>
+            </View>
           ),
         })}
       />

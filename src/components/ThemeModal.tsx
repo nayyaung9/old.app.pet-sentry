@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleProp,
   ViewStyle,
+  Platform,
 } from "react-native";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTheme } from "~/utils/theme/ThemeManager";
@@ -66,12 +67,7 @@ const ThemeModal = ({
         <TouchableOpacity
           activeOpacity={1}
           onPress={onCloseThemeModal}
-          style={[
-            styles.overlay,
-            {
-              backgroundColor: "rgba(0, 0, 0, 0.4)",
-            },
-          ]}
+          style={styles.overlay}
         />
         <View
           style={[
@@ -111,6 +107,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
     height: "100%",
+    backgroundColor: Platform.select({
+      android: "rgba(0, 0, 0, 0.2)",
+      ios: "rgba(0, 0, 0, 0.4)",
+    }),
   },
   contentContainer: {
     justifyContent: "flex-end",

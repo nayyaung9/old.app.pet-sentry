@@ -14,11 +14,11 @@ export const StyleConstants = {
     Bold: { fontFamily: FONT_FAMILY.BOLD },
   },
   FontStyle: {
-    XS: { fontSize: 10, lineHeight: 12 },
-    S: { fontSize: 12, lineHeight: 15 },
-    M: { fontSize: 14, lineHeight: 18 },
-    L: { fontSize: 16, lineHeight: 21 },
-    XL: { fontSize: 18, lineHeight: 24 },
+    XS: { fontSize: 10 },
+    S: { fontSize: 12 },
+    M: { fontSize: 14 },
+    L: { fontSize: 16 },
+    XL: { fontSize: 18 },
   },
 
   Spacing: {

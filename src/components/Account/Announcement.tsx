@@ -69,11 +69,11 @@ const Accouncement = () => {
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
+                      marginTop: -5,
                     }}
                   >
                     <View style={{ flex: 0.7 }}>
                       <ThemeText
-                        fontStyle="M"
                         fontWeight={"Medium"}
                         color={colors.primary}
                         numberOfLines={1}

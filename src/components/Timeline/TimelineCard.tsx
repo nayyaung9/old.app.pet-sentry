@@ -71,7 +71,6 @@ const TimelineCard = ({
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <View style={{ flex: 0.7, flexDirection: "row" }}>
               <ThemeText
-                fontStyle="M"
                 fontWeight={"Medium"}
                 color={colors.primary}
                 numberOfLines={1}

@@ -101,6 +101,17 @@ const ProfileSetting = () => {
           onChangeText={(value) => onChangeText("email")(value)}
         />
       </View>
+      <View style={styles.inputView}>
+        <ThemeText>Contact Numbers</ThemeText>
+
+        {state?.contactNumbers?.map((contactNumber, index) => (
+          <Input
+            label=""
+            value={state.contactNumbers[index]}
+            onChangeText={(value) => onChangeText("email")(value)}
+          />
+        ))}
+      </View>
     </View>
   );
 };

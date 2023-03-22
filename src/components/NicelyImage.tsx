@@ -2,7 +2,7 @@ import React from "react";
 import CachedImage from "expo-cached-image";
 import { ActivityIndicator, ImageStyle, StyleProp, View } from "react-native";
 import { useTheme } from "~/utils/theme/ThemeManager";
-import { getFilenameFromURL } from "~/utils/helpers";
+import * as Crypto from "expo-crypto";
 
 type NicelyImageProps = {
   uri: string;
@@ -10,14 +10,15 @@ type NicelyImageProps = {
 };
 const NicelyImage = ({ uri, containerStyle }: NicelyImageProps) => {
   const { colors } = useTheme();
-  const cacheKey = getFilenameFromURL(uri);
+
+  console.log(uri)
 
   return (
     <CachedImage
       source={{
         uri: `${uri}`,
       }}
-      cacheKey={`${cacheKey}`}
+      cacheKey={uri}
       placeholderContent={
         <View
           style={{

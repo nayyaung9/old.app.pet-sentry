@@ -7,6 +7,7 @@ interface ModalActionState {
 interface TimelineState {
   statusMenu: boolean;
   selectedInfo: ModalActionState;
+  filteringModal: boolean;
   onToggleStatusMenu: () => void;
   setPostInfoForModal: ({
     postId,
@@ -15,6 +16,7 @@ interface TimelineState {
     postId: string;
     ownerId: string;
   }) => void;
+  onToggleFilteringModal: () => void;
 }
 
 export const useTimelineStore = create<TimelineState>()((set) => ({
@@ -23,6 +25,7 @@ export const useTimelineStore = create<TimelineState>()((set) => ({
     ownerId: null,
     postId: null,
   },
+  filteringModal: false,
   onToggleStatusMenu: () => {
     set((state) => ({
       statusMenu: !state.statusMenu,
@@ -38,10 +41,13 @@ export const useTimelineStore = create<TimelineState>()((set) => ({
       },
     }));
   },
+  onToggleFilteringModal: () =>
+    set((state) => ({ ...state, filteringModal: !state.filteringModal })),
 }));
 
 export const useTimelineState = () =>
   useTimelineStore((state) => ({
     statusMenu: state.statusMenu,
     selectedInfo: state.selectedInfo,
+    filteringModal: state.filteringModal
   }));

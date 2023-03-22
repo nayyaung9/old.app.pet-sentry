@@ -51,4 +51,31 @@ const usePostDeleteMutation = (
   return useMutation(deletePostFunction, options);
 };
 
-export { usePostCreateMutation, usePostDeleteMutation };
+/** Set United Status Case */
+type UnitedStatusParams = {
+  postId: string;
+};
+const unitedStatusFunction = async (params: UnitedStatusParams) => {
+  try {
+    const { data } = await apiInstance.put<PetSentry.Post>(
+      "/post/set-united-status",
+      {
+        ...params,
+      }
+    );
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+const usePostUnitedStatusMutation = (
+  options: MutationOptions<PetSentry.Post, AxiosError, UnitedStatusParams>
+) => {
+  return useMutation(unitedStatusFunction, options);
+};
+
+export {
+  usePostCreateMutation,
+  usePostDeleteMutation,
+  usePostUnitedStatusMutation,
+};

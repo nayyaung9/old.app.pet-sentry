@@ -10,10 +10,18 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { StyleConstants } from "~/utils/theme/constants";
 import { useTimelineState, useTimelineStore } from "~/utils/state/timeline";
-import { usePostDeleteMutation } from "~/libs/mutation/post";
+import {
+  usePostDeleteMutation,
+  usePostUnitedStatusMutation,
+} from "~/libs/mutation/post";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
 import type { RootStackScreenProps } from "~/@types/navigators";
+import type {
+  PostDetailQueryPost,
+  PostOwnerQueryKey,
+  PostQueryKey,
+} from "~/libs/query/post";
 
 const TimelineMenuRoot = () => {
   const navigation =
@@ -26,14 +34,42 @@ const TimelineMenuRoot = () => {
 
   const isCurrentUserAnOwner = selectedInfo?.ownerId == userId;
 
-  const deleteMutation = usePostDeleteMutation({
-    onSuccess: (res) => {
-      if (res) {
-        queryClient.invalidateQueries(["Owner-Posts"]);
-        queryClient.invalidateQueries([
+  const unitedMutation = usePostUnitedStatusMutation({
+    onSuccess: (response) => {
+      if (response) {
+        const postDetailQueryKey: PostDetailQueryPost = [
+          "Post",
+          { postId: response?._id },
+        ];
+
+        const timelineQueryKey: PostQueryKey = [
           "Posts",
-          { activityType: res?.activityType },
-        ]);
+          { activityType: response?.activityType },
+        ];
+
+        const ownerPostQueryKey: PostOwnerQueryKey = ["Owner-Posts"];
+
+        queryClient.invalidateQueries(timelineQueryKey);
+        queryClient.invalidateQueries(postDetailQueryKey);
+        queryClient.invalidateQueries(ownerPostQueryKey);
+
+        onToggleStatusMenu();
+      }
+    },
+    onError: (error) => console.log(error),
+  });
+
+  const deleteMutation = usePostDeleteMutation({
+    onSuccess: (response) => {
+      if (response) {
+        const ownerPostQueryKey: PostOwnerQueryKey = ["Owner-Posts"];
+        const timelineQueryKey: PostQueryKey = [
+          "Posts",
+          { activityType: response?.activityType },
+        ];
+        queryClient.invalidateQueries(timelineQueryKey);
+        queryClient.invalidateQueries(ownerPostQueryKey);
+
         showMessage({
           message: "Post Delete",
           description: "Your post is deleted!",
@@ -54,6 +90,9 @@ const TimelineMenuRoot = () => {
 
   const onDeletePost = (id: string) => deleteMutation.mutate({ postId: id });
 
+  const onUpdateUnitedStatus = (id: string) =>
+    unitedMutation.mutate({ postId: id });
+
   const onEditPost = (id: string) => {
     onToggleStatusMenu();
     navigation.navigate("Pet-Edit-Root", { postId: id });
@@ -64,7 +103,7 @@ const TimelineMenuRoot = () => {
       {isCurrentUserAnOwner && Object.keys(selectedInfo).length >= 1 && (
         <View>
           <MenuIconButton
-            onPress={() => console.log("AAA")}
+            onPress={() => onUpdateUnitedStatus(selectedInfo?.postId as string)}
             icon={
               <FontAwesome5
                 name="hand-holding-heart"

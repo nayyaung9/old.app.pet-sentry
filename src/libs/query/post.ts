@@ -7,7 +7,7 @@ import {
 import { handleError } from "~/utils/handleError";
 import { AxiosError } from "axios";
 
-type PostQueryKey = ["Posts", { activityType: string }];
+export type PostQueryKey = ["Posts", { activityType: string }];
 
 const fetchPosts = async ({ queryKey }: QueryFunctionContext<PostQueryKey>) => {
   const { activityType } = queryKey[1];
@@ -26,7 +26,7 @@ const usePosts = ({ ...queryKeyParams }: PostQueryKey[1]) => {
 };
 
 // Fetch Owner Posts
-type PostOwnerQueryKey = ["Owner-Posts"];
+export type PostOwnerQueryKey = ["Owner-Posts"];
 
 const fetchOwnerPosts = async () => {
   try {
@@ -42,12 +42,13 @@ const useOwnerPosts = () => {
 };
 // Fetch Owner Posts
 
-type PostDetailQueryPost = ["Post", { postId: string }];
+export type PostDetailQueryPost = ["Post", { postId: string }];
 
 const fetchPostDetail = async ({
   queryKey,
 }: QueryFunctionContext<PostDetailQueryPost>) => {
   const { postId } = queryKey[1];
+  console.log(postId);
   try {
     const { data } = await PetSentry.get(`/post/post/${postId}`);
     return data.data;
@@ -56,15 +57,10 @@ const fetchPostDetail = async ({
   }
 };
 
-const usePostDetail = ({
-  options,
-  ...queryKeyParams
-}: PostDetailQueryPost[1] & {
-  options?: UseQueryOptions<PetSentry.Post, AxiosError>;
-}) => {
+const usePostDetail = ({ ...queryKeyParams }: PostDetailQueryPost[1]) => {
   const queryKey: PostDetailQueryPost = ["Post", { ...queryKeyParams }];
 
-  return useQuery(queryKey, fetchPostDetail, options);
+  return useQuery(queryKey, fetchPostDetail);
 };
 
 export { usePosts, useOwnerPosts, usePostDetail };

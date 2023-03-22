@@ -48,9 +48,6 @@ const TimelineDetail: React.FC<RootStackScreenProps<"Timeline-Detail">> = ({
   // Query Hooks
   const { data, isLoading } = usePostDetail({
     postId,
-    options: {
-      enabled: !!postId,
-    },
   });
 
   // const onNavigateToMap = () => {

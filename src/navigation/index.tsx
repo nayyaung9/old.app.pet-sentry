@@ -13,7 +13,6 @@ import TimelineDetail from "~/screens/Timeline/Detail";
 import Map from "~/screens/Map/Root";
 import PetLostForm from "~/screens/Compose/PetLostForm";
 import PetReportForm from "~/screens/Compose/PetReportForm";
-import ProfileRoot from "~/screens/Profile/Root";
 import ProfileSetting from "~/screens/Profile/Edit";
 import Login from "~/screens/Authentication/Login";
 import Register from "~/screens/Authentication/Register";
@@ -64,19 +63,6 @@ const ApplicationNavigator = () => {
           })}
         />
         <Stack.Screen name="Profile-Setting" component={ProfileSetting} />
-        <Stack.Screen
-          name="Profile-Root"
-          component={ProfileRoot}
-          options={({ route, navigation }) => ({
-            title: route?.params?.name,
-            headerTitleAlign: "left",
-            headerLeft: () => (
-              <Pressable onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color="#555" />
-              </Pressable>
-            ),
-          })}
-        />
         <Stack.Screen
           name="Login-Screen"
           component={Login}

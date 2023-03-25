@@ -3,7 +3,10 @@ import { StyleSheet, View, Image } from "react-native";
 import { StyleConstants } from "~/utils/theme/constants";
 import ThemeText from "../ThemeText";
 
-const TimelineEmpty = () => {
+type TimelineEmptyProps = {
+  type: "profile" | "timeline";
+};
+const TimelineEmpty = ({ type = "timeline" }: TimelineEmptyProps) => {
   return (
     <View style={styles.emptyContainer}>
       <Image
@@ -18,7 +21,9 @@ const TimelineEmpty = () => {
           textAlign: "center",
         }}
       >
-        Good News! We have no reported pets now.
+        {type == "timeline"
+          ? "Good News! We have no reported pets now."
+          : "You have no posts yet."}
       </ThemeText>
     </View>
   );

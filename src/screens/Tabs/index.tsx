@@ -119,7 +119,7 @@ const ScreenTab = () => {
         name="Tab-Profile"
         component={ProfileTab}
         options={({ navigation }) => ({
-          title: token ? "Profile" : "Account",
+          title: token ? "Your Profile" : "Welcome",
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
               name="person"

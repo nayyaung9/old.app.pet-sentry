@@ -4,7 +4,7 @@ import { getAuthToken } from "~/utils/storage";
 const environment = "development";
 
 const API_ENDPOINT = {
-  development: "http://192.168.1.4:8000/api",
+  development: "http://192.168.1.5:8000/api",
   release: "https://api-pet-sentry.onrender.com/api",
 };
 

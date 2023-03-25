@@ -33,9 +33,10 @@ const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
   });
 
   useEffect(() => {
-    console.log("Hello")
+    console.log("Hello");
     navigation.setOptions({
       title: "Edit Your Profile",
+      headerTitleAlign: "center",
       headerLeft: () => (
         <Pressable onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} color="#555" />
@@ -55,11 +56,11 @@ const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
     if (data) {
       setState({
         ...state,
-        _id: data?._id,
-        contactNumbers: data?.contactNumbers,
-        email: data?.email,
-        name: data?.name,
-        profileUrl: data?.profileUrl,
+        _id: data?.user?._id,
+        contactNumbers: data?.user?.contactNumbers,
+        email: data?.user?.email,
+        name: data?.user?.name,
+        profileUrl: data?.user?.profileUrl,
       });
     }
   }, [data]);
@@ -84,7 +85,7 @@ const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
   const onAddNewContactNumber = () =>
     setState({ ...state, contactNumbers: [...state.contactNumbers, ""] });
 
-  const onContactNumberChange = (value, index) => {
+  const onContactNumberChange = (value: string, index: number) => {
     const existingNumbers = state.contactNumbers;
 
     existingNumbers[index] = value;

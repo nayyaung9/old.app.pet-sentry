@@ -25,11 +25,14 @@ import { useMapAddress } from "~/utils/state/useMapState";
 import { useGeoAddress, useUserCoordinates } from "~/utils/state/useGeoAddress";
 import { usePostCreateMutation } from "~/libs/mutation/post";
 import { firebase } from "~/libs/firebase";
+import { useQueryClient } from "@tanstack/react-query";
 import type { BottomTabsScreenProps } from "~/@types/navigators";
+import type { PostOwnerQueryKey, PostQueryKey } from "~/libs/query/post";
 
 const STEP_COUNTS = 3;
 
 const PetReportForm = () => {
+  const queryClient = useQueryClient();
   const navigation =
     useNavigation<BottomTabsScreenProps<"Tab-Compose">["navigation"]>();
   const { colors } = useTheme();
@@ -138,9 +141,17 @@ const PetReportForm = () => {
   // };
 
   const mutation = usePostCreateMutation({
-    onSuccess: (res) => {
-      if (res?._id) {
-        navigation.navigate("Timeline-Detail", { postId: res?._id });
+    onSuccess: (response) => {
+      if (response) {
+        const timelineQueryKey: PostQueryKey = [
+          "Posts",
+          { activityType: response?.activityType },
+        ];
+        const ownerPostsQueryKey: PostOwnerQueryKey = ["Owner-Posts"];
+
+        queryClient.invalidateQueries(timelineQueryKey);
+        queryClient.invalidateQueries(ownerPostsQueryKey);
+        navigation.navigate("Tab-Profile");
       }
     },
   });

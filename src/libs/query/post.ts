@@ -1,9 +1,5 @@
 import PetSentry from "~/libs/api";
-import {
-  QueryFunctionContext,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query";
+import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 import { handleError } from "~/utils/handleError";
 import { AxiosError } from "axios";
 
@@ -12,12 +8,15 @@ export type PostQueryKey = ["Posts", { activityType: string }];
 const fetchPosts = async ({ queryKey }: QueryFunctionContext<PostQueryKey>) => {
   const { activityType } = queryKey[1];
   try {
-    const { data } = await PetSentry.post("/post/fetch-posts", {
-      activityType,
-    });
+    const { data } = await PetSentry.post<{ data: PetSentry.Post[] }>(
+      "/post/fetch-posts",
+      {
+        activityType,
+      }
+    );
     return data.data;
   } catch (err) {
-    handleError(err);
+    throw handleError(err);
   }
 };
 const usePosts = ({ ...queryKeyParams }: PostQueryKey[1]) => {
@@ -30,10 +29,12 @@ export type PostOwnerQueryKey = ["Owner-Posts"];
 
 const fetchOwnerPosts = async () => {
   try {
-    const { data } = await PetSentry.get("/post/fetch-owner-posts");
+    const { data } = await PetSentry.get<{ data: PetSentry.Post[] }>(
+      "/post/fetch-owner-posts"
+    );
     return data.data;
   } catch (err) {
-    handleError(err);
+    throw handleError(err);
   }
 };
 const useOwnerPosts = () => {
@@ -50,10 +51,12 @@ const fetchPostDetail = async ({
   const { postId } = queryKey[1];
   console.log(postId);
   try {
-    const { data } = await PetSentry.get(`/post/post/${postId}`);
+    const { data } = await PetSentry.get<{ data: PetSentry.Post }>(
+      `/post/post/${postId}`
+    );
     return data.data;
   } catch (err) {
-    handleError(err);
+    throw handleError(err);
   }
 };
 

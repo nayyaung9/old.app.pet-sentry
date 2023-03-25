@@ -63,18 +63,7 @@ const ApplicationNavigator = () => {
             ),
           })}
         />
-        <Stack.Screen
-          name="Profile-Setting"
-          component={ProfileSetting}
-          options={({ navigation }) => ({
-            title: "Edit Your Profile",
-            headerLeft: () => (
-              <Pressable onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color="#555" />
-              </Pressable>
-            ),
-          })}
-        />
+        <Stack.Screen name="Profile-Setting" component={ProfileSetting} />
         <Stack.Screen
           name="Profile-Root"
           component={ProfileRoot}

@@ -6,6 +6,9 @@ import ThemeText from "~/components/ThemeText";
 import { useMe } from "~/libs/query/user";
 import { StyleConstants } from "~/utils/theme/constants";
 import { Feather } from "@expo/vector-icons";
+import { RootStackScreenProps } from "~/@types/navigators";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "~/utils/theme/ThemeManager";
 
 interface ProfileState {
   _id: string;
@@ -14,7 +17,10 @@ interface ProfileState {
   name: string;
   profileUrl: string | null;
 }
-const ProfileSetting = () => {
+const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
+  navigation,
+}) => {
+  const { colors } = useTheme();
   const { data } = useMe();
 
   const [previewImage, setPreviewImage] = useState("");
@@ -25,6 +31,25 @@ const ProfileSetting = () => {
     name: "",
     profileUrl: null,
   });
+
+  useEffect(() => {
+    console.log("Hello")
+    navigation.setOptions({
+      title: "Edit Your Profile",
+      headerLeft: () => (
+        <Pressable onPress={() => navigation.goBack()}>
+          <Ionicons name="chevron-back" size={24} color="#555" />
+        </Pressable>
+      ),
+      headerRight: () => (
+        <Pressable onPress={onProfileUpdate}>
+          <ThemeText color={colors.primary} fontStyle={"S"}>
+            Update
+          </ThemeText>
+        </Pressable>
+      ),
+    });
+  }, [state]);
 
   useEffect(() => {
     if (data) {
@@ -54,6 +79,21 @@ const ProfileSetting = () => {
 
   const onChangeText = (key: string) => (value: string) => {
     setState({ ...state, [key]: value });
+  };
+
+  const onAddNewContactNumber = () =>
+    setState({ ...state, contactNumbers: [...state.contactNumbers, ""] });
+
+  const onContactNumberChange = (value, index) => {
+    const existingNumbers = state.contactNumbers;
+
+    existingNumbers[index] = value;
+
+    setState({ ...state, contactNumbers: existingNumbers });
+  };
+
+  const onProfileUpdate = () => {
+    console.log({ state });
   };
 
   return (
@@ -104,13 +144,27 @@ const ProfileSetting = () => {
       <View style={styles.inputView}>
         <ThemeText>Contact Numbers</ThemeText>
 
-        {state?.contactNumbers?.map((contactNumber, index) => (
-          <Input
-            label=""
-            value={state.contactNumbers[index]}
-            onChangeText={(value) => onChangeText("email")(value)}
-          />
-        ))}
+        {state?.contactNumbers &&
+          state?.contactNumbers?.map((contactNumber, index) => (
+            <View
+              style={{ marginBottom: StyleConstants.Spacing.S }}
+              key={index}
+            >
+              <Input
+                label=""
+                value={state.contactNumbers[index]}
+                onChangeText={(value) => onContactNumberChange(value, index)}
+              />
+            </View>
+          ))}
+      </View>
+      <View style={{ alignItems: "flex-start" }}>
+        <Pressable
+          style={styles.addNumberButton}
+          onPress={onAddNewContactNumber}
+        >
+          <ThemeText>Add New Number</ThemeText>
+        </Pressable>
       </View>
     </View>
   );
@@ -147,6 +201,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: "#ddd",
     padding: StyleConstants.Spacing.S - 4,
+  },
+  addNumberButton: {
+    backgroundColor: "#f0f2f5",
+    borderRadius: 8,
+    paddingVertical: StyleConstants.Spacing.S - 2,
+    paddingHorizontal: StyleConstants.Spacing.M - 4,
   },
 });
 export default ProfileSetting;

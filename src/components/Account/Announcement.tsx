@@ -91,57 +91,66 @@ const Accouncement = () => {
                       </Pressable>
                     </View>
                   </View>
-                  {!post.isVerify ? (
-                    <View
-                      style={{
-                        paddingVertical: StyleConstants.Spacing.S - 7,
-                        paddingHorizontal: StyleConstants.Spacing.S - 2,
-                        borderRadius: 50,
-                        backgroundColor: colors.primary,
-                        marginTop: StyleConstants.Spacing.S,
-                      }}
-                    >
-                      <ThemeText
-                        color={"#fff"}
-                        fontWeight={"Medium"}
-                        fontStyle={"S"}
-                      >
-                        In Review
-                      </ThemeText>
-                    </View>
-                  ) : (
-                    <View
-                      style={{
-                        paddingVertical: StyleConstants.Spacing.S - 7,
-                        paddingHorizontal: StyleConstants.Spacing.S - 2,
-                        borderRadius: 50,
-                        backgroundColor: colors.textGreen,
-                        marginTop: StyleConstants.Spacing.S,
-                      }}
-                    >
-                      <ThemeText
-                        color={"#fff"}
-                        fontWeight={"Medium"}
-                        fontStyle={"S"}
-                      >
-                        Published
-                      </ThemeText>
-                    </View>
-                  )}
 
-                  <View style={{ flex: 1, justifyContent: "flex-end" }}>
-                    {(post?.information || post?.specialTraits) && (
-                      <ThemeText
-                        numberOfLines={1}
-                        color={colors.mediumDark}
-                        style={{ marginBottom: StyleConstants.Spacing.S }}
-                      >
-                        {post?.information || post?.specialTraits}
-                      </ThemeText>
-                    )}
-                    <ThemeText fontStyle={"S"} color={colors.mediumDark}>
-                      {moment(post?.activityDate).format("MMM, DD, YYYY")}
+                  {(post?.information || post?.specialTraits) && (
+                    <ThemeText
+                      numberOfLines={1}
+                      color={colors.mediumDark}
+                      style={{ marginBottom: StyleConstants.Spacing.S }}
+                    >
+                      {post?.information || post?.specialTraits}
                     </ThemeText>
+                  )}
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <View>
+                      {post?.isReunited && (
+                        <View
+                          style={{
+                            alignSelf: "flex-start",
+                            paddingVertical: StyleConstants.Spacing.S - 7,
+                            paddingHorizontal: StyleConstants.Spacing.S - 2,
+                            borderRadius: 50,
+                            backgroundColor: colors.textGreen,
+                            marginBottom: StyleConstants.Spacing.S,
+                          }}
+                        >
+                          <ThemeText
+                            color={"#fff"}
+                            fontWeight={"Medium"}
+                            fontStyle={"S"}
+                          >
+                            Reunited
+                          </ThemeText>
+                        </View>
+                      )}
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <ThemeText fontStyle={"S"} color={colors.mediumDark}>
+                        {moment(post?.activityDate).format("MMM, DD, YYYY")}
+                      </ThemeText>
+
+                      <ThemeText
+                        color={colors.primary}
+                        style={{
+                          marginHorizontal: StyleConstants.Spacing.S - 4,
+                        }}
+                      >
+                        ·
+                      </ThemeText>
+                      <ThemeText
+                        fontStyle="S"
+                        color={
+                          post?.isVerify ? colors.textGreen : colors.primary
+                        }
+                      >
+                        {post?.isVerify ? "Published" : "In Review"}
+                      </ThemeText>
+                    </View>
                   </View>
                 </View>
               </View>

@@ -24,12 +24,15 @@ const OwnerInfo: React.FC<OwnerInfoProps> = ({ containerStyle, owner }) => {
       </ThemeText>
       <View style={styles.ownerInfoContainer}>
         <View style={styles.infoRow}>
-          <Image
-            source={{
-              uri: "https://avatars.githubusercontent.com/u/45455924?v=4",
-            }}
-            style={styles.avatar}
-          />
+          {owner?.profileUrl ? (
+            <Image source={{ uri: owner?.profileUrl }} style={styles.avatar} />
+          ) : (
+            <Image
+              source={require("assets/images/default_avatar.png")}
+              style={styles.avatar}
+            />
+          )}
+
           <View style={{ marginLeft: StyleConstants.Spacing.S }}>
             <ThemeText color={"#000"} fontStyle={"S"} fontWeight={"Medium"}>
               {owner?.name}

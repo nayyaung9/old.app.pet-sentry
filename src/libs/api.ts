@@ -1,11 +1,11 @@
 import axios from "axios";
 import { getAuthToken } from "~/utils/storage";
 
-const environment = "development";
+const environment = "release";
 
 const API_ENDPOINT = {
   development: "http://192.168.1.5:8000/api",
-  release: "https://api-pet-sentry.onrender.com/api",
+  release: "http://13.233.76.94:8000/api",
 };
 
 const instance = axios.create({

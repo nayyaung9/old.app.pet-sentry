@@ -3,39 +3,56 @@ import { Image, Pressable, StyleSheet, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Input from "~/components/Input";
 import ThemeText from "~/components/ThemeText";
-import { useMe } from "~/libs/query/user";
+import { ProfileQueryKey, useMe } from "~/libs/query/user";
 import { StyleConstants } from "~/utils/theme/constants";
 import { Feather } from "@expo/vector-icons";
 import { RootStackScreenProps } from "~/@types/navigators";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "~/utils/theme/ThemeManager";
+import { useUpdateProfileInfoMutation } from "~/libs/mutation/auth";
+import { Flow } from "react-native-animated-spinkit";
+import { showMessage } from "react-native-flash-message";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileState {
   _id: string;
   contactNumbers: null | string[];
   email: string;
-  name: string;
   profileUrl: string | null;
 }
 const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
   navigation,
 }) => {
+  const queryClient = useQueryClient();
   const { colors } = useTheme();
   const { data } = useMe();
+
+  const profileQueryKey: ProfileQueryKey = ["Profile-Me"];
+
+  const mutation = useUpdateProfileInfoMutation({
+    onSuccess: () => {
+      showMessage({
+        message: "Your profile is updated.",
+        type: "success",
+      });
+      queryClient.invalidateQueries(profileQueryKey);
+      navigation.goBack();
+    },
+    onError: (error) => console.log(error),
+  });
 
   const [previewImage, setPreviewImage] = useState("");
   const [state, setState] = useState<ProfileState>({
     _id: "",
     contactNumbers: [],
     email: "",
-    name: "",
     profileUrl: null,
   });
 
   useEffect(() => {
     console.log("Hello");
     navigation.setOptions({
-      title: "Edit Your Profile",
+      title: "Edit Profile",
       headerTitleAlign: "center",
       headerLeft: () => (
         <Pressable onPress={() => navigation.goBack()}>
@@ -43,14 +60,18 @@ const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
         </Pressable>
       ),
       headerRight: () => (
-        <Pressable onPress={onProfileUpdate}>
-          <ThemeText color={colors.primary} fontStyle={"S"}>
-            Update
-          </ThemeText>
+        <Pressable onPress={onProfileUpdate} disabled={mutation.isLoading}>
+          {mutation.isLoading ? (
+            <Flow size={20} color={colors.primary} />
+          ) : (
+            <ThemeText color={colors.primary} fontStyle={"S"}>
+              Update
+            </ThemeText>
+          )}
         </Pressable>
       ),
     });
-  }, [state]);
+  }, [state, mutation]);
 
   useEffect(() => {
     if (data) {
@@ -58,7 +79,6 @@ const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
         ...state,
         _id: data?.user?._id,
         contactNumbers: data?.user?.contactNumbers,
-        email: data?.user?.email,
         name: data?.user?.name,
         profileUrl: data?.user?.profileUrl,
       });
@@ -94,7 +114,13 @@ const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
   };
 
   const onProfileUpdate = () => {
-    console.log({ state });
+    const { contactNumbers, ...rest } = state;
+    const payload = {
+      ...rest,
+      contactNumbers: contactNumbers?.filter((item) => item != ""),
+    };
+
+    mutation.mutate(payload);
   };
 
   return (
@@ -125,23 +151,17 @@ const ProfileSetting: React.FC<RootStackScreenProps<"Profile-Setting">> = ({
             }
           />
         </View>
+
+        <View style={styles.profileCredentialContainer}>
+          <ThemeText fontWeight="Medium" fontStyle={"L"}>
+            {data?.user?.name}
+          </ThemeText>
+          <ThemeText color={colors.textSecondary} fontStyle={"S"}>
+            {data?.user?.email}
+          </ThemeText>
+        </View>
       </View>
 
-      <View style={styles.inputView}>
-        <Input
-          label="Name"
-          value={state.name}
-          onChangeText={(value) => onChangeText("name")(value)}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <Input
-          label="Email"
-          editable={false}
-          value={state.email}
-          onChangeText={(value) => onChangeText("email")(value)}
-        />
-      </View>
       <View style={styles.inputView}>
         <ThemeText>Contact Numbers</ThemeText>
 
@@ -202,6 +222,10 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: "#ddd",
     padding: StyleConstants.Spacing.S - 4,
+  },
+  profileCredentialContainer: {
+    alignItems: "center",
+    paddingTop: StyleConstants.Spacing.S,
   },
   addNumberButton: {
     backgroundColor: "#f0f2f5",

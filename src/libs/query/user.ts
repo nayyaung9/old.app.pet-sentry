@@ -2,7 +2,7 @@ import petSentryAPI from "~/libs/api";
 import { useQuery } from "@tanstack/react-query";
 import { handleError } from "~/utils/handleError";
 
-type CurrentUserQueryKey = ["Me"];
+export type ProfileQueryKey = ["Profile-Me"];
 
 const fetchMe = async () => {
   try {
@@ -16,7 +16,7 @@ const fetchMe = async () => {
   }
 };
 const useMe = () => {
-  const queryKey: CurrentUserQueryKey = ["Me"];
+  const queryKey: ProfileQueryKey = ["Profile-Me"];
   return useQuery(queryKey, fetchMe);
 };
 

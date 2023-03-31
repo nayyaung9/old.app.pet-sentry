@@ -56,4 +56,23 @@ const useRegisterEmailMutation = (
 };
 /* Register with Email */
 
-export { useLoginMutation, useRegisterEmailMutation };
+const updateProfileInfoFunction = async (params: PetSentry.Account) => {
+  try {
+    const { data } = await apiInstance.put("/auth/update-profile", {
+      ...params,
+    });
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+const useUpdateProfileInfoMutation = (
+  options: MutationOptions<MutationAuthResponse, AxiosError, PetSentry.Account>
+) => {
+  return useMutation(updateProfileInfoFunction, options);
+};
+export {
+  useLoginMutation,
+  useRegisterEmailMutation,
+  useUpdateProfileInfoMutation,
+};

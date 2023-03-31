@@ -59,7 +59,7 @@ const AccountRoot = () => {
           <ThemeText color={colors.textSecondary} fontStyle={"S"}>
             Location
           </ThemeText>
-          <ThemeText fontStyle={"S"}>{geoAddress}</ThemeText>
+          <ThemeText fontStyle={"XS"}>{geoAddress}</ThemeText>
         </View>
       </View>
 

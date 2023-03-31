@@ -12,14 +12,21 @@ import { useAuthStore } from "~/utils/state/useAuth";
 import { showMessage } from "react-native-flash-message";
 import { useNavigation } from "@react-navigation/native";
 
+type drawerMenusProps = {
+  label: string;
+  icon: React.ReactNode;
+  route: string;
+};
 const drawerMenus = [
   {
     label: "Profile",
     icon: <Ionicons name="person" size={24} color="#555" />,
+    route: "Tab-Profile",
   },
   {
     label: "About Project",
     icon: <FontAwesome name="question" size={24} color="#555" />,
+    route: "Tab-Profile",
   },
 ];
 
@@ -40,9 +47,9 @@ const AccountDrawer = () => {
   return (
     <>
       <View style={styles.profileContainer}>
-        {data?.profileUrl ? (
+        {data?.user?.profileUrl ? (
           <Image
-            source={{ uri: data?.profileUrl }}
+            source={{ uri: data?.user?.profileUrl }}
             style={styles.profileImage}
           />
         ) : (
@@ -55,7 +62,7 @@ const AccountDrawer = () => {
         <Pressable style={styles.profileInfoContainer}>
           <ThemeText>Hello</ThemeText>
           <ThemeText fontWeight="Medium" color={colors.mediumDark}>
-            {data?.name}
+            {data?.user?.name}
           </ThemeText>
         </Pressable>
       </View>
@@ -63,12 +70,12 @@ const AccountDrawer = () => {
       <ComponentSeparator color={colors.inputBackground} />
 
       <View style={styles.profileMenuContainer}>
-        {drawerMenus.map((menuItem, index) => (
+        {drawerMenus.map((menuItem: drawerMenusProps, index) => (
           <MenuIconButton
             key={index}
             icon={menuItem?.icon}
             title={menuItem?.label}
-            onPress={() => null}
+            onPress={() => navigation.navigate(menuItem?.route)}
             containerStyle={styles.menuItem}
           />
         ))}

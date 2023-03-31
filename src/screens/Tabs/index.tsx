@@ -6,7 +6,7 @@ import {
   Ionicons,
   MaterialIcons,
   AntDesign,
-  FontAwesome,
+  FontAwesome5,
 } from "@expo/vector-icons";
 
 import type { BottomTabScreenParamList } from "~/@types/navigators";
@@ -18,16 +18,16 @@ import ComposeTab from "./Compose";
 import ProfileTab from "./Profile";
 
 // Utils
-import { useGeoAddress, useUserCoordinates } from "~/utils/state/useGeoAddress";
+import { useGeoAddress } from "~/utils/state/useGeoAddress";
 import { useTheme } from "~/utils/theme/ThemeManager";
 import { useAuthState } from "~/utils/state/useAuth";
-import { StyleConstants } from "~/utils/theme/constants";
 import { useTimelineStore } from "~/utils/state/timeline";
+import { StyleConstants } from "~/utils/theme/constants";
 
 const ScreenTab = () => {
   const { colors } = useTheme();
   const geoAddress = useGeoAddress();
-  const userCoordinates = useUserCoordinates();
+  // const userCoordinates = useUserCoordinates();
   const { token } = useAuthState();
   const { onToggleFilteringModal } = useTimelineStore();
 
@@ -46,7 +46,13 @@ const ScreenTab = () => {
         options={({ navigation }) => ({
           headerTitle: () => (
             <View style={{ alignItems: "center" }}>
-              <ThemeText fontStyle={"L"} fontWeight={"Medium"}>
+              <ThemeText
+                fontStyle={"L"}
+                fontWeight={"Medium"}
+                style={{
+                  lineHeight: 18,
+                }}
+              >
                 Pet Sentry
               </ThemeText>
               {geoAddress != "" && (
@@ -74,10 +80,13 @@ const ScreenTab = () => {
           ),
           headerRight: () => (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Pressable onPress={onToggleFilteringModal}>
+              <Pressable
+                onPress={onToggleFilteringModal}
+                style={{ marginRight: StyleConstants.Spacing.M }}
+              >
                 <AntDesign name="filter" size={24} color="black" />
               </Pressable>
-              <Pressable
+              {/* <Pressable
                 style={{
                   marginRight: StyleConstants.Spacing.M,
                   marginLeft: StyleConstants.Spacing.S,
@@ -93,7 +102,7 @@ const ScreenTab = () => {
                 }
               >
                 <Ionicons name="map-outline" size={24} color="black" />
-              </Pressable>
+              </Pressable> */}
             </View>
           ),
         })}
@@ -141,7 +150,7 @@ const ScreenTab = () => {
                 style={{ marginRight: 16 }}
                 onPress={() => navigation.navigate("Profile-Setting")}
               >
-                <Ionicons name="md-settings-sharp" size={24} color="black" />
+                <FontAwesome5 name="user-edit" size={20} color="black" />
               </Pressable>
             ),
           }),

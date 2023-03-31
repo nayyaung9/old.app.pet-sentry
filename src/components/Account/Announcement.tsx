@@ -11,15 +11,26 @@ import { RootStackParamList } from "~/@types/navigators";
 import { Entypo } from "@expo/vector-icons";
 import Loading from "../Loading";
 import TimelineEmpty from "../Timeline/TimelineEmpty";
+import ThemeModal from "../ThemeModal";
+import TimelineMenuRoot from "../Timeline/Menu/Root";
+import { useTimelineState, useTimelineStore } from "~/utils/state/timeline";
 
 const Accouncement = () => {
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, "Timeline-Detail">>();
   const { colors } = useTheme();
   const { data, isLoading } = useOwnerPosts();
+  const { statusMenu } = useTimelineState();
+  const { onToggleStatusMenu, setPostInfoForModal } = useTimelineStore();
 
   const onNavigateToPostDetail = (id: string) =>
     navigation.navigate("Timeline-Detail", { postId: id });
+
+  const onMakeActionStatusModal = (post: PetSentry.Post) => {
+    onToggleStatusMenu();
+
+    setPostInfoForModal({ postId: post._id, ownerId: post?._owner?._id });
+  };
 
   return (
     <View style={styles.root}>
@@ -84,7 +95,9 @@ const Accouncement = () => {
                         </ThemeText>
                       </View>
                       <View style={{ flex: 1, alignItems: "flex-end" }}>
-                        <Pressable>
+                        <Pressable
+                          onPress={() => onMakeActionStatusModal(post)}
+                        >
                           <Entypo
                             name="dots-three-vertical"
                             size={20}
@@ -96,9 +109,13 @@ const Accouncement = () => {
 
                     {(post?.information || post?.specialTraits) && (
                       <ThemeText
-                        numberOfLines={1}
+                        numberOfLines={2}
                         color={colors.mediumDark}
-                        style={{ marginBottom: StyleConstants.Spacing.S }}
+                        style={{
+                          marginBottom: StyleConstants.Spacing.S,
+                          flex: 1,
+                          marginRight: StyleConstants.Spacing.M,
+                        }}
                       >
                         {post?.information || post?.specialTraits}
                       </ThemeText>
@@ -136,22 +153,28 @@ const Accouncement = () => {
                           {moment(post?.activityDate).format("MMM, DD, YYYY")}
                         </ThemeText>
 
-                        <ThemeText
-                          color={colors.primary}
-                          style={{
-                            marginHorizontal: StyleConstants.Spacing.S - 4,
-                          }}
-                        >
-                          ·
-                        </ThemeText>
-                        <ThemeText
-                          fontStyle="S"
-                          color={
-                            post?.isVerify ? colors.textGreen : colors.primary
-                          }
-                        >
-                          {post?.isVerify ? "Published" : "In Review"}
-                        </ThemeText>
+                        {!post?.isVerify && (
+                          <>
+                            <ThemeText
+                              color={colors.primary}
+                              style={{
+                                marginHorizontal: StyleConstants.Spacing.S - 4,
+                              }}
+                            >
+                              ·
+                            </ThemeText>
+                            <ThemeText
+                              fontStyle="S"
+                              color={
+                                post?.isVerify
+                                  ? colors.textGreen
+                                  : colors.primary
+                              }
+                            >
+                              In Review
+                            </ThemeText>
+                          </>
+                        )}
                       </View>
                     </View>
                   </View>
@@ -161,6 +184,14 @@ const Accouncement = () => {
           </View>
         </>
       )}
+
+      <ThemeModal
+        openThemeModal={statusMenu}
+        onCloseThemeModal={onToggleStatusMenu}
+        parentPaddingEnabled={false}
+      >
+        <TimelineMenuRoot />
+      </ThemeModal>
     </View>
   );
 };

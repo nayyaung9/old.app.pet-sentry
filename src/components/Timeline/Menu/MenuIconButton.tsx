@@ -17,7 +17,7 @@ const MenuIconButton = ({
   onPress,
   containerStyle,
 }: {
-  icon: React.ReactElement;
+  icon: React.ReactNode;
   title: string;
   helperText?: string;
   onPress: () => void;
@@ -34,7 +34,6 @@ const MenuIconButton = ({
         style={{
           width: 24,
           height: 24,
-          marginRight: StyleConstants.Spacing.S,
         }}
       >
         {icon}
